@@ -1,4 +1,4 @@
-package main
+package utils
 
 import (
 	"fmt"
@@ -6,25 +6,16 @@ import (
 	"strings"
 )
 
-func main() {
-	if checkIfArgumentsValid() {
-		return
-	}
-	contents := readContents()
-	commands := getCommands(contents)
-	fmt.Println(commands)
-}
-
-func checkIfArgumentsValid() bool {
-	if len(os.Args) == 1 {
+func CheckIfArgumentsValid(arguments []string) bool {
+	if len(arguments) == 1 {
 		fmt.Println("No file was provided")
 		return true
 	}
 	return false
 }
 
-func readContents() []string {
-	fileName := os.Args[1]
+func ReadContents(arguments []string) []string {
+	fileName := arguments[1]
 	contents, err := os.ReadFile(fileName)
 	if err != nil {
 		fmt.Println("File reading error", err)
@@ -33,10 +24,11 @@ func readContents() []string {
 	return strings.Split(string(contents), "\n")
 }
 
-func getCommands(contents []string) []string {
-
+func GetCommands(contents []string) []string {
+	commands := []string{}
 	fmt.Println("Contents of file:\n ")
 	for i := 0; i < len(contents); i++ {
-		fmt.Println(contents[i])
+		commands = append(commands, strings.Split(contents[i], "]")[0])
 	}
+	return commands
 }
