@@ -1,3 +1,3 @@
-module LogfileParser
+module logfileparser
 
 go 1.18

@@ -1,18 +1,22 @@
 # Execution Environment
 FROM golang:1.16-alpine
 
+# Install Git.
+RUN apk update && apk add --no-cache git
+
 # Working Directory
-WORKDIR /
+RUN mkdir /src
+WORKDIR /src
 
 # Copying Files
-COPY *.go ./
-COPY go.mod ./
+COPY . .
 
-# Build 
-RUN go build -o /logfileparser
+# Fetching dependencies.
+RUN go get -d -v
 
-# Expose Port 8080
-EXPOSE 8080
+# Building the binary executable.
+RUN go build -o /main
+
 
 # Running Executable
-CMD [ "./logfileparser" ]
+CMD [ "/main" ,"./user1.txt"]
