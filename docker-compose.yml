@@ -44,10 +44,10 @@ services:
     networks:
       - dev-network
     depends_on:
-      logfileparser:
-        condition: service_started
       message-broker:
         condition: service_started
+      logfileparser:
+        condition: service_started  
 
 
 networks:
