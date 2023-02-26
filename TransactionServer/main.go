@@ -15,13 +15,12 @@ func createUser() {
 }
 
 func main() {
-	ConsumeCommands()
-	// port := ":8080"
-	// db.InitConnection()
-	// http.HandleFunc("/add", addHandler)
-	// http.HandleFunc("/buy", buyHandler)
-	// http.HandleFunc("/commitBuy", commitBuy)
-	// http.HandleFunc("/cancelBuy", cancelBuy)
-	// http.HandleFunc("/setBuyAmount", setBuyAmount)
-	// http.ListenAndServe(port, nil)
+	port := ":8080"
+	db.InitConnection()
+	http.HandleFunc("/add", addHandler)
+	http.HandleFunc("/buy", buyHandler)
+	http.HandleFunc("/commitBuy", commitBuy)
+	http.HandleFunc("/cancelBuy", cancelBuy)
+	http.HandleFunc("/setBuyAmount", setBuyAmount)
+	http.ListenAndServe(port, nil)
 }
