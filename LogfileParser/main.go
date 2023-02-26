@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 )
 
@@ -10,5 +9,5 @@ func main() {
 		return
 	}
 	contents := ReadContents(os.Args)
-	fmt.Println(contents)
+	ProduceCommands(contents)
 }

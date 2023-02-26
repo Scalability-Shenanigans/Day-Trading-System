@@ -1,0 +1,56 @@
+version: "3.9"
+
+services:
+
+  # Create service with RabbitMQ.
+  message-broker:
+    image: rabbitmq:3-management-alpine
+    container_name: message-broker
+    ports:
+      - 5672:5672   # for sender and consumer connections
+      - 15672:15672 # for serving RabbitMQ GUI
+    restart: always
+    networks:
+      - dev-network
+
+
+  # Create service with Fiber sender.
+  logfileparser:
+    container_name: logfileparser
+    ports:
+      - 3000:3000
+    build:
+      context: .
+      dockerfile: LogfileParser/Dockerfile
+    environment:
+      AMQP_SERVER_URL: amqp://guest:guest@message-broker:5672/
+    restart: always
+    networks:
+      - dev-network
+    depends_on:
+      message-broker:
+        condition: service_started
+
+
+  # Create service with message consumer.
+  consumer:
+    container_name: consumer
+    build:
+      context: .
+      dockerfile: TransactionServer/Dockerfile
+    environment:
+      AMQP_SERVER_URL: amqp://guest:guest@message-broker:5672/
+    restart: always
+    networks:
+      - dev-network
+    depends_on:
+      logfileparser:
+        condition: service_started
+      message-broker:
+        condition: service_started
+
+
+networks:
+  # Create a new Docker network.
+  dev-network:
+    driver: bridge

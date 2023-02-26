@@ -1,7 +1,6 @@
 package main
 
 import (
-	"TransactionServer/db"
 	"net/http"
 )
 
@@ -16,12 +15,13 @@ func createUser() {
 }
 
 func main() {
-	port := ":8080"
-	db.InitConnection()
-	http.HandleFunc("/add", addHandler)
-	http.HandleFunc("/buy", buyHandler)
-	http.HandleFunc("/commitBuy", commitBuy)
-	http.HandleFunc("/cancelBuy", cancelBuy)
-	http.HandleFunc("/setBuyAmount", setBuyAmount)
-	http.ListenAndServe(port, nil)
+	ConsumeCommands()
+	// port := ":8080"
+	// db.InitConnection()
+	// http.HandleFunc("/add", addHandler)
+	// http.HandleFunc("/buy", buyHandler)
+	// http.HandleFunc("/commitBuy", commitBuy)
+	// http.HandleFunc("/cancelBuy", cancelBuy)
+	// http.HandleFunc("/setBuyAmount", setBuyAmount)
+	// http.ListenAndServe(port, nil)
 }

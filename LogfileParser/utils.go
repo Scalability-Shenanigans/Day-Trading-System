@@ -14,13 +14,17 @@ func CheckIfArgumentsValid(arguments []string) bool {
 	return false
 }
 
-func ReadContents(arguments []string) []string {
+func ReadContents(arguments []string) string {
 	fileName := arguments[1]
 	contents, err := os.ReadFile(fileName)
 	if err != nil {
 		fmt.Println("File reading error", err)
 		panic(err)
 	}
+	return string(contents)
+}
+
+func ProcessContents(contents string) []string {
 	return GetCommandStrings(strings.Split(string(contents), "\n"))
 }
 

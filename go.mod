@@ -1,10 +1,11 @@
-module RabbitMQ
+module day-trading-system
 
-go 1.20
+go 1.18
 
 require (
 	github.com/gofiber/fiber/v2 v2.42.0
 	github.com/streadway/amqp v1.0.0
+	go.mongodb.org/mongo-driver v1.11.2
 )
 
 require (
@@ -22,7 +23,7 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.44.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
-	golang.org/x/mod v0.8.0 // indirect
+	golang.org/x/mod v0.7.0 // indirect
 	golang.org/x/sys v0.5.0 // indirect
-	golang.org/x/tools v0.6.0 // indirect
+	golang.org/x/tools v0.4.0 // indirect
 )
