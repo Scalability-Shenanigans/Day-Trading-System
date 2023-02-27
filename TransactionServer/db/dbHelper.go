@@ -56,15 +56,20 @@ func CreateAccount(user string, initial_balance int) {
 func UpdateBalance(amount int, user string) bool {
 	filter := bson.M{"user": user}
 	var result Account
-	accounts.FindOne(context.TODO(), filter).Decode(&result)
-
+	err := accounts.FindOne(context.TODO(), filter).Decode(&result)
+	if err == mongo.ErrNoDocuments {
+		result = Account{
+			User: user,
+		}
+	}
 	if amount < 0 && (result.Balance+amount) < 0 {
 		fmt.Println("ERROR: funds will go below 0")
 		return false
 	}
 
 	result.Balance += amount
-	accounts.ReplaceOne(context.TODO(), filter, result)
+	opts := options.Replace().SetUpsert(true)
+	accounts.ReplaceOne(context.TODO(), filter, result, opts)
 	fmt.Println("new balance set")
 	return true
 
