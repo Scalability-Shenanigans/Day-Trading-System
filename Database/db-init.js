@@ -4,5 +4,6 @@ db.createCollection('Accounts')
 db.createCollection('BuyOrders')
 db.createCollection('SellOrders')
 db.createCollection('PendingTransactions')
+db.createCollection('FinishedTransactions')
 
 

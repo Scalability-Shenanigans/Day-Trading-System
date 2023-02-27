@@ -56,15 +56,20 @@ func CreateAccount(user string, initial_balance int) {
 func UpdateBalance(amount int, user string) bool {
 	filter := bson.M{"user": user}
 	var result Account
-	accounts.FindOne(context.TODO(), filter).Decode(&result)
-
+	err := accounts.FindOne(context.TODO(), filter).Decode(&result)
+	if err == mongo.ErrNoDocuments {
+		result = Account{
+			User: user,
+		}
+	}
 	if amount < 0 && (result.Balance+amount) < 0 {
 		fmt.Println("ERROR: funds will go below 0")
 		return false
 	}
 
 	result.Balance += amount
-	accounts.ReplaceOne(context.TODO(), filter, result)
+	opts := options.Replace().SetUpsert(true)
+	accounts.ReplaceOne(context.TODO(), filter, result, opts)
 	fmt.Println("new balance set")
 	return true
 
@@ -112,4 +117,26 @@ func UpdateStockHolding(user string, stock string, amount int) bool {
 
 	accounts.ReplaceOne(context.TODO(), filter, result)
 	return true
+}
+
+func CreateTransaction(transaction Transaction) {
+	res, err := transactions.InsertOne(context.TODO(), transaction)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println(res.InsertedID)
+}
+
+func ConsumeLastTransaction(user string) Transaction {
+	opts := options.FindOneAndDelete().SetSort(bson.M{"$natural": -1})
+	filter := bson.M{"user": user}
+	var transaction Transaction
+	err := transactions.FindOneAndDelete(context.TODO(), filter, opts).Decode(&transaction)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return transaction
 }
