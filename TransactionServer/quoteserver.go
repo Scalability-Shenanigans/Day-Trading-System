@@ -31,3 +31,8 @@ func SendRequest(command string) string {
 	defer connection.Close()
 	return string(buffer[:mLen])
 }
+
+func GetQuote(user string, stock string) string {
+	//
+	return "32"
+}

@@ -118,3 +118,25 @@ func UpdateStockHolding(user string, stock string, amount int) bool {
 	accounts.ReplaceOne(context.TODO(), filter, result)
 	return true
 }
+
+func CreateTransaction(transaction Transaction) {
+	res, err := transactions.InsertOne(context.TODO(), transaction)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println(res.InsertedID)
+}
+
+func ConsumeLastTransaction(user string) Transaction {
+	opts := options.FindOneAndDelete().SetSort(bson.M{"$natural": -1})
+	filter := bson.M{"user": user}
+	var transaction Transaction
+	err := transactions.FindOneAndDelete(context.TODO(), filter, opts).Decode(&transaction)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return transaction
+}
