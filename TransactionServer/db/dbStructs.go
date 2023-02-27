@@ -11,6 +11,12 @@ type BuyOrder struct {
 	Amount int    `bson:"amount"`
 }
 
+type BuyAmountOrder struct {
+	User   string  `json:"user"`
+	Stock  string  `json:"stock"`
+	Amount float64 `json:"amount"`
+}
+
 type SellOrder struct {
 	Stock  string `bson:"stock"`
 	Price  int    `bson:"price"`

@@ -9,12 +9,13 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var mongoURI = "mongodb://localhost:5000" //for local testing
-// var mongoURI = "mongodb://db:27017" //use this for when everything is containerized
+// var mongoURI = "mongodb://localhost:5000" //for local testing
+var mongoURI = "mongodb://localhost:27017" //use this for when everything is containerized
 var client *mongo.Client
 var accounts *mongo.Collection
 var transactions *mongo.Collection
 var buyOrders *mongo.Collection
+var buyAmountOrders *mongo.Collection
 var sellOrders *mongo.Collection
 
 func InitConnection() {
@@ -35,15 +36,16 @@ func InitConnection() {
 	accounts = db.Collection("Accounts")
 	transactions = db.Collection("PendingTransactions")
 	buyOrders = db.Collection("BuyOrders")
+	buyAmountOrders = db.Collection("BuyAmountOrders")
 	sellOrders = db.Collection("SellOrders")
 }
 
-func CreateAccount(user string, initial_balance int) {
-	new_account := Account{
+func CreateAccount(user string, initialBalance int) {
+	newAccount := Account{
 		User:    user,
-		Balance: initial_balance,
+		Balance: initialBalance,
 	}
-	res, err := accounts.InsertOne(context.TODO(), new_account)
+	res, err := accounts.InsertOne(context.TODO(), newAccount)
 
 	if err != nil {
 		fmt.Println("Failed to create account")
@@ -58,9 +60,13 @@ func UpdateBalance(amount int, user string) bool {
 	var result Account
 	err := accounts.FindOne(context.TODO(), filter).Decode(&result)
 	if err == mongo.ErrNoDocuments {
-		result = Account{
-			User: user,
-		}
+		fmt.Println("ERROR: No account found for that user")
+		return false
+		/*
+			result = Account{
+				User: user,
+			}
+		*/
 	}
 	if amount < 0 && (result.Balance+amount) < 0 {
 		fmt.Println("ERROR: funds will go below 0")
@@ -128,6 +134,28 @@ func CreateTransaction(transaction Transaction) {
 	}
 
 	fmt.Println(res.InsertedID)
+}
+
+func CreateBuyAmountOrder(buyAmountOrder BuyAmountOrder) {
+	res, err := buyAmountOrders.InsertOne(context.TODO(), buyAmountOrder)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println(res.InsertedID)
+}
+
+func FindBuyAmountOrder(user string, stock string) (found bool, order BuyAmountOrder) {
+	filter := bson.M{"user": user, "stock": stock}
+	var buyAmountOrder BuyAmountOrder
+	err := buyAmountOrders.FindOneAndDelete(context.TODO(), filter).Decode(&buyAmountOrder)
+	if err == mongo.ErrNoDocuments {
+		fmt.Println("No BuyAmountOrder for found for this user")
+		return false, buyAmountOrder
+	}
+	return true, buyAmountOrder
 }
 
 func ConsumeLastTransaction(user string) Transaction {

@@ -2,10 +2,17 @@ package main
 
 import (
 	"TransactionServer/db"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
 )
+
+type TriggerOrder struct {
+	User  string  `json:"user"`
+	Stock string  `json:"stock"`
+	Price float64 `json:"price"`
+}
 
 func buyHandler(w http.ResponseWriter, r *http.Request) {
 	//get stock price
@@ -61,16 +68,44 @@ func cancelBuy(w http.ResponseWriter, r *http.Request) {
 	//do we reserve funds when a buy is added but not commited?
 }
 
-func setBuyAmount(w http.ResponseWriter, r *http.Request) {
-	//check price
-	//if price is <= buy order
-	//buy x amount of the stock
-	//if it isnt't add the buy order to db?
-	// how are we dealing with buy orders?
-	// periodically polling?
-	// if we do this i think we make a seperate service that just handles buy orders on its own so the main tx service doesn't waste time
-	// spawn a thread each time a buy order is placed?
-	// sockets will be a terrible time if we do this i think
+func setBuyAmountHandler(w http.ResponseWriter, r *http.Request) {
+	var buyAmountOrder db.BuyAmountOrder
+	err := json.NewDecoder(r.Body).Decode(&buyAmountOrder)
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("Bad Request")
+		return
+	}
+	fmt.Println(buyAmountOrder)
+
+	// check user account to see if they have enough funds and decrement Account balance if they do
+	if db.UpdateBalance(int(buyAmountOrder.Amount*-1), buyAmountOrder.User) {
+		fmt.Println("Creating BuyAmountOrder")
+		db.CreateBuyAmountOrder(buyAmountOrder) // Add buyAmountOrder to db
+	}
+}
+
+func setBuyTriggerHandler(w http.ResponseWriter, r *http.Request) {
+	var triggerOrder TriggerOrder
+	err := json.NewDecoder(r.Body).Decode(&triggerOrder)
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("Bad Request")
+		return
+	}
+	fmt.Println(triggerOrder)
+
+	// check mongodb for buyAmount object with same user and stock
+	found, buyAmountOrder := db.FindBuyAmountOrder(triggerOrder.User, triggerOrder.Stock)
+
+	if found {
+		fmt.Println(buyAmountOrder)
+		fmt.Println("Found BuyAmountOrder")
+		//check stock price
+		//if price is <= trigger price
+		//buy x amount of the stock -> update user stock holdings
+		// else send to polling service -> user, stock, amount, trigger price
+	}
 }
 
 func cancelSetBuy(http.ResponseWriter, *http.Request) {
