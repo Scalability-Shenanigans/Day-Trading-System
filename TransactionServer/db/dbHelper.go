@@ -16,6 +16,7 @@ var accounts *mongo.Collection
 var transactions *mongo.Collection
 var buyOrders *mongo.Collection
 var buyAmountOrders *mongo.Collection
+var triggeredBuyAmountOrders *mongo.Collection
 var sellOrders *mongo.Collection
 
 func InitConnection() {
@@ -37,6 +38,7 @@ func InitConnection() {
 	transactions = db.Collection("PendingTransactions")
 	buyOrders = db.Collection("BuyOrders")
 	buyAmountOrders = db.Collection("BuyAmountOrders")
+	triggeredBuyAmountOrders = db.Collection("TriggeredBuyAmountOrders")
 	sellOrders = db.Collection("SellOrders")
 }
 
@@ -144,6 +146,17 @@ func CreateBuyAmountOrder(buyAmountOrder BuyAmountOrder) {
 		return
 	}
 
+	fmt.Println(res.InsertedID)
+}
+
+func CreateTriggeredBuyAmountOrder(triggeredBuyAmountOrder TriggeredBuyAmountOrder) {
+	res, err := triggeredBuyAmountOrders.InsertOne(context.TODO(), triggeredBuyAmountOrder)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println("Added TriggeredBuyAmountOrder to DB")
 	fmt.Println(res.InsertedID)
 }
 

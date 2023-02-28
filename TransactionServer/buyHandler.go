@@ -99,12 +99,16 @@ func setBuyTriggerHandler(w http.ResponseWriter, r *http.Request) {
 	found, buyAmountOrder := db.FindBuyAmountOrder(triggerOrder.User, triggerOrder.Stock)
 
 	if found {
-		fmt.Println(buyAmountOrder)
 		fmt.Println("Found BuyAmountOrder")
-		//check stock price
-		//if price is <= trigger price
-		//buy x amount of the stock -> update user stock holdings
-		// else send to polling service -> user, stock, amount, trigger price
+		fmt.Println(buyAmountOrder)
+
+		// add TriggeredBuyAmountOrder to db for PollingService to act on
+		var triggeredBuyAmountOrder db.TriggeredBuyAmountOrder
+		triggeredBuyAmountOrder.User = buyAmountOrder.User
+		triggeredBuyAmountOrder.Stock = buyAmountOrder.Stock
+		triggeredBuyAmountOrder.Amount = buyAmountOrder.Amount
+		triggeredBuyAmountOrder.Price = triggerOrder.Price
+		db.CreateTriggeredBuyAmountOrder(triggeredBuyAmountOrder)
 	}
 }
 
