@@ -2,10 +2,7 @@ module PollingService
 
 go 1.18
 
-require (
-	github.com/streadway/amqp v1.0.0
-	go.mongodb.org/mongo-driver v1.11.2
-)
+require go.mongodb.org/mongo-driver v1.11.2
 
 require (
 	github.com/golang/snappy v0.0.4 // indirect
@@ -19,4 +16,5 @@ require (
 	golang.org/x/crypto v0.6.0 // indirect
 	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/text v0.7.0 // indirect
+	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 )
