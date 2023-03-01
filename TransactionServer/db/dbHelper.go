@@ -16,6 +16,7 @@ var accounts *mongo.Collection
 var transactions *mongo.Collection
 var buyOrders *mongo.Collection
 var buyAmountOrders *mongo.Collection
+var sellAmountOrders *mongo.Collection
 var triggeredBuyAmountOrders *mongo.Collection
 var sellOrders *mongo.Collection
 
@@ -140,6 +141,17 @@ func CreateTransaction(transaction Transaction) {
 
 func CreateBuyAmountOrder(buyAmountOrder BuyAmountOrder) {
 	res, err := buyAmountOrders.InsertOne(context.TODO(), buyAmountOrder)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println(res.InsertedID)
+}
+
+func CreateSellAmountOrder(sellAmountOrder SellAmountOrder) {
+	res, err := sellAmountOrders.InsertOne(context.TODO(), sellAmountOrder)
 
 	if err != nil {
 		fmt.Println(err)
