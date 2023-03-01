@@ -14,30 +14,36 @@ type TriggerOrder struct {
 	Price float64 `json:"price"`
 }
 
+type Buy struct {
+	User   string  `json:"user"`
+	Stock  string  `json:"stock"`
+	Amount float64 `json:"amount"`
+}
+
 func buyHandler(w http.ResponseWriter, r *http.Request) {
 	//get stock price
 	//add transaction to pending transactions collection
 	//	store user, transactionId, stock name, price, amount, anything else we need
 	//we can either check if a user has enough funds here or during the commit
 	//	(both probably work commit just means we do more processing before failing)
-	user := r.URL.Query().Get("user")
-	stock := r.URL.Query().Get("stock")
-	amount, err := strconv.Atoi(r.URL.Query().Get("amount"))
+	var buy Buy
+	err := json.NewDecoder(r.Body).Decode(&buy)
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println("Bad Request")
 		return
 	}
 
-	quote, err := strconv.Atoi(GetQuote(stock, user))
+	quote, err := strconv.Atoi(GetQuote(buy.Stock, buy.User))
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
 	transaction := db.Transaction{
-		User:   user,
-		Stock:  stock,
-		Amount: amount,
+		User:   buy.User,
+		Stock:  buy.Stock,
+		Amount: int(buy.Amount),
 		Price:  quote,
 		Is_Buy: true,
 	}
