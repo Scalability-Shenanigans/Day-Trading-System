@@ -74,12 +74,12 @@ type UserCommand struct {
 
 type Log struct {
 	XMLName      	    xml.Name 				`xml:"log"`
-	UserCommands 	    []UserCommand  			`xml:"userCommand"`
-	AccountTransactions []AccountTransaction	`xml:"accountTransaction"`
-	QuoteServers		[]QuoteServer			`xml:"quoteServer"`
-	SystemEvents        []SystemEvent 			`xml:"systemEvent"`
-	ErrorEvents         []ErrorEvent			`xml:"errorEvent"`
-	DebugEvents         []DebugEvent 			`xml:"debug"`
+	UserCommands 	    []UserCommand  			`xml:"userCommand,omitempty"`
+	AccountTransactions []AccountTransaction	`xml:"accountTransaction,omitempty"`
+	QuoteServers		[]QuoteServer			`xml:"quoteServe,omitemptyr"`
+	SystemEvents        []SystemEvent 			`xml:"systemEvent,omitempty"`
+	ErrorEvents         []ErrorEvent			`xml:"errorEvent,omitempty"`
+	DebugEvents         []DebugEvent 			`xml:"debugEvent,omitempty"`
 }
 
 func (l *Log) AddUserCommand(userCommand UserCommand) {
@@ -124,7 +124,7 @@ func WriteXML(filename string) {
 	xmlWriter := io.Writer(file)
 	enc := xml.NewEncoder(xmlWriter)
 	enc.Indent("  ", "    ")
-	
+
 	// Write to file.
 	if err := enc.Encode(logfile); err != nil {
 		fmt.Printf("error: %v\n", err)
