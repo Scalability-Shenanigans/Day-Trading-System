@@ -98,10 +98,8 @@ func pollingFunction() {
 			}
 			fmt.Println(triggeredBuyAmountOrder)
 
-			/*
-				Get current stock price
-			*/
-			var curStockPrice = 10.0
+			results := TransactionServerRequest(cur.Stock+" "+cur.User)
+			curStockPrice := results.Price
 
 			if triggeredBuyAmountOrder.Price >= curStockPrice { // If trigger price is >= stock price execute order
 
