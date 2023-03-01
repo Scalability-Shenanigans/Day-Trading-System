@@ -8,11 +8,11 @@ import (
 	"strconv"
 )
 
-type TriggerOrder struct {
-	User  string  `json:"user"`
-	Stock string  `json:"stock"`
-	Price float64 `json:"price"`
-}
+// type TriggerOrder struct {
+// 	User  string  `json:"user"`
+// 	Stock string  `json:"stock"`
+// 	Price float64 `json:"price"`
+// }
 
 type Sell struct {
 	User   string  `json:"user"`
@@ -20,10 +20,9 @@ type Sell struct {
 	Amount float64 `json:"amount"`
 }
 
-
 func sellHandler(w http.ResponseWriter, r *http.Request) {
 
-	var sell Buy
+	var sell Sell
 
 	err := json.NewDecoder(r.Body).Decode(&sell)
 	if err != nil {
@@ -49,12 +48,9 @@ func sellHandler(w http.ResponseWriter, r *http.Request) {
 	db.CreateTransaction(transaction)
 
 }
-	
 
 func commitSell(w http.ResponseWriter, r *http.Request) {
 
-	
-	
 }
 
 func cancelSell(w http.ResponseWriter, r *http.Request) {
@@ -64,11 +60,11 @@ func cancelSell(w http.ResponseWriter, r *http.Request) {
 }
 
 func setSellAmountHandler(w http.ResponseWriter, r *http.Request) {
-	
+
 }
 
 func setSellTriggerHandler(w http.ResponseWriter, r *http.Request) {
-	
+
 }
 
 func cancelSetSell(http.ResponseWriter, *http.Request) {
