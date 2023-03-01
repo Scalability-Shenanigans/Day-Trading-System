@@ -6,58 +6,127 @@ import (
 	"io"
 	"os"
 )
-
-type Command struct {
-	XMLName        xml.Name `xml:"userCommand"`
-	TimeStamp      int      `xml:"timestamp"`
-	TransactionNum int      `xml:"transactionNum"`
-	Command        string   `xml:"command"`
-	UserName       string   `xml:"username"`
-	Funds          int      `xml:"funds"`
+type Debug struct {
+	TimeStamp      int      	`xml:"timestamp"`
+	Server         string       `xml:"server"`
+	TransactionNum int      	`xml:"transactionNum"`
+	Command        string   	`xml:"command"`
+	UserName       string       `xml:"username,omitempty"`
+	StockSymbol	   string       `xml:"stocksymbol,omitempty"`
+	FileName	   string       `xml:"filename,omitempty"`
+	Funds          float64      `xml:"funds,omitempty"`
+	DebugMessage   string		`xml:"debugMessage,omitempty"`
 }
 
-type CommandArray struct {
-	Commands []Command
+type ErrorEvent struct {
+	TimeStamp      int      	`xml:"timestamp"`
+	Server         string       `xml:"server"`
+	TransactionNum int      	`xml:"transactionNum"`
+	Command        string   	`xml:"command"`
+	UserName       string       `xml:"username,omitempty"`
+	StockSymbol	   string       `xml:"stocksymbol,omitempty"`
+	FileName	   string       `xml:"filename,omitempty"`
+	Funds          float64      `xml:"funds,omitempty"`
+	ErrorMessage   string		`xml:"errorMessage,omitempty"`
 }
 
-type Company struct {
-	XMLName      xml.Name `xml:"log"`
-	userCommands CommandArray
+type SystemEvent struct {
+	TimeStamp      int      	`xml:"timestamp"`
+	Server         string       `xml:"server"`
+	TransactionNum int      	`xml:"transactionNum"`
+	Command        string   	`xml:"command"`
+	UserName       string       `xml:"username"`
+	StockSymbol	   string       `xml:"stocksymbol,omitempty"`
+	FileName	   string       `xml:"filename,omitempty"`
+	Funds          float64      `xml:"funds,omitempty"`
 }
 
-func (s *CommandArray) AddCommand(timestamp int, transactionNum int, command string, username string, funds int) {
-	staffRecord := Command{TimeStamp: timestamp, TransactionNum: transactionNum, Command: command, UserName: username, Funds: funds}
-
-	s.Commands = append(s.Commands, staffRecord)
+type QuoteServer struct {
+	TimeStamp      int      	`xml:"timestamp"`
+	Server         string       `xml:"server"`
+	TransactionNum int      	`xml:"transactionNum"`
+	Price          float64      `xml:"price"`
+	StockSymbol	   string       `xml:"stocksymbol"`
+	UserName       string       `xml:"username"`
+	CryptoKey      string   	`xml:"cryptokey"`
+	
 }
 
-func Kundi() {
+type AccountTransaction struct {	
+	TimeStamp      int      	`xml:"timestamp"`
+	Server         string       `xml:"server"`
+	TransactionNum int      	`xml:"transactionNum"`
+	Action         string   	`xml:"action"`
+	UserName       string       `xml:"username"`
+	Funds          float64      `xml:"funds"`
+}
 
-	v := Company{}
+type UserCommand struct {	
+	TimeStamp      int      	`xml:"timestamp"`
+	Server         string       `xml:"server"`
+	TransactionNum int      	`xml:"transactionNum"`
+	Command        string   	`xml:"command"`
+	UserName       string       `xml:"username"`
+	StockSymbol	   string       `xml:"stocksymbol,omitempty"`
+	FileName	   string       `xml:"filename,omitempty"`
+	Funds          float64      `xml:"funds,omitempty"`
+}
 
-	// put a for loop here to add more data
-	// this example will just add 2 rows of data.
+type Log struct {
+	XMLName      	    xml.Name 				`xml:"log"`
+	UserCommands 	    []UserCommand  			`xml:"userCommand"`
+	AccountTransactions []AccountTransaction	`xml:"accountTransaction"`
+	QuoteServers		[]QuoteServer			`xml:"quoteServer"`
+	SystemEvents        []SystemEvent 			`xml:"systemEvent"`
+	ErrorEvents         []ErrorEvent			`xml:"errorEvent"`
+	DebugEvents         []DebugEvent 			`xml:"debug"`
+}
 
-	v.userCommands.AddStaff(103, 1234, "ADD", "ADADS", 150)
+func (l *Log) AddUserCommand(userCommand UserCommand) {
+	l.UserCommands = append(l.UserCommands, userCommand)
+}
+
+func (l *Log) AddAccountTransaction(accountTransaction AccountTransaction) {
+	l.AccountTransactions = append(l.AccountTransactions, accountTransaction)
+}
+
+func (l *Log) AddQuoteServer(quoteServer QuoteServer) {
+	l.QuoteServers = append(l.QuoteServers, quoteServer)
+}
+
+func (l *Log) AddSystemEvent(systemEvent SystemEvent) {
+	l.SystemEvents = append(l.SystemEvents, systemEvent)
+}
+
+func (l *Log) AddDebugEvent(debugEvent DebugEvent) {
+	l.DebugEvents = append(l.DebugEvents, debugEvent)
+}
+
+func (l *Log) AddErrorEvent(errorEvent ErrorEvent) {
+	l.ErrorEvents = append(l.ErrorEvents, errorEvent)
+}
+
+func WriteXML(filename string) {
+
+	logfile := Log{}
 
 	// sanity check - display on screen
-	xmlString, err := xml.MarshalIndent(v, "", "    ")
+	// xmlString, err := xml.MarshalIndent(logfile, "", "    ")
 
-	if err != nil {
-		fmt.Println(err)
-	}
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
 
-	fmt.Printf("%s \n", string(xmlString))
+	// fmt.Printf("%s \n", string(xmlString))
 
-	// everything ok now, write to file.
-	filename := "newstaffs.xml"
+	// Write to file.
 	file, _ := os.Create(filename)
 
 	xmlWriter := io.Writer(file)
 
 	enc := xml.NewEncoder(xmlWriter)
 	enc.Indent("  ", "    ")
-	if err := enc.Encode(v); err != nil {
+	if err := enc.Encode(logfile); err != nil {
 		fmt.Printf("error: %v\n", err)
 	}
 
