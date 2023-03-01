@@ -7,5 +7,6 @@ db.createCollection('TriggeredBuyAmountOrders')
 db.createCollection('SellOrders')
 db.createCollection('PendingTransactions')
 db.createCollection('FinishedTransactions')
+db.createCollection('Logs')
 
 
