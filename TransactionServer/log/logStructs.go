@@ -31,29 +31,29 @@ type SystemEvent struct {
 	XMLName     xml.Name `xml:"systemEvent"`
 	Command     string   `xml:"command"`
 	Username    string   `xml:"username"`
-	StockSymbol string   `xml:"stockSymbol"`
-	Filename    string   `xml:"filename"`
-	Funds       float64  `xml:"funds"`
+	StockSymbol string   `xml:"stockSymbol,omitempty"`
+	Filename    string   `xml:"filename,omitempty"`
+	Funds       float64  `xml:"funds,omitempty"`
 }
 
 type ErrorEvent struct {
 	XMLName      xml.Name `xml:"errorEvent"`
 	Command      string   `xml:"command"`
-	Username     string   `xml:"username"`
-	StockSymbol  string   `xml:"stockSymbol"`
-	Filename     string   `xml:"filename"`
-	Funds        float64  `xml:"funds"`
-	ErrorMessage string   `xml:"errorMessage"`
+	Username     string   `xml:"username,omitempty"`
+	StockSymbol  string   `xml:"stockSymbol,omitempty"`
+	Filename     string   `xml:"filename,omitempty"`
+	Funds        float64  `xml:"funds,omitempty"`
+	ErrorMessage string   `xml:"errorMessage,omitempty"`
 }
 
 type Debug struct {
 	XMLName      xml.Name `xml:"debug"`
 	Command      string   `xml:"command"`
-	Username     string   `xml:"username"`
-	StockSymbol  string   `xml:"stockSymbol"`
-	Filename     string   `xml:"filename"`
-	Funds        float64  `xml:"funds"`
-	DebugMessage string   `xml:"debugMessage"`
+	Username     string   `xml:"username,omitempty"`
+	StockSymbol  string   `xml:"stockSymbol,omitempty"`
+	Filename     string   `xml:"filename,omitempty"`
+	Funds        float64  `xml:"funds,omitempty"`
+	DebugMessage string   `xml:"debugMessage,omitempty"`
 }
 
 type Log struct {
