@@ -119,13 +119,13 @@ func WriteXML(filename string) {
 
 	// fmt.Printf("%s \n", string(xmlString))
 
-	// Write to file.
+	// Create File.
 	file, _ := os.Create(filename)
-
 	xmlWriter := io.Writer(file)
-
 	enc := xml.NewEncoder(xmlWriter)
 	enc.Indent("  ", "    ")
+	
+	// Write to file.
 	if err := enc.Encode(logfile); err != nil {
 		fmt.Printf("error: %v\n", err)
 	}
