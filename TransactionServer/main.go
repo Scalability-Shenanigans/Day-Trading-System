@@ -26,6 +26,7 @@ func addHandler(w http.ResponseWriter, r *http.Request) {
 	if db.UpdateBalance(int(addFunds.Amount), addFunds.User) {
 		return
 	}
+	fmt.Println("Creating an account for user")
 	db.CreateAccount(addFunds.User, int(addFunds.Amount))
 }
 

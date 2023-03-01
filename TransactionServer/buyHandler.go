@@ -78,11 +78,7 @@ func setBuyAmountHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println(buyAmountOrder)
 
-	// check user account to see if they have enough funds and decrement Account balance if they do
-	if db.UpdateBalance(int(buyAmountOrder.Amount*-1), buyAmountOrder.User) {
-		fmt.Println("Creating BuyAmountOrder")
-		db.CreateBuyAmountOrder(buyAmountOrder) // Add buyAmountOrder to db
-	}
+	db.CreateBuyAmountOrder(buyAmountOrder) // Add buyAmountOrder to db
 }
 
 func setBuyTriggerHandler(w http.ResponseWriter, r *http.Request) {
@@ -102,13 +98,17 @@ func setBuyTriggerHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Found BuyAmountOrder")
 		fmt.Println(buyAmountOrder)
 
-		// add TriggeredBuyAmountOrder to db for PollingService to act on
-		var triggeredBuyAmountOrder db.TriggeredBuyAmountOrder
-		triggeredBuyAmountOrder.User = buyAmountOrder.User
-		triggeredBuyAmountOrder.Stock = buyAmountOrder.Stock
-		triggeredBuyAmountOrder.Amount = buyAmountOrder.Amount
-		triggeredBuyAmountOrder.Price = triggerOrder.Price
-		db.CreateTriggeredBuyAmountOrder(triggeredBuyAmountOrder)
+		// check user account to see if they have enough funds and decrement Account balance if they do
+		if db.UpdateBalance(int(buyAmountOrder.Amount*triggerOrder.Price*-1), buyAmountOrder.User) {
+			fmt.Println("Creating BuyAmountOrder")
+			// add TriggeredBuyAmountOrder to db for PollingService to act on
+			var triggeredBuyAmountOrder db.TriggeredBuyAmountOrder
+			triggeredBuyAmountOrder.User = buyAmountOrder.User
+			triggeredBuyAmountOrder.Stock = buyAmountOrder.Stock
+			triggeredBuyAmountOrder.Amount = buyAmountOrder.Amount
+			triggeredBuyAmountOrder.Price = triggerOrder.Price
+			db.CreateTriggeredBuyAmountOrder(triggeredBuyAmountOrder)
+		}
 	}
 }
 
