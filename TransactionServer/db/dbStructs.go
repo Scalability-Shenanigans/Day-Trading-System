@@ -45,10 +45,10 @@ type Account struct {
 }
 
 type Transaction struct {
-	Transaction_ID int    `bson:"transaction_id"`
-	Stock          string `bson:"stock"`
-	Is_Buy         bool   `bson:"is_buy"`
-	Amount         int    `bson:"amount"`
-	Price          int    `bson:"price"`
-	User           string `bson:"user"`
+	Transaction_ID int     `bson:"transaction_id"`
+	Stock          string  `bson:"stock"`
+	Is_Buy         bool    `bson:"is_buy"`
+	Amount         int     `bson:"amount"`
+	Price          float64 `bson:"price"`
+	User           string  `bson:"user"`
 }

@@ -31,11 +31,7 @@ func sellHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	quote, err := strconv.Atoi(GetQuote(sell.Stock, sell.User))
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	quote:= GetQuote(sell.Stock, sell.User)
 
 	transaction := db.Transaction{
 		User:   sell.User,

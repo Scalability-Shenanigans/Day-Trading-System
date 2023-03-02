@@ -14,14 +14,20 @@ const (
 )
 
 type TransactionResult struct {
-	Price 			int  
+	Price 			float64  
 	Symbol          string 
 	Username        bool   
 	TimeStamp       int    
 	Key         	string    
 }
 
-func TransactionServerRequest(stock string, user string) string {
+func GetQuote(stock string, user string) float64 {
+	command := stock + " " + user + " \n"
+	result  := SendRequest(command)
+	return result.Price
+}
+
+func TransactionServerRequest(stock string, user string) *TransactionResult {
 	command := stock + " " + user + " \n"
 	return SendRequest(command)
 }
