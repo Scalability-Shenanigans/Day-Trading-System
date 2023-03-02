@@ -32,7 +32,7 @@ func TransactionServerRequest(stock string, user string) *TransactionResult {
 	return SendRequest(command)
 }
 
-func SendRequest(command string) *TransactionResult {
+func SendRequest(command string) TransactionResult {
 	//Establish Connection
 	connection, err := net.Dial(SERVER_TYPE, SERVER_HOST+":"+SERVER_PORT)
 	if err != nil {

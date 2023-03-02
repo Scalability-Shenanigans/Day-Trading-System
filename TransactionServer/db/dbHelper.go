@@ -41,6 +41,7 @@ func InitConnection() {
 	buyAmountOrders = db.Collection("BuyAmountOrders")
 	triggeredBuyAmountOrders = db.Collection("TriggeredBuyAmountOrders")
 	sellOrders = db.Collection("SellOrders")
+	logs = db.Collection("Logs")
 }
 
 func CreateAccount(user string, initialBalance int) {

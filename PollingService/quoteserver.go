@@ -14,7 +14,7 @@ const (
 )
 
 type TransactionResult struct {
-	Price 			int  
+	Price 			float64  
 	Symbol          string 
 	Username        bool   
 	TimeStamp       int    
@@ -26,7 +26,7 @@ func TransactionServerRequest(stock string, user string) string {
 	return SendRequest(command)
 }
 
-func SendRequest(command string) *TransactionResult {
+func SendRequest(command string) TransactionResult {
 	//Establish Connection
 	connection, err := net.Dial(SERVER_TYPE, SERVER_HOST+":"+SERVER_PORT)
 	if err != nil {
