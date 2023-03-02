@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
 )
 
 // type TriggerOrder struct {
@@ -31,7 +30,7 @@ func sellHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	quote:= GetQuote(sell.Stock, sell.User)
+	quote := GetQuote(sell.Stock, sell.User)
 
 	transaction := db.Transaction{
 		User:   sell.User,
@@ -51,7 +50,7 @@ func commitSell(w http.ResponseWriter, r *http.Request) {
 
 	// since Amount is not no. of shares, it is baically the sell amount
 	// After selling, add the sell amount to user's acct balance
-	if db.UpdateBalance(transaction.Amount, user) {
+	if db.UpdateBalance(float64(transaction.Amount)*transaction.Price, user) {
 		if db.UpdateStockHolding(user, transaction.Stock, -1*transaction.Amount) { // update how much stock they hold after selling
 			fmt.Println("Transaction Commited")
 		}
