@@ -6,9 +6,9 @@ type StockHolding struct {
 }
 
 type BuyOrder struct {
-	Stock  string `bson:"stock"`
-	Price  int    `bson:"price"`
-	Amount int    `bson:"amount"`
+	Stock  string  `bson:"stock"`
+	Price  float64 `bson:"price"`
+	Amount int     `bson:"amount"`
 }
 
 type BuyAmountOrder struct {
@@ -38,7 +38,7 @@ type SellOrder struct {
 
 type Account struct {
 	User        string         `bson:"user"`
-	Balance     int            `bson:"balance"`
+	Balance     float64        `bson:"balance"`
 	Stocks      []StockHolding `bson:"stocks,omitempty"`
 	Buy_Orders  []BuyOrder     `bson:"buy_orders,omitempty"`
 	Sell_Orders []SellOrder    `bson:"sell_orders,omitempty"`

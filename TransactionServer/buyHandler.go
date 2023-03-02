@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
 )
 
 type TriggerOrder struct {
@@ -34,12 +33,12 @@ func buyHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	quote:= GetQuote(buy.Stock, buy.User)
+	quote := GetQuote(buy.Stock, buy.User)
 
 	transaction := db.Transaction{
 		User:   buy.User,
 		Stock:  buy.Stock,
-		Amount: int(buy.Amount),
+		Amount: int(buy.Amount / quote),
 		Price:  quote,
 		Is_Buy: true,
 	}
@@ -55,9 +54,9 @@ func commitBuy(w http.ResponseWriter, r *http.Request) {
 	user := r.URL.Query().Get("user")
 	transaction := db.ConsumeLastTransaction(user)
 
-	transactionCost := transaction.Amount * transaction.Price
+	transactionCost := float64(transaction.Amount) * transaction.Price
 
-	if db.UpdateBalance(transactionCost*-1, user) {
+	if db.UpdateBalance(transactionCost*-1.0, user) {
 		if db.UpdateStockHolding(user, transaction.Stock, transaction.Amount) {
 			fmt.Println("Transaction Commited")
 		}
@@ -65,9 +64,16 @@ func commitBuy(w http.ResponseWriter, r *http.Request) {
 }
 
 func cancelBuy(w http.ResponseWriter, r *http.Request) {
-	//cancel the buy
-	//delete it from db and everywhere else
-	//do we reserve funds when a buy is added but not commited?
+	var buy Buy
+	err := json.NewDecoder(r.Body).Decode(&buy)
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("Bad Request")
+		return
+	}
+	//consumes the last transaction but does nothing with it so its effectively cancelled
+	db.ConsumeLastTransaction(buy.User)
+
 }
 
 func setBuyAmountHandler(w http.ResponseWriter, r *http.Request) {
@@ -101,7 +107,7 @@ func setBuyTriggerHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(buyAmountOrder)
 
 		// check user account to see if they have enough funds and decrement Account balance if they do
-		if db.UpdateBalance(int(buyAmountOrder.Amount*triggerOrder.Price*-1), buyAmountOrder.User) {
+		if db.UpdateBalance((buyAmountOrder.Amount * triggerOrder.Price * -1), buyAmountOrder.User) {
 			fmt.Println("Creating BuyAmountOrder")
 			// add TriggeredBuyAmountOrder to db for PollingService to act on
 			var triggeredBuyAmountOrder db.TriggeredBuyAmountOrder

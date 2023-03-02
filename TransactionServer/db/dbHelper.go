@@ -44,7 +44,7 @@ func InitConnection() {
 	logs = db.Collection("Logs")
 }
 
-func CreateAccount(user string, initialBalance int) {
+func CreateAccount(user string, initialBalance float64) {
 	newAccount := Account{
 		User:    user,
 		Balance: initialBalance,
@@ -59,7 +59,7 @@ func CreateAccount(user string, initialBalance int) {
 
 }
 
-func UpdateBalance(amount int, user string) bool {
+func UpdateBalance(amount float64, user string) bool {
 	filter := bson.M{"user": user}
 	var result Account
 	err := accounts.FindOne(context.TODO(), filter).Decode(&result)
