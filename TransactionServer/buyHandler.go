@@ -56,7 +56,7 @@ func commitBuy(w http.ResponseWriter, r *http.Request) {
 
 	transactionCost := float64(transaction.Amount) * transaction.Price
 
-	if db.UpdateBalance(transactionCost*-1.0, user) {
+	if db.UpdateBalance(transactionCost*-1.0, user, 0) {
 		if db.UpdateStockHolding(user, transaction.Stock, transaction.Amount) {
 			fmt.Println("Transaction Commited")
 		}
@@ -107,7 +107,7 @@ func setBuyTriggerHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(buyAmountOrder)
 
 		// check user account to see if they have enough funds and decrement Account balance if they do
-		if db.UpdateBalance((buyAmountOrder.Amount * triggerOrder.Price * -1), buyAmountOrder.User) {
+		if db.UpdateBalance((buyAmountOrder.Amount * triggerOrder.Price * -1), buyAmountOrder.User, 0) {
 			fmt.Println("Creating BuyAmountOrder")
 			// add TriggeredBuyAmountOrder to db for PollingService to act on
 			var triggeredBuyAmountOrder db.TriggeredBuyAmountOrder

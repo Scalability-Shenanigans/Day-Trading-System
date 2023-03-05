@@ -50,7 +50,7 @@ func commitSell(w http.ResponseWriter, r *http.Request) {
 
 	// since Amount is not no. of shares, it is baically the sell amount
 	// After selling, add the sell amount to user's acct balance
-	if db.UpdateBalance(float64(transaction.Amount)*transaction.Price, user) {
+	if db.UpdateBalance(float64(transaction.Amount)*transaction.Price, user, 0) {
 		if db.UpdateStockHolding(user, transaction.Stock, -1*transaction.Amount) { // update how much stock they hold after selling
 			fmt.Println("Transaction Commited")
 		}

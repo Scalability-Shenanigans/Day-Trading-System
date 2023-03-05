@@ -1,6 +1,7 @@
 package db
 
 import (
+	"TransactionServer/log"
 	"context"
 	"fmt"
 
@@ -41,25 +42,32 @@ func InitConnection() {
 	buyAmountOrders = db.Collection("BuyAmountOrders")
 	triggeredBuyAmountOrders = db.Collection("TriggeredBuyAmountOrders")
 	sellOrders = db.Collection("SellOrders")
-	logs = db.Collection("Logs")
 }
 
-func CreateAccount(user string, initialBalance float64) {
+func CreateAccount(user string, initialBalance float64, transactionNum int64) {
 	newAccount := Account{
 		User:    user,
 		Balance: initialBalance,
 	}
+
+	newAccountTransaction := log.AccountTransaction{
+		Action:   "add",
+		Username: user,
+		Funds:    initialBalance,
+	}
+
 	res, err := accounts.InsertOne(context.TODO(), newAccount)
 
 	if err != nil {
 		fmt.Println("Failed to create account")
 	} else {
 		fmt.Println(res.InsertedID)
+		log.CreateAccountTransactionLog(&newAccountTransaction, transactionNum)
 	}
 
 }
 
-func UpdateBalance(amount float64, user string) bool {
+func UpdateBalance(amount float64, user string, transactionNum int64) bool {
 	filter := bson.M{"user": user}
 	var result Account
 	err := accounts.FindOne(context.TODO(), filter).Decode(&result)
@@ -78,9 +86,27 @@ func UpdateBalance(amount float64, user string) bool {
 	}
 
 	result.Balance += amount
+
+	var action string
+
+	if amount > 0 {
+		action = "add"
+	} else {
+		action = "remove"
+	}
+
+	newAccountTransaction := log.AccountTransaction{
+		Action:   action,
+		Username: user,
+		Funds:    amount,
+	}
+
 	opts := options.Replace().SetUpsert(true)
 	accounts.ReplaceOne(context.TODO(), filter, result, opts)
 	fmt.Println("new balance set")
+
+	log.CreateAccountTransactionLog(&newAccountTransaction, transactionNum)
+
 	return true
 
 }
