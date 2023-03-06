@@ -86,6 +86,10 @@ func DumplogHandler(w http.ResponseWriter, r *http.Request) {
 
 	var userCommands []UserCommand
 	var accountTransactions []AccountTransaction
+	var quoteServers []QuoteServer
+	var systemEvents []SystemEvent
+	var errorEvents []ErrorEvent
+	var debugs []Debug
 
 	for cursor.Next(context.Background()) {
 		var log bson.M
@@ -107,7 +111,6 @@ func DumplogHandler(w http.ResponseWriter, r *http.Request) {
 			}
 			fmt.Printf("UserCommand: %+v\n", userCommand)
 			userCommands = append(userCommands, userCommand)
-
 		case "AccountTransaction":
 			var accountTransaction AccountTransaction
 			data, _ := bson.Marshal(log)
@@ -117,6 +120,42 @@ func DumplogHandler(w http.ResponseWriter, r *http.Request) {
 			}
 			fmt.Printf("AccountTransaction: %+v\n", accountTransaction)
 			accountTransactions = append(accountTransactions, accountTransaction)
+		case "SystemEvent":
+			var systemEvent SystemEvent
+			data, _ := bson.Marshal(log)
+			err := bson.Unmarshal(data, &systemEvent)
+			if err != nil {
+				fmt.Println(err)
+			}
+			fmt.Printf("SystemEvent: %+v\n", systemEvent)
+			systemEvents = append(systemEvents, systemEvent)
+		case "ErrorEvent":
+			var errorEvent ErrorEvent
+			data, _ := bson.Marshal(log)
+			err := bson.Unmarshal(data, &errorEvent)
+			if err != nil {
+				fmt.Println(err)
+			}
+			fmt.Printf("ErrorEvent: %+v\n", errorEvent)
+			errorEvents = append(errorEvents, errorEvent)
+		case "Debug":
+			var debug Debug
+			data, _ := bson.Marshal(log)
+			err := bson.Unmarshal(data, &debug)
+			if err != nil {
+				fmt.Println(err)
+			}
+			fmt.Printf("Debug: %+v\n", debug)
+			debugs = append(debugs, debug)
+		case "QuoteServer":
+			var quoteServer QuoteServer
+			data, _ := bson.Marshal(log)
+			err := bson.Unmarshal(data, &quoteServer)
+			if err != nil {
+				fmt.Println(err)
+			}
+			fmt.Printf("QuoteServer: %+v\n", quoteServer)
+			quoteServers = append(quoteServers, quoteServer)
 		default:
 			fmt.Println("Unknown document type")
 		}
