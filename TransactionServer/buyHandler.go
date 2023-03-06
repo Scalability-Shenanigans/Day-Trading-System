@@ -22,6 +22,11 @@ type Buy struct {
 	TransactionNum int     `json:"transactionNum"`
 }
 
+type CancelSetBuy struct {
+	User  string `json:"user"`
+	Stock string `json:"stock"`
+}
+
 func buyHandler(w http.ResponseWriter, r *http.Request) {
 	//get stock price
 	//add transaction to pending transactions collection
@@ -144,6 +149,15 @@ func setBuyTriggerHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func cancelSetBuy(http.ResponseWriter, *http.Request) {
-	//undo everything you did in the setBuyAmount one
+func cancelSetBuy(w http.ResponseWriter, r *http.Request) {
+	var cancelSetBuy CancelSetBuy
+	err := json.NewDecoder(r.Body).Decode(&cancelSetBuy)
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("Bad Request")
+		return
+	}
+	fmt.Println(cancelSetBuy)
+
+	db.DeleteBuyAmountOrder(cancelSetBuy.User, cancelSetBuy.Stock)
 }
