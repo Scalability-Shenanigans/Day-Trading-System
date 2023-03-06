@@ -39,7 +39,17 @@ func addHandler(w http.ResponseWriter, r *http.Request) {
 		Funds:          addFunds.Amount,
 	}
 
+	transaction := &log.AccountTransaction{
+		Timestamp:      time.Now().UnixNano(),
+		Server:         "localhost",
+		TransactionNum: int64(addFunds.TransactionNum),
+		Action:         "ADD",
+		Username:       addFunds.User,
+		Funds:          addFunds.Amount,
+	}
+
 	log.CreateUserCommandsLog(cmd)
+	log.CreateAccountTransactionLog(transaction)
 
 	if db.UpdateBalance(addFunds.Amount, addFunds.User, int64(addFunds.TransactionNum)) {
 		return

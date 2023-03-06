@@ -71,7 +71,19 @@ func displayHandler(w http.ResponseWriter, r *http.Request) {
 
 func GetQuote(stock string, user string) float64 {
 	command := stock + " " + user + " \n"
+	requestTime := time.Now().UnixNano()
 	result := SendRequest(command)
+	quoteServer := &log.QuoteServer{
+		Timestamp:       requestTime,
+		Server:          "localhost",
+		TransactionNum:  0, //for now
+		QuoteServerTime: int64(result.TimeStamp),
+		Username:        user,
+		StockSymbol:     result.Symbol,
+		Price:           result.Price,
+		Cryptokey:       result.Key,
+	}
+	log.CreateQuoteServerLog(quoteServer)
 	return result.Price
 }
 

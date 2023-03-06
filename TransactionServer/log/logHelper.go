@@ -68,6 +68,32 @@ func CreateAccountTransactionLog(cmd *AccountTransaction) {
 	}
 }
 
+func CreateSystemEventLog(cmd *SystemEvent) {
+
+	cmd.XMLName = xml.Name{Local: "SystemEvent"}
+
+	res, err := logs.InsertOne(context.TODO(), cmd)
+
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println(res.InsertedID)
+	}
+}
+
+func CreateQuoteServerLog(cmd *QuoteServer) {
+
+	cmd.XMLName = xml.Name{Local: "QuoteServer"}
+
+	res, err := logs.InsertOne(context.TODO(), cmd)
+
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println(res.InsertedID)
+	}
+}
+
 func DumplogHandler(w http.ResponseWriter, r *http.Request) {
 	var dumplog Dumplog
 
