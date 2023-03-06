@@ -4,9 +4,10 @@ import (
 	"PollingService/db"
 	"context"
 	"fmt"
-	"go.mongodb.org/mongo-driver/bson"
 	"log"
 	"time"
+
+	"go.mongodb.org/mongo-driver/bson"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -170,7 +171,7 @@ func sellHandler() {
 
 		if triggeredSellAmountOrder.Price <= curStockPrice { // If trigger price is <= stock price execute order
 
-			UpdateBalance(triggeredSellAmountOrder.Amount, triggeredSellAmountOrder.User, 0)
+			UpdateBalance(float64(triggeredSellAmountOrder.Num_of_shares)*triggeredSellAmountOrder.Price, triggeredSellAmountOrder.User, 0)
 
 			filter := bson.M{"user": triggeredSellAmountOrder.User, "stock": triggeredSellAmountOrder.Stock}
 			_, err = triggeredSellAmountOrders.DeleteOne(context.TODO(), filter)
