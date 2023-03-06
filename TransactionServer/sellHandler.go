@@ -7,12 +7,6 @@ import (
 	"net/http"
 )
 
-// type TriggerOrder struct {
-// 	User  string  `json:"user"`
-// 	Stock string  `json:"stock"`
-// 	Price float64 `json:"price"`
-// }
-
 type Sell struct {
 	User   string  `json:"user"`
 	Stock  string  `json:"stock"`
