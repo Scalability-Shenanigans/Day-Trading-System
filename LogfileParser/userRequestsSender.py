@@ -44,6 +44,13 @@ def main():
                 }
                 print(data)
                 print(send_request("add", data))
+            elif command == 'DUMPLOG':
+              data = {
+                "filename": args[1],
+                "transactionNum": transactionNum
+              }
+              print(data)
+              print(send_request("dumplog", data))
 
 
 

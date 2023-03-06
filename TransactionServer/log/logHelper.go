@@ -2,12 +2,21 @@ package log
 
 import (
 	"context"
+	"encoding/json"
+	"encoding/xml"
 	"fmt"
-	"time"
+	"net/http"
+	"os"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
+
+type Dumplog struct {
+	Filename       string `json:"filename"`
+	TransactionNum int    `json:"transactionNum"`
+}
 
 // var mongoURI = "mongodb://localhost:5000" //for local testing
 var mongoURI = "mongodb://localhost:27017" //use this for when everything is containerized
@@ -34,17 +43,12 @@ func InitLogDBConnection() {
 
 func CreateUserCommandsLog(cmd *UserCommand, transactionNum int64) {
 
-	log := &Log{
-		Timestamp:      time.Now().UnixNano(),
-		Server:         "localhost",
-		TransactionNum: transactionNum,
-		UserCommand:    cmd,
-	}
+	cmd.XMLName = xml.Name{Local: "UserCommand"}
 
-	res, err := logs.InsertOne(context.TODO(), log)
+	res, err := logs.InsertOne(context.TODO(), cmd)
 
 	if err != nil {
-		fmt.Println("Failed to insert UserCommand log")
+		fmt.Println(err)
 	} else {
 		fmt.Println(res.InsertedID)
 	}
@@ -53,18 +57,94 @@ func CreateUserCommandsLog(cmd *UserCommand, transactionNum int64) {
 
 func CreateAccountTransactionLog(cmd *AccountTransaction, transactionNum int64) {
 
-	log := &Log{
-		Timestamp:          time.Now().UnixNano(),
-		Server:             "localhost",
-		TransactionNum:     transactionNum,
-		AccountTransaction: cmd,
-	}
+	cmd.XMLName = xml.Name{Local: "AccountTransaction"}
 
-	res, err := logs.InsertOne(context.TODO(), log)
+	res, err := logs.InsertOne(context.TODO(), cmd)
 
 	if err != nil {
-		fmt.Println("Failed to insert AccountTransaction log")
+		fmt.Println(err)
 	} else {
 		fmt.Println(res.InsertedID)
 	}
+}
+
+func DumplogHandler(w http.ResponseWriter, r *http.Request) {
+	var dumplog Dumplog
+
+	err := json.NewDecoder(r.Body).Decode(&dumplog)
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("Bad Request")
+		return
+	}
+
+	cursor, err := logs.Find(context.TODO(), bson.D{})
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	var userCommands []UserCommand
+	var accountTransactions []AccountTransaction
+
+	for cursor.Next(context.Background()) {
+		var log bson.M
+		err := cursor.Decode(&log)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		xmlname := log["xmlname"].(bson.M)
+		local := xmlname["local"].(string)
+
+		switch local {
+		case "UserCommand":
+			var userCommand UserCommand
+			data, _ := bson.Marshal(log)
+			err := bson.Unmarshal(data, &userCommand)
+			if err != nil {
+				fmt.Println(err)
+			}
+			fmt.Printf("UserCommand: %+v\n", userCommand)
+			userCommands = append(userCommands, userCommand)
+
+		case "AccountTransaction":
+			var accountTransaction AccountTransaction
+			data, _ := bson.Marshal(log)
+			err := bson.Unmarshal(data, &accountTransaction)
+			if err != nil {
+				fmt.Println(err)
+			}
+			fmt.Printf("AccountTransaction: %+v\n", accountTransaction)
+			accountTransactions = append(accountTransactions, accountTransaction)
+		default:
+			fmt.Println("Unknown document type")
+		}
+	}
+
+	if err := cursor.Err(); err != nil {
+		fmt.Println(err)
+	}
+
+	allLogs := Log{
+		UserCommands:        userCommands,
+		AccountTransactions: accountTransactions,
+	}
+
+	// create the XML file
+	file, err := os.Create(dumplog.Filename + ".xml")
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+
+	file.WriteString(xml.Header)
+
+	// write the XML to the file
+	encoder := xml.NewEncoder(file)
+	encoder.Indent("", "  ")
+	if err := encoder.Encode(allLogs); err != nil {
+		panic(err)
+	}
+
 }

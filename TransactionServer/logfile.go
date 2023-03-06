@@ -6,7 +6,7 @@ import (
 	"io"
 	"os"
 )
-type Debug struct {
+type DebugEvent struct {
 	TimeStamp      int      	`xml:"timestamp"`
 	Server         string       `xml:"server"`
 	TransactionNum int      	`xml:"transactionNum"`

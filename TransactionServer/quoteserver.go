@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"net"
+	"strconv"
 	"strings"
-	"stringcov"
 )
 
 const (
@@ -14,16 +14,16 @@ const (
 )
 
 type TransactionResult struct {
-	Price 			float64  
-	Symbol          string 
-	Username        bool   
-	TimeStamp       int    
-	Key         	string    
+	Price     float64
+	Symbol    string
+	Username  string
+	TimeStamp int
+	Key       string
 }
 
 func GetQuote(stock string, user string) float64 {
 	command := stock + " " + user + " \n"
-	result  := SendRequest(command)
+	result := SendRequest(command)
 	return result.Price
 }
 
@@ -32,7 +32,7 @@ func TransactionServerRequest(stock string, user string) *TransactionResult {
 	return SendRequest(command)
 }
 
-func SendRequest(command string) TransactionResult {
+func SendRequest(command string) *TransactionResult {
 	//Establish Connection
 	connection, err := net.Dial(SERVER_TYPE, SERVER_HOST+":"+SERVER_PORT)
 	if err != nil {
@@ -49,11 +49,11 @@ func SendRequest(command string) TransactionResult {
 	defer connection.Close()
 
 	// Process Result
-	result := strings.Split(strings.Split(string(buffer[:mLen]), "\n")[0],",")
+	result := strings.Split(strings.Split(string(buffer[:mLen]), "\n")[0], ",")
 	Amount, err := strconv.ParseFloat(result[0], 64)
-	time,err :=strconv.Atoi(result[2])
-	transactionResult := TransactionResult{Amount,result[1],result[2],time,result[4]}
+	time, err := strconv.Atoi(result[2])
+	transactionResult := TransactionResult{Amount, result[1], result[2], time, result[4]}
 
 	//Return Result
-	return transactionResult
+	return &transactionResult
 }

@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 )
 
 type AddFunds struct {
@@ -30,9 +31,12 @@ func addHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	cmd := &log.UserCommand{
-		Command:  "ADD",
-		Username: addFunds.User,
-		Funds:    addFunds.Amount,
+		Timestamp:      time.Now().UnixNano(),
+		Server:         "localhost",
+		TransactionNum: int64(addFunds.TransactionNum),
+		Command:        "ADD",
+		Username:       addFunds.User,
+		Funds:          addFunds.Amount,
 	}
 
 	log.CreateUserCommandsLog(cmd, int64(addFunds.TransactionNum))
@@ -58,5 +62,6 @@ func main() {
 	http.HandleFunc("/cancelBuy", cancelBuy)
 	http.HandleFunc("/setBuyAmount", setBuyAmountHandler)
 	http.HandleFunc("/setBuyTrigger", setBuyTriggerHandler)
+	http.HandleFunc("/dumplog", log.DumplogHandler)
 	http.ListenAndServe(port, nil)
 }

@@ -4,6 +4,7 @@ import (
 	"TransactionServer/log"
 	"context"
 	"fmt"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -51,9 +52,12 @@ func CreateAccount(user string, initialBalance float64, transactionNum int64) {
 	}
 
 	newAccountTransaction := log.AccountTransaction{
-		Action:   "add",
-		Username: user,
-		Funds:    initialBalance,
+		Timestamp:      time.Now().UnixNano(),
+		Server:         "localhost",
+		TransactionNum: transactionNum,
+		Action:         "add",
+		Username:       user,
+		Funds:          initialBalance,
 	}
 
 	res, err := accounts.InsertOne(context.TODO(), newAccount)
@@ -96,9 +100,12 @@ func UpdateBalance(amount float64, user string, transactionNum int64) bool {
 	}
 
 	newAccountTransaction := log.AccountTransaction{
-		Action:   action,
-		Username: user,
-		Funds:    amount,
+		Timestamp:      time.Now().UnixNano(),
+		Server:         "localhost",
+		TransactionNum: transactionNum,
+		Action:         action,
+		Username:       user,
+		Funds:          amount,
 	}
 
 	opts := options.Replace().SetUpsert(true)
