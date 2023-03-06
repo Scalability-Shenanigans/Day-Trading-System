@@ -38,14 +38,25 @@ def main():
                 }
                 print(data)
                 print(send_request("buy", data))
-            elif command == 'ADD':
+            elif command == 'COMMIT_BUY':
                 data = {
                     "user": args[1],
-                    "amount": float(args[2]),
-                    "transactionNum": transactionNum
                 }
                 print(data)
-                print(send_request("add", data))
+                print(send_request("commitBuy", data))
+            elif command == 'CANCEL_BUY':
+                data = {
+                    "user": args[1],
+                }
+                print(data)
+                print(send_request("cancelBuy", data))
+            elif command == 'CANCEL_SET_BUY':
+                data = {
+                    "user": args[1],
+                    "stock": args[2]
+                }
+                print(data)
+                print(send_request("cancelSetBuy", data))
             elif command == 'SET_BUY_AMOUNT':
                 data = {
                     "user": args[1],
@@ -55,6 +66,23 @@ def main():
                 }
                 print(data)
                 print(send_request("setBuyAmount", data))
+            elif command == 'SET_BUY_TRIGGER':
+                data = {
+                    "user": args[1],
+                    "stock": args[2],
+                    "amount": float(args[3]),
+                    "transactionNum": transactionNum
+                }
+                print(data)
+                print(send_request("setBuyTrigger", data))
+            elif command == 'ADD':
+                data = {
+                    "user": args[1],
+                    "amount": float(args[2]),
+                    "transactionNum": transactionNum
+                }
+                print(data)
+                print(send_request("add", data))
             elif command == 'DUMPLOG':
               data = {
                 "filename": args[1],
@@ -62,6 +90,64 @@ def main():
               }
               print(data)
               print(send_request("dumplog", data))
+            elif command == 'SELL':
+                data = {
+                    "user": args[1],
+                    "stock": args[2],
+                    "amount": float(args[3]),
+                    "transactionNum": transactionNum
+                }
+                print(data)
+                print(send_request("sell", data))
+            elif command == 'COMMIT_SELL':
+                data = {
+                    "user": args[1]
+                }
+                print(data)
+                print(send_request("commitSell", data))
+            elif command == 'CANCEL_SET_SELL':
+                data = {
+                    "user": args[1],
+                    "stock": args[2]
+                }
+                print(data)
+                print(send_request("cancelSetSell", data))
+            elif command == 'CANCEL_SELL':
+                print(data)
+                print(send_request("cancelSell", data))
+            elif command == 'SET_SELL_AMOUNT':
+                data = {
+                    "user": args[1],
+                    "stock": args[2],
+                    "amount": float(args[3]),
+                    "transactionNum": transactionNum
+                }
+                print(data)
+                print(send_request("setSellAmount", data))
+            elif command == 'SET_SELL_TRIGGER':
+                data = {
+                    "user": args[1],
+                    "stock": args[2],
+                    "amount": float(args[3]),
+                    "transactionNum": transactionNum
+                }
+                print(data)
+                print(send_request("setSellTrigger", data))
+            elif command == 'QUOTE':
+                data = {
+                    "user": args[1],
+                    "stock": args[2]
+                }
+                print(data)
+                print(send_request("quote", data))
+            elif command == 'DISPLAY_SUMMARY':
+                data = {
+                    "user": args[1]
+                }
+                print(data)
+                print(send_request("display", data))
+
+
 
 
 
