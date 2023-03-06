@@ -1,10 +1,14 @@
 package main
 
 import (
+	"TransactionServer/log"
+	"encoding/json"
 	"fmt"
 	"net"
+	"net/http"
 	"strconv"
 	"strings"
+	"time"
 )
 
 const (
@@ -19,6 +23,50 @@ type TransactionResult struct {
 	Username  string
 	TimeStamp int
 	Key       string
+}
+type Quote struct {
+	User  string `json:"user"`
+	Stock string `json:"stock"`
+}
+
+func quoteHandler(w http.ResponseWriter, r *http.Request) {
+	//get stock price
+	//add user command to log
+	var quote Quote
+	err := json.NewDecoder(r.Body).Decode(&quote)
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("Bad Request")
+		return
+	}
+
+	GetQuote(quote.Stock, quote.User)
+
+	cmd := &log.UserCommand{
+		Timestamp:      time.Now().UnixNano(),
+		Server:         "localhost",
+		TransactionNum: 0, //for now
+		Command:        "QUOTE",
+		Username:       quote.User,
+		StockSymbol:    quote.Stock,
+	}
+	log.CreateUserCommandsLog(cmd)
+
+}
+
+func displayHandler(w http.ResponseWriter, r *http.Request) {
+	//just add the command to logs for now
+	user := r.URL.Query().Get("user")
+
+	cmd := &log.UserCommand{
+		Timestamp:      time.Now().UnixNano(),
+		Server:         "localhost",
+		TransactionNum: 0, //for now
+		Command:        "DISPLAY_SUMMARY",
+		Username:       user,
+	}
+	log.CreateUserCommandsLog(cmd)
+
 }
 
 func GetQuote(stock string, user string) float64 {

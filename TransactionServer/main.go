@@ -62,6 +62,13 @@ func main() {
 	http.HandleFunc("/cancelBuy", cancelBuy)
 	http.HandleFunc("/setBuyAmount", setBuyAmountHandler)
 	http.HandleFunc("/setBuyTrigger", setBuyTriggerHandler)
+	http.HandleFunc("/sell", sellHandler)
+	http.HandleFunc("/commitSell", commitSell)
+	http.HandleFunc("/cancelSell", cancelSell)
+	http.HandleFunc("/setSellAmount", setSellAmountHandler)
+	http.HandleFunc("/setSellTrigger", setSellTriggerHandler)
 	http.HandleFunc("/dumplog", log.DumplogHandler)
+	http.HandleFunc("/quote", quoteHandler)
+	http.HandleFunc("/display", quoteHandler)
 	http.ListenAndServe(port, nil)
 }
