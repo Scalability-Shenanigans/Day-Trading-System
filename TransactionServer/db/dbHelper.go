@@ -234,7 +234,7 @@ func FindBuyAmountOrder(user string, stock string) (found bool, order BuyAmountO
 func FindSellAmountOrder(user string, stock string) (found bool, order SellAmountOrder) {
 	filter := bson.M{"user": user, "stock": stock}
 	var sellAmountOrder SellAmountOrder
-	err := sellAmountOrders.FindOneAndDelete(context.TODO(), filter).Decode(&sellAmountOrder)
+	err := buyAmountOrders.FindOneAndDelete(context.TODO(), filter).Decode(&sellAmountOrder)
 	if err == mongo.ErrNoDocuments {
 		fmt.Println("No BuyAmountOrder for found for this user")
 		return false, sellAmountOrder
