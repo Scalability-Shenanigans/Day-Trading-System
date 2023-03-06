@@ -66,7 +66,7 @@ func CreateAccount(user string, initialBalance float64, transactionNum int64) {
 		fmt.Println("Failed to create account")
 	} else {
 		fmt.Println(res.InsertedID)
-		log.CreateAccountTransactionLog(&newAccountTransaction, transactionNum)
+		log.CreateAccountTransactionLog(&newAccountTransaction)
 	}
 
 }
@@ -112,7 +112,7 @@ func UpdateBalance(amount float64, user string, transactionNum int64) bool {
 	accounts.ReplaceOne(context.TODO(), filter, result, opts)
 	fmt.Println("new balance set")
 
-	log.CreateAccountTransactionLog(&newAccountTransaction, transactionNum)
+	log.CreateAccountTransactionLog(&newAccountTransaction)
 
 	return true
 

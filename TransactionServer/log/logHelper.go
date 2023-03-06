@@ -41,7 +41,7 @@ func InitLogDBConnection() {
 	logs = db.Collection("Logs")
 }
 
-func CreateUserCommandsLog(cmd *UserCommand, transactionNum int64) {
+func CreateUserCommandsLog(cmd *UserCommand) {
 
 	cmd.XMLName = xml.Name{Local: "UserCommand"}
 
@@ -55,7 +55,7 @@ func CreateUserCommandsLog(cmd *UserCommand, transactionNum int64) {
 
 }
 
-func CreateAccountTransactionLog(cmd *AccountTransaction, transactionNum int64) {
+func CreateAccountTransactionLog(cmd *AccountTransaction) {
 
 	cmd.XMLName = xml.Name{Local: "AccountTransaction"}
 

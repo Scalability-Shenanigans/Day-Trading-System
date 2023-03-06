@@ -33,9 +33,11 @@ def main():
                 data = {
                     "user": args[1],
                     "stock": args[2],
-                    "amount": float(args[3])
+                    "amount": float(args[3]),
+                    "transactionNum": transactionNum
                 }
                 print(data)
+                print(send_request("buy", data))
             elif command == 'ADD':
                 data = {
                     "user": args[1],
@@ -44,6 +46,15 @@ def main():
                 }
                 print(data)
                 print(send_request("add", data))
+            elif command == 'SET_BUY_AMOUNT':
+                data = {
+                    "user": args[1],
+                    "stock": args[2],
+                    "amount": float(args[3]),
+                    "transactionNum": transactionNum
+                }
+                print(data)
+                print(send_request("setBuyAmount", data))
             elif command == 'DUMPLOG':
               data = {
                 "filename": args[1],

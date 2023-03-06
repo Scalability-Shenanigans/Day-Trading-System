@@ -8,6 +8,22 @@
     <username>oY01WVirLr</username>
     <funds>63511.53</funds>
   </userCommand>
+  <userCommand>
+    <timestamp>1678069241807508000</timestamp>
+    <server>localhost</server>
+    <transactionNum>3</transactionNum>
+    <command>BUY</command>
+    <username>oY01WVirLr</username>
+    <funds>276.83</funds>
+  </userCommand>
+  <userCommand>
+    <timestamp>1678070776354808000</timestamp>
+    <server>localhost</server>
+    <transactionNum>30</transactionNum>
+    <command>SET_BUY_AMOUNT</command>
+    <username>oY01WVirLr</username>
+    <funds>658.38</funds>
+  </userCommand>
   <accountTransaction>
     <timestamp>1678065389217594000</timestamp>
     <server>localhost</server>

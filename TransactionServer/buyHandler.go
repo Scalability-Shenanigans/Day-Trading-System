@@ -2,9 +2,11 @@ package main
 
 import (
 	"TransactionServer/db"
+	"TransactionServer/log"
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 )
 
 type TriggerOrder struct {
@@ -14,9 +16,10 @@ type TriggerOrder struct {
 }
 
 type Buy struct {
-	User   string  `json:"user"`
-	Stock  string  `json:"stock"`
-	Amount float64 `json:"amount"`
+	User           string  `json:"user"`
+	Stock          string  `json:"stock"`
+	Amount         float64 `json:"amount"`
+	TransactionNum int     `json:"transactionNum"`
 }
 
 func buyHandler(w http.ResponseWriter, r *http.Request) {
@@ -32,6 +35,17 @@ func buyHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Bad Request")
 		return
 	}
+
+	cmd := &log.UserCommand{
+		Timestamp:      time.Now().UnixNano(),
+		Server:         "localhost",
+		TransactionNum: int64(buy.TransactionNum),
+		Command:        "BUY",
+		Username:       buy.User,
+		Funds:          buy.Amount,
+	}
+
+	log.CreateUserCommandsLog(cmd)
 
 	quote := GetQuote(buy.Stock, buy.User)
 
@@ -85,6 +99,16 @@ func setBuyAmountHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Println(buyAmountOrder)
+
+	cmd := &log.UserCommand{
+		Timestamp:      time.Now().UnixNano(),
+		Server:         "localhost",
+		TransactionNum: int64(buyAmountOrder.TransactionNum),
+		Command:        "SET_BUY_AMOUNT",
+		Username:       buyAmountOrder.User,
+		Funds:          buyAmountOrder.Amount,
+	}
+	log.CreateUserCommandsLog(cmd)
 
 	db.CreateBuyAmountOrder(buyAmountOrder) // Add buyAmountOrder to db
 }

@@ -39,7 +39,7 @@ func addHandler(w http.ResponseWriter, r *http.Request) {
 		Funds:          addFunds.Amount,
 	}
 
-	log.CreateUserCommandsLog(cmd, int64(addFunds.TransactionNum))
+	log.CreateUserCommandsLog(cmd)
 
 	if db.UpdateBalance(addFunds.Amount, addFunds.User, int64(addFunds.TransactionNum)) {
 		return

@@ -12,9 +12,10 @@ type BuyOrder struct {
 }
 
 type BuyAmountOrder struct {
-	User   string  `json:"user"`
-	Stock  string  `json:"stock"`
-	Amount float64 `json:"amount"`
+	User           string  `json:"user"`
+	Stock          string  `json:"stock"`
+	Amount         float64 `json:"amount"`
+	TransactionNum int     `json:"transactionNum"`
 }
 
 type SellAmountOrder struct {
