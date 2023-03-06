@@ -85,6 +85,7 @@ func setSellAmountHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println(sellAmountOrder)
 	// Note: SellAmountOrder.Amount is not the no. of shares, it is the dollar amount user specified in command
+	// At this stage we don't know how many shares to sell because we don't have trigger price yet
 	db.CreateSellAmountOrder(sellAmountOrder)
 }
 
@@ -105,6 +106,7 @@ func setSellTriggerHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Found SellAmountOrder")
 		fmt.Println(sellAmountOrder)
 
+		// calculate max no. of shares which can be sold based on trigger price
 		var no_of_shares_to_sell = int(sellAmountOrder.Amount / triggerOrder.Price)
 
 		// check user account to see if they have enough shares of the stock to sell and decrement stock holding
@@ -114,13 +116,15 @@ func setSellTriggerHandler(w http.ResponseWriter, r *http.Request) {
 			var triggeredSellAmountOrder db.TriggeredSellAmountOrder
 			triggeredSellAmountOrder.User = sellAmountOrder.User
 			triggeredSellAmountOrder.Stock = sellAmountOrder.Stock
-			triggeredSellAmountOrder.Amount = no_of_shares_to_sell
+			triggeredSellAmountOrder.Num_of_shares = no_of_shares_to_sell
 			triggeredSellAmountOrder.Price = triggerOrder.Price
 			db.CreateTriggeredSellAmountOrder(triggeredSellAmountOrder)
 		}
 	}
 }
 
+// In this function, I guess we also need to update Stockholding for user
+// i.e add back those shares to stockholding which were reserved to be sold
 func cancelSetSell(w http.ResponseWriter, r *http.Request) {
 	var cancelSetSell CancelSetSell
 	err := json.NewDecoder(r.Body).Decode(&cancelSetSell)
