@@ -19,6 +19,12 @@ type Sell struct {
 	Amount float64 `json:"amount"`
 }
 
+type CancelSetSell struct {
+	User   string  `json:"user"`
+	Stock  string  `json:"stock"`
+	Amount float64 `json:"amount"`
+}
+
 func sellHandler(w http.ResponseWriter, r *http.Request) {
 
 	var sell Sell
@@ -92,7 +98,7 @@ func setSellTriggerHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println(triggerOrder)
 
-	// check mongodb for sellAmount object with same user and stock
+	// check mongodb for sell Amount object with same user and stock
 	found, sellAmountOrder := db.FindSellAmountOrder(triggerOrder.User, triggerOrder.Stock)
 
 	if found {
@@ -115,6 +121,15 @@ func setSellTriggerHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func cancelSetSell(http.ResponseWriter, *http.Request) {
-	//undo everything you did in the setBuyAmount one
+func cancelSetSell(w http.ResponseWriter, r *http.Request) {
+	var cancelSetSell CancelSetSell
+	err := json.NewDecoder(r.Body).Decode(&cancelSetSell)
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("Bad Request")
+		return
+	}
+	fmt.Println(cancelSetSell)
+
+	db.DeleteSellAmountOrder(cancelSetSell.User, cancelSetSell.Stock)
 }

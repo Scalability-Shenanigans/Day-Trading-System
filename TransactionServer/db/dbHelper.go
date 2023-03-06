@@ -42,7 +42,9 @@ func InitConnection() {
 	transactions = db.Collection("PendingTransactions")
 	buyOrders = db.Collection("BuyOrders")
 	buyAmountOrders = db.Collection("BuyAmountOrders")
+	sellAmountOrders = db.Collection("SellAmountOrders")
 	triggeredBuyAmountOrders = db.Collection("TriggeredBuyAmountOrders")
+	triggeredSellAmountOrders = db.Collection("TriggeredSellAmountOrders")
 	sellOrders = db.Collection("SellOrders")
 }
 
@@ -238,6 +240,16 @@ func FindSellAmountOrder(user string, stock string) (found bool, order SellAmoun
 		return false, sellAmountOrder
 	}
 	return true, sellAmountOrder
+}
+
+func DeleteBuyAmountOrder(user string, stock string) {
+	filter := bson.M{"user": user, "stock": stock}
+	buyAmountOrders.FindOneAndDelete(context.TODO(), filter)
+}
+
+func DeleteSellAmountOrder(user string, stock string) {
+	filter := bson.M{"user": user, "stock": stock}
+	sellAmountOrders.FindOneAndDelete(context.TODO(), filter)
 }
 
 func ConsumeLastTransaction(user string) Transaction {
