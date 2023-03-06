@@ -18,6 +18,13 @@ type TriggeredBuyAmountOrder struct {
 	Price  float64 `json:"price"`
 }
 
+type TriggeredSellAmountOrder struct {
+	User   string  `json:"user"`
+	Stock  string  `json:"stock"`
+	Amount float64 `json:"amount"`
+	Price  float64 `json:"price"`
+}
+
 type SellOrder struct {
 	Stock  string `bson:"stock"`
 	Price  int    `bson:"price"`
@@ -26,7 +33,7 @@ type SellOrder struct {
 
 type Account struct {
 	User        string         `bson:"user"`
-	Balance     int            `bson:"balance"`
+	Balance     float64        `bson:"balance"`
 	Stocks      []StockHolding `bson:"stocks,omitempty"`
 	Buy_Orders  []BuyOrder     `bson:"buy_orders,omitempty"`
 	Sell_Orders []SellOrder    `bson:"sell_orders,omitempty"`

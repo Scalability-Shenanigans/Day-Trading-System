@@ -20,6 +20,7 @@ var buyOrders *mongo.Collection
 var buyAmountOrders *mongo.Collection
 var sellAmountOrders *mongo.Collection
 var triggeredBuyAmountOrders *mongo.Collection
+var triggeredSellAmountOrders *mongo.Collection
 var sellOrders *mongo.Collection
 
 func InitConnection() {
@@ -41,7 +42,9 @@ func InitConnection() {
 	transactions = db.Collection("PendingTransactions")
 	buyOrders = db.Collection("BuyOrders")
 	buyAmountOrders = db.Collection("BuyAmountOrders")
+	sellAmountOrders = db.Collection("SellAmountOrders")
 	triggeredBuyAmountOrders = db.Collection("TriggeredBuyAmountOrders")
+	triggeredSellAmountOrders = db.Collection("TriggeredSellAmountOrders")
 	sellOrders = db.Collection("SellOrders")
 }
 
@@ -206,6 +209,17 @@ func CreateTriggeredBuyAmountOrder(triggeredBuyAmountOrder TriggeredBuyAmountOrd
 	fmt.Println(res.InsertedID)
 }
 
+func CreateTriggeredSellAmountOrder(triggeredSellAmountOrder TriggeredSellAmountOrder) {
+	res, err := triggeredSellAmountOrders.InsertOne(context.TODO(), triggeredSellAmountOrder)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println("Added TriggeredSellAmountOrder to DB")
+	fmt.Println(res.InsertedID)
+}
+
 func FindBuyAmountOrder(user string, stock string) (found bool, order BuyAmountOrder) {
 	filter := bson.M{"user": user, "stock": stock}
 	var buyAmountOrder BuyAmountOrder
@@ -215,6 +229,27 @@ func FindBuyAmountOrder(user string, stock string) (found bool, order BuyAmountO
 		return false, buyAmountOrder
 	}
 	return true, buyAmountOrder
+}
+
+func FindSellAmountOrder(user string, stock string) (found bool, order SellAmountOrder) {
+	filter := bson.M{"user": user, "stock": stock}
+	var sellAmountOrder SellAmountOrder
+	err := sellAmountOrders.FindOneAndDelete(context.TODO(), filter).Decode(&sellAmountOrder)
+	if err == mongo.ErrNoDocuments {
+		fmt.Println("No BuyAmountOrder for found for this user")
+		return false, sellAmountOrder
+	}
+	return true, sellAmountOrder
+}
+
+func DeleteBuyAmountOrder(user string, stock string) {
+	filter := bson.M{"user": user, "stock": stock}
+	buyAmountOrders.FindOneAndDelete(context.TODO(), filter)
+}
+
+func DeleteSellAmountOrder(user string, stock string) {
+	filter := bson.M{"user": user, "stock": stock}
+	sellAmountOrders.FindOneAndDelete(context.TODO(), filter)
 }
 
 func ConsumeLastTransaction(user string) Transaction {
