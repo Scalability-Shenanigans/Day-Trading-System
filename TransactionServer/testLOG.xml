@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <log>
   <userCommand>
     <timestamp>1678065389206074000</timestamp>
@@ -8,6 +7,14 @@
     <username>oY01WVirLr</username>
     <funds>63511.53</funds>
   </userCommand>
+  <accountTransaction>
+    <timestamp>1678065389217594000</timestamp>
+    <server>localhost</server>
+    <transactionNum>1</transactionNum>
+    <action>add</action>
+    <username>oY01WVirLr</username>
+    <funds>63511.53</funds>
+  </accountTransaction>
   <userCommand>
     <timestamp>1678069241807508000</timestamp>
     <server>localhost</server>
@@ -24,12 +31,4 @@
     <username>oY01WVirLr</username>
     <funds>658.38</funds>
   </userCommand>
-  <accountTransaction>
-    <timestamp>1678065389217594000</timestamp>
-    <server>localhost</server>
-    <transactionNum>1</transactionNum>
-    <action>add</action>
-    <username>oY01WVirLr</username>
-    <funds>63511.53</funds>
-  </accountTransaction>
 </log>

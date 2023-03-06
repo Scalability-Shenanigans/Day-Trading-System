@@ -6,7 +6,6 @@ import (
 	"encoding/xml"
 	"fmt"
 	"net/http"
-	"os"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -84,12 +83,7 @@ func DumplogHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	var userCommands []UserCommand
-	var accountTransactions []AccountTransaction
-	var quoteServers []QuoteServer
-	var systemEvents []SystemEvent
-	var errorEvents []ErrorEvent
-	var debugs []Debug
+	allLogs := []interface{}{}
 
 	for cursor.Next(context.Background()) {
 		var log bson.M
@@ -110,7 +104,7 @@ func DumplogHandler(w http.ResponseWriter, r *http.Request) {
 				fmt.Println(err)
 			}
 			fmt.Printf("UserCommand: %+v\n", userCommand)
-			userCommands = append(userCommands, userCommand)
+			allLogs = append(allLogs, userCommand)
 		case "AccountTransaction":
 			var accountTransaction AccountTransaction
 			data, _ := bson.Marshal(log)
@@ -119,7 +113,7 @@ func DumplogHandler(w http.ResponseWriter, r *http.Request) {
 				fmt.Println(err)
 			}
 			fmt.Printf("AccountTransaction: %+v\n", accountTransaction)
-			accountTransactions = append(accountTransactions, accountTransaction)
+			allLogs = append(allLogs, accountTransaction)
 		case "SystemEvent":
 			var systemEvent SystemEvent
 			data, _ := bson.Marshal(log)
@@ -128,7 +122,7 @@ func DumplogHandler(w http.ResponseWriter, r *http.Request) {
 				fmt.Println(err)
 			}
 			fmt.Printf("SystemEvent: %+v\n", systemEvent)
-			systemEvents = append(systemEvents, systemEvent)
+			allLogs = append(allLogs, systemEvent)
 		case "ErrorEvent":
 			var errorEvent ErrorEvent
 			data, _ := bson.Marshal(log)
@@ -137,7 +131,7 @@ func DumplogHandler(w http.ResponseWriter, r *http.Request) {
 				fmt.Println(err)
 			}
 			fmt.Printf("ErrorEvent: %+v\n", errorEvent)
-			errorEvents = append(errorEvents, errorEvent)
+			allLogs = append(allLogs, errorEvent)
 		case "Debug":
 			var debug Debug
 			data, _ := bson.Marshal(log)
@@ -146,7 +140,7 @@ func DumplogHandler(w http.ResponseWriter, r *http.Request) {
 				fmt.Println(err)
 			}
 			fmt.Printf("Debug: %+v\n", debug)
-			debugs = append(debugs, debug)
+			allLogs = append(allLogs, debug)
 		case "QuoteServer":
 			var quoteServer QuoteServer
 			data, _ := bson.Marshal(log)
@@ -155,7 +149,7 @@ func DumplogHandler(w http.ResponseWriter, r *http.Request) {
 				fmt.Println(err)
 			}
 			fmt.Printf("QuoteServer: %+v\n", quoteServer)
-			quoteServers = append(quoteServers, quoteServer)
+			allLogs = append(allLogs, quoteServer)
 		default:
 			fmt.Println("Unknown document type")
 		}
@@ -165,25 +159,6 @@ func DumplogHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	allLogs := Log{
-		UserCommands:        userCommands,
-		AccountTransactions: accountTransactions,
-	}
-
-	// create the XML file
-	file, err := os.Create(dumplog.Filename + ".xml")
-	if err != nil {
-		panic(err)
-	}
-	defer file.Close()
-
-	file.WriteString(xml.Header)
-
-	// write the XML to the file
-	encoder := xml.NewEncoder(file)
-	encoder.Indent("", "  ")
-	if err := encoder.Encode(allLogs); err != nil {
-		panic(err)
-	}
+	WriteXMLToFile(allLogs, dumplog.Filename)
 
 }
