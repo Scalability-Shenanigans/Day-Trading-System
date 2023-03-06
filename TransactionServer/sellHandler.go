@@ -35,27 +35,26 @@ func sellHandler(w http.ResponseWriter, r *http.Request) {
 	transaction := db.Transaction{
 		User:   sell.User,
 		Stock:  sell.Stock,
-		Amount: int(sell.Amount),
+		Amount: int(sell.Amount / quote), // Amount = no. of shares to be sold
 		Price:  quote,
 		Is_Buy: false,
 	}
 
 	db.CreateTransaction(transaction)
-
 }
 
 func commitSell(w http.ResponseWriter, r *http.Request) {
+
 	user := r.URL.Query().Get("user")
 	transaction := db.ConsumeLastTransaction(user)
-
-	// since Amount is not no. of shares, it is baically the sell amount
-	// After selling, add the sell amount to user's acct balance
-	if db.UpdateBalance(float64(transaction.Amount)*transaction.Price, user, 0) {
+	// transaction.Amount is no. of shares, transaction.Price is the selling price for one share
+	transactionCost := float64(transaction.Amount) * transaction.Price
+	// Update user's account balance after they sold stock
+	if db.UpdateBalance(transactionCost, user, 0) {
 		if db.UpdateStockHolding(user, transaction.Stock, -1*transaction.Amount) { // update how much stock they hold after selling
 			fmt.Println("Transaction Commited")
 		}
 	}
-
 }
 
 func cancelSell(w http.ResponseWriter, r *http.Request) {
