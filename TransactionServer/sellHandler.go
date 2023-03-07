@@ -2,21 +2,25 @@ package main
 
 import (
 	"TransactionServer/db"
+	"TransactionServer/log"
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 )
 
 type Sell struct {
-	User   string  `json:"user"`
-	Stock  string  `json:"stock"`
-	Amount float64 `json:"amount"`
+	User           string  `json:"user"`
+	Stock          string  `json:"stock"`
+	Amount         float64 `json:"amount"`
+	TransactionNum int     `json:"transactionNum"`
 }
 
 type CancelSetSell struct {
-	User   string  `json:"user"`
-	Stock  string  `json:"stock"`
-	Amount float64 `json:"amount"`
+	User           string  `json:"user"`
+	Stock          string  `json:"stock"`
+	Amount         float64 `json:"amount"`
+	TransactionNum int     `json:"transactionNum"`
 }
 
 func sellHandler(w http.ResponseWriter, r *http.Request) {
@@ -29,6 +33,17 @@ func sellHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Bad Request")
 		return
 	}
+
+	cmd := &log.UserCommand{
+		Timestamp:      time.Now().UnixNano(),
+		Server:         "localhost",
+		TransactionNum: int64(sell.TransactionNum),
+		Command:        "SELL",
+		Username:       sell.User,
+		Funds:          sell.Amount,
+	}
+
+	log.CreateUserCommandsLog(cmd)
 
 	quote := GetQuote(sell.Stock, sell.User)
 
@@ -77,6 +92,18 @@ func setSellAmountHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Bad Request")
 		return
 	}
+
+	cmd := &log.UserCommand{
+		Timestamp:      time.Now().UnixNano(),
+		Server:         "localhost",
+		TransactionNum: int64(sellAmountOrder.TransactionNum),
+		Command:        "SET_SELL_AMOUNT",
+		Username:       sellAmountOrder.User,
+		Funds:          sellAmountOrder.Amount,
+	}
+
+	log.CreateUserCommandsLog(cmd)
+
 	fmt.Println(sellAmountOrder)
 	// Note: SellAmountOrder.Amount is not the no. of shares, it is the dollar amount user specified in command
 	// At this stage we don't know how many shares to sell because we don't have trigger price yet
@@ -128,6 +155,17 @@ func cancelSetSell(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Println(cancelSetSell)
+
+	cmd := &log.UserCommand{
+		Timestamp:      time.Now().UnixNano(),
+		Server:         "localhost",
+		TransactionNum: int64(cancelSetSell.TransactionNum),
+		Command:        "CANCEL_SET_SELL",
+		Username:       cancelSetSell.User,
+		Funds:          cancelSetSell.Amount,
+	}
+
+	log.CreateUserCommandsLog(cmd)
 
 	db.DeleteSellAmountOrder(cancelSetSell.User, cancelSetSell.Stock)
 }

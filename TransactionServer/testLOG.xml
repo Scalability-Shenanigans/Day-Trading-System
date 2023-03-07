@@ -31,4 +31,20 @@
     <username>oY01WVirLr</username>
     <funds>658.38</funds>
   </userCommand>
+  <userCommand>
+    <timestamp>1678149841222625000</timestamp>
+    <server>localhost</server>
+    <transactionNum>3</transactionNum>
+    <command>BUY</command>
+    <username>oY01WVirLr</username>
+    <funds>276.83</funds>
+  </userCommand>
+  <systemEvent>
+    <timestamp>1678149841222626000</timestamp>
+    <server>localhost</server>
+    <transactionNum>3</transactionNum>
+    <command>BUY</command>
+    <username>oY01WVirLr</username>
+    <funds>276.83</funds>
+  </systemEvent>
 </log>

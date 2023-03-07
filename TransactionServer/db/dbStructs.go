@@ -19,9 +19,10 @@ type BuyAmountOrder struct {
 }
 
 type SellAmountOrder struct {
-	User   string  `json:"user"`
-	Stock  string  `json:"stock"`
-	Amount float64 `json:"amount"`
+	User           string  `json:"user"`
+	Stock          string  `json:"stock"`
+	Amount         float64 `json:"amount"`
+	TransactionNum int     `json:"transactionNum"`
 }
 
 type TriggeredBuyAmountOrder struct {
