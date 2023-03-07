@@ -41,19 +41,22 @@ def main():
             elif command == 'COMMIT_BUY':
                 data = {
                     "user": args[1],
+                    "transactionNum": transactionNum
                 }
                 print(data)
                 print(send_request("commitBuy", data))
             elif command == 'CANCEL_BUY':
                 data = {
                     "user": args[1],
+                    "transactionNum": transactionNum
                 }
                 print(data)
                 print(send_request("cancelBuy", data))
             elif command == 'CANCEL_SET_BUY':
                 data = {
                     "user": args[1],
-                    "stock": args[2]
+                    "stock": args[2],
+                    "transactionNum": transactionNum
                 }
                 print(data)
                 print(send_request("cancelSetBuy", data))
@@ -101,19 +104,24 @@ def main():
                 print(send_request("sell", data))
             elif command == 'COMMIT_SELL':
                 data = {
-                    "user": args[1]
+                    "user": args[1],
+                    "transactionNum": transactionNum
                 }
                 print(data)
                 print(send_request("commitSell", data))
             elif command == 'CANCEL_SET_SELL':
                 data = {
                     "user": args[1],
-                    "stock": args[2]
+                    "stock": args[2],
+                    "transactionNum": transactionNum
                 }
                 print(data)
                 print(send_request("cancelSetSell", data))
             elif command == 'CANCEL_SELL':
-                print(data)
+                data = {
+                    "user": args[1],
+                    "transactionNum": transactionNum
+                }
                 print(send_request("cancelSell", data))
             elif command == 'SET_SELL_AMOUNT':
                 data = {

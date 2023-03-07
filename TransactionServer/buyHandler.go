@@ -22,9 +22,20 @@ type Buy struct {
 	TransactionNum int     `json:"transactionNum"`
 }
 
+type CancelBuy struct {
+	User           string `json:"user"`
+	TransactionNum int    `json:"transactionNum"`
+}
+
 type CancelSetBuy struct {
-	User  string `json:"user"`
-	Stock string `json:"stock"`
+	User           string `json:"user"`
+	Stock          string `json:"stock"`
+	TransactionNum int    `json:"transactionNum"`
+}
+
+type CommitBuy struct {
+	User           string `json:"user"`
+	TransactionNum int    `json:"transactionNum"`
 }
 
 func buyHandler(w http.ResponseWriter, r *http.Request) {
@@ -79,8 +90,28 @@ func commitBuy(w http.ResponseWriter, r *http.Request) {
 	//consume it (delete it after its done)
 	//update users account in db
 	// balance, holdings, ???
-	user := r.URL.Query().Get("user")
+
+	var commitBuy CommitBuy
+	err := json.NewDecoder(r.Body).Decode(&commitBuy)
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("Bad Request")
+		return
+	}
+
+	user := commitBuy.User
 	transaction := db.ConsumeLastTransaction(user)
+
+	cmd := &log.UserCommand{
+		Timestamp:      time.Now().UnixNano(),
+		Server:         "localhost",
+		TransactionNum: int64(commitBuy.TransactionNum),
+		Command:        "COMMIT_BUY",
+		Username:       commitBuy.User,
+		Funds:          float64(transaction.Amount),
+	}
+
+	log.CreateUserCommandsLog(cmd)
 
 	transactionCost := float64(transaction.Amount) * transaction.Price
 
@@ -92,15 +123,25 @@ func commitBuy(w http.ResponseWriter, r *http.Request) {
 }
 
 func cancelBuy(w http.ResponseWriter, r *http.Request) {
-	var buy Buy
-	err := json.NewDecoder(r.Body).Decode(&buy)
+	var cancelBuy CancelBuy
+	err := json.NewDecoder(r.Body).Decode(&cancelBuy)
 	if err != nil {
 		fmt.Println(err)
 		fmt.Println("Bad Request")
 		return
 	}
+
+	cmd := &log.UserCommand{
+		Timestamp:      time.Now().UnixNano(),
+		Server:         "localhost",
+		TransactionNum: int64(cancelBuy.TransactionNum),
+		Command:        "CANCEL_BUY",
+		Username:       cancelBuy.User,
+	}
+	log.CreateUserCommandsLog(cmd)
+
 	//consumes the last transaction but does nothing with it so its effectively cancelled
-	db.ConsumeLastTransaction(buy.User)
+	db.ConsumeLastTransaction(cancelBuy.User)
 
 }
 
@@ -167,6 +208,15 @@ func cancelSetBuy(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Println(cancelSetBuy)
+
+	cmd := &log.UserCommand{
+		Timestamp:      time.Now().UnixNano(),
+		Server:         "localhost",
+		TransactionNum: int64(cancelSetBuy.TransactionNum),
+		Command:        "CANCEL_SET_BUY",
+		Username:       cancelSetBuy.User,
+	}
+	log.CreateUserCommandsLog(cmd)
 
 	db.DeleteBuyAmountOrder(cancelSetBuy.User, cancelSetBuy.Stock)
 }

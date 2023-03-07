@@ -23,10 +23,13 @@ type CancelSetSell struct {
 	TransactionNum int     `json:"transactionNum"`
 }
 
+type CommitSell struct {
+	User           string `json:"user"`
+	TransactionNum int    `json:"transactionNum"`
+}
+
 func sellHandler(w http.ResponseWriter, r *http.Request) {
-
 	var sell Sell
-
 	err := json.NewDecoder(r.Body).Decode(&sell)
 	if err != nil {
 		fmt.Println(err)
@@ -59,8 +62,25 @@ func sellHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func commitSell(w http.ResponseWriter, r *http.Request) {
+	var commitSell CommitSell
+	err := json.NewDecoder(r.Body).Decode(&commitSell)
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("Bad Request")
+		return
+	}
 
-	user := r.URL.Query().Get("user")
+	cmd := &log.UserCommand{
+		Timestamp:      time.Now().UnixNano(),
+		Server:         "localhost",
+		TransactionNum: int64(commitSell.TransactionNum),
+		Command:        "COMMIT_SELL",
+		Username:       commitSell.User,
+	}
+
+	log.CreateUserCommandsLog(cmd)
+
+	user := commitSell.User
 	transaction := db.ConsumeLastTransaction(user)
 	// transaction.Amount is no. of shares, transaction.Price is the selling price for one share
 	transactionCost := float64(transaction.Amount) * transaction.Price
