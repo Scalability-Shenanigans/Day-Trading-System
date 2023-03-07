@@ -76,7 +76,7 @@ func displayHandler(w http.ResponseWriter, r *http.Request) {
 	cmd := &log.UserCommand{
 		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
-		TransactionNum: int64(transactionNum), //for now
+		TransactionNum: int64(transactionNum),
 		Command:        "DISPLAY_SUMMARY",
 		Username:       user,
 	}
@@ -91,7 +91,7 @@ func GetQuote(stock string, user string, transactionNum int) float64 {
 	quoteServer := &log.QuoteServer{
 		Timestamp:       requestTime,
 		Server:          "localhost",
-		TransactionNum:  0, //for now
+		TransactionNum:  int64(transactionNum),
 		QuoteServerTime: int64(result.TimeStamp),
 		Username:        user,
 		StockSymbol:     result.Symbol,

@@ -89,7 +89,7 @@ func commitSell(w http.ResponseWriter, r *http.Request) {
 	transactionCost := float64(transaction.Amount) * transaction.Price
 	// update how much stock they hold after selling
 	if db.UpdateStockHolding(user, transaction.Stock, -1*transaction.Amount) {
-		if db.UpdateBalance(transactionCost, user, 0) { // update account balance after selling
+		if db.UpdateBalance(transactionCost, user, int64(commitSell.TransactionNum)) { // update account balance after selling
 			fmt.Println("Transaction Commited")
 		}
 	}
