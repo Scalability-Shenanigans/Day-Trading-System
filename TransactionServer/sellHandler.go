@@ -50,7 +50,6 @@ func sellHandler(w http.ResponseWriter, r *http.Request) {
 		Username:       sell.User,
 		Funds:          sell.Amount,
 	}
-
 	log.CreateUserCommandsLog(cmd)
 
 	quote := GetQuote(sell.Stock, sell.User)
@@ -82,7 +81,6 @@ func commitSell(w http.ResponseWriter, r *http.Request) {
 		Command:        "COMMIT_SELL",
 		Username:       commitSell.User,
 	}
-
 	log.CreateUserCommandsLog(cmd)
 
 	user := commitSell.User
@@ -136,7 +134,6 @@ func setSellAmountHandler(w http.ResponseWriter, r *http.Request) {
 		Username:       sellAmountOrder.User,
 		Funds:          sellAmountOrder.Amount,
 	}
-
 	log.CreateUserCommandsLog(cmd)
 
 	fmt.Println(sellAmountOrder)
@@ -163,7 +160,6 @@ func setSellTriggerHandler(w http.ResponseWriter, r *http.Request) {
 		Username:       triggerOrder.User,
 		Funds:          triggerOrder.Price,
 	}
-
 	log.CreateUserCommandsLog(cmd)
 
 	// check mongodb for sell Amount object with same user and stock
@@ -210,7 +206,6 @@ func cancelSetSell(w http.ResponseWriter, r *http.Request) {
 		Username:       cancelSetSell.User,
 		Funds:          cancelSetSell.Amount,
 	}
-
 	log.CreateUserCommandsLog(cmd)
 
 	db.DeleteSellAmountOrder(cancelSetSell.User, cancelSetSell.Stock)

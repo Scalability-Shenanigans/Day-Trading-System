@@ -54,7 +54,7 @@ func CreateAccount(user string, initialBalance float64, transactionNum int64) {
 		Balance: initialBalance,
 	}
 
-	newAccountTransaction := log.AccountTransaction{
+	transaction := log.AccountTransaction{
 		Timestamp:      time.Now().UnixNano(),
 		Server:         "localhost",
 		TransactionNum: transactionNum,
@@ -69,7 +69,7 @@ func CreateAccount(user string, initialBalance float64, transactionNum int64) {
 		fmt.Println("Failed to create account")
 	} else {
 		fmt.Println(res.InsertedID)
-		log.CreateAccountTransactionLog(&newAccountTransaction)
+		log.CreateAccountTransactionLog(&transaction)
 	}
 
 }
@@ -102,7 +102,11 @@ func UpdateBalance(amount float64, user string, transactionNum int64) bool {
 		action = "remove"
 	}
 
-	newAccountTransaction := log.AccountTransaction{
+	opts := options.Replace().SetUpsert(true)
+	accounts.ReplaceOne(context.TODO(), filter, result, opts)
+	fmt.Println("new balance set")
+
+	transaction := log.AccountTransaction{
 		Timestamp:      time.Now().UnixNano(),
 		Server:         "localhost",
 		TransactionNum: transactionNum,
@@ -110,12 +114,7 @@ func UpdateBalance(amount float64, user string, transactionNum int64) bool {
 		Username:       user,
 		Funds:          amount,
 	}
-
-	opts := options.Replace().SetUpsert(true)
-	accounts.ReplaceOne(context.TODO(), filter, result, opts)
-	fmt.Println("new balance set")
-
-	log.CreateAccountTransactionLog(&newAccountTransaction)
+	log.CreateAccountTransactionLog(&transaction)
 
 	return true
 

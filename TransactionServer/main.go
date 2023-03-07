@@ -43,7 +43,7 @@ func addHandler(w http.ResponseWriter, r *http.Request) {
 		Timestamp:      time.Now().UnixNano(),
 		Server:         "localhost",
 		TransactionNum: int64(addFunds.TransactionNum),
-		Action:         "ADD",
+		Action:         "add",
 		Username:       addFunds.User,
 		Funds:          addFunds.Amount,
 	}

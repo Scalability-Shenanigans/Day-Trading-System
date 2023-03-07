@@ -111,7 +111,6 @@ func commitBuy(w http.ResponseWriter, r *http.Request) {
 		Username:       commitBuy.User,
 		Funds:          float64(transaction.Amount),
 	}
-
 	log.CreateUserCommandsLog(cmd)
 
 	transactionCost := float64(transaction.Amount) * transaction.Price
@@ -187,7 +186,6 @@ func setBuyTriggerHandler(w http.ResponseWriter, r *http.Request) {
 		Username:       triggerOrder.User,
 		Funds:          triggerOrder.Price,
 	}
-
 	log.CreateUserCommandsLog(cmd)
 
 	// check mongodb for buyAmount object with same user and stock
