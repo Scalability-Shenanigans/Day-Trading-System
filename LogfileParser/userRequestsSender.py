@@ -156,7 +156,7 @@ def line_processor(line):
 
 
 def main():
-    choice = input("mode: manual, dumplog, or automatic? ")
+    choice = input("mode: manual, dumplog, dbwipe, or automatic? ")
     if choice == "manual":
         while True:
             line = input("enter command: ")
@@ -172,10 +172,13 @@ def main():
         }
         print(data)
         print(send_request("dumplog", data))
+    elif choice == "dbwipe": # command I added for wiping all the collections
+        print(send_request("dbwipe"))    
     elif choice == "automatic":
         with open("user1.txt", "r") as f:
             for line in f:
                 line_processor(line)
+    
     
 
 

@@ -4,6 +4,7 @@ import (
 	"TransactionServer/log"
 	"context"
 	"fmt"
+	"net/http"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -260,4 +261,28 @@ func ConsumeLastTransaction(user string) Transaction {
 		fmt.Println(err)
 	}
 	return transaction
+}
+
+func DBWiper(w http.ResponseWriter, r *http.Request) {
+	logs := client.Database("DayTrading").Collection("Logs")
+	allCollections := []*mongo.Collection{accounts,
+		transactions,
+		buyOrders,
+		buyAmountOrders,
+		sellAmountOrders,
+		triggeredBuyAmountOrders,
+		triggeredSellAmountOrders,
+		sellOrders,
+		logs,
+	}
+
+	for _, collection := range allCollections {
+		_, err := collection.DeleteMany(context.TODO(), bson.M{})
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+	}
+
+	fmt.Println("All collections wiped")
 }

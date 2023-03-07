@@ -82,5 +82,6 @@ func main() {
 	http.HandleFunc("/dumplog", log.DumplogHandler)
 	http.HandleFunc("/quote", quoteHandler)
 	http.HandleFunc("/display", quoteHandler)
+	http.HandleFunc("/dbwipe", db.DBWiper)
 	http.ListenAndServe(port, nil)
 }
