@@ -54,7 +54,7 @@ func buyHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	cmd := &log.UserCommand{
-		Timestamp:      time.Now().UnixNano(),
+		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
 		TransactionNum: int64(buy.TransactionNum),
 		Command:        "BUY",
@@ -62,7 +62,7 @@ func buyHandler(w http.ResponseWriter, r *http.Request) {
 		Funds:          buy.Amount,
 	}
 	sysEvent := &log.SystemEvent{
-		Timestamp:      time.Now().UnixNano(),
+		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
 		TransactionNum: int64(buy.TransactionNum),
 		Command:        "BUY",
@@ -104,7 +104,7 @@ func commitBuy(w http.ResponseWriter, r *http.Request) {
 	transaction := db.ConsumeLastTransaction(user)
 
 	cmd := &log.UserCommand{
-		Timestamp:      time.Now().UnixNano(),
+		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
 		TransactionNum: int64(commitBuy.TransactionNum),
 		Command:        "COMMIT_BUY",
@@ -132,7 +132,7 @@ func cancelBuy(w http.ResponseWriter, r *http.Request) {
 	}
 
 	cmd := &log.UserCommand{
-		Timestamp:      time.Now().UnixNano(),
+		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
 		TransactionNum: int64(cancelBuy.TransactionNum),
 		Command:        "CANCEL_BUY",
@@ -156,7 +156,7 @@ func setBuyAmountHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(buyAmountOrder)
 
 	cmd := &log.UserCommand{
-		Timestamp:      time.Now().UnixNano(),
+		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
 		TransactionNum: int64(buyAmountOrder.TransactionNum),
 		Command:        "SET_BUY_AMOUNT",
@@ -179,7 +179,7 @@ func setBuyTriggerHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(triggerOrder)
 
 	cmd := &log.UserCommand{
-		Timestamp:      time.Now().UnixNano(),
+		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
 		TransactionNum: int64(triggerOrder.TransactionNum),
 		Command:        "SET_BUY_TRIGGER",
@@ -220,7 +220,7 @@ func cancelSetBuy(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(cancelSetBuy)
 
 	cmd := &log.UserCommand{
-		Timestamp:      time.Now().UnixNano(),
+		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
 		TransactionNum: int64(cancelSetBuy.TransactionNum),
 		Command:        "CANCEL_SET_BUY",

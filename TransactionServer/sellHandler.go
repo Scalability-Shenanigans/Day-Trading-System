@@ -43,7 +43,7 @@ func sellHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	cmd := &log.UserCommand{
-		Timestamp:      time.Now().UnixNano(),
+		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
 		TransactionNum: int64(sell.TransactionNum),
 		Command:        "SELL",
@@ -75,7 +75,7 @@ func commitSell(w http.ResponseWriter, r *http.Request) {
 	}
 
 	cmd := &log.UserCommand{
-		Timestamp:      time.Now().UnixNano(),
+		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
 		TransactionNum: int64(commitSell.TransactionNum),
 		Command:        "COMMIT_SELL",
@@ -105,7 +105,7 @@ func cancelSell(w http.ResponseWriter, r *http.Request) {
 	}
 
 	cmd := &log.UserCommand{
-		Timestamp:      time.Now().UnixNano(),
+		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
 		TransactionNum: int64(cancelSell.TransactionNum),
 		Command:        "CANCEL_SELL",
@@ -127,7 +127,7 @@ func setSellAmountHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	cmd := &log.UserCommand{
-		Timestamp:      time.Now().UnixNano(),
+		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
 		TransactionNum: int64(sellAmountOrder.TransactionNum),
 		Command:        "SET_SELL_AMOUNT",
@@ -153,7 +153,7 @@ func setSellTriggerHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(triggerOrder)
 
 	cmd := &log.UserCommand{
-		Timestamp:      time.Now().UnixNano(),
+		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
 		TransactionNum: int64(triggerOrder.TransactionNum),
 		Command:        "SET_SELL_TRIGGER",
@@ -199,7 +199,7 @@ func cancelSetSell(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(cancelSetSell)
 
 	cmd := &log.UserCommand{
-		Timestamp:      time.Now().UnixNano(),
+		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
 		TransactionNum: int64(cancelSetSell.TransactionNum),
 		Command:        "CANCEL_SET_SELL",

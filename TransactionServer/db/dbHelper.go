@@ -55,7 +55,7 @@ func CreateAccount(user string, initialBalance float64, transactionNum int64) {
 	}
 
 	transaction := log.AccountTransaction{
-		Timestamp:      time.Now().UnixNano(),
+		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
 		TransactionNum: transactionNum,
 		Action:         "add",
@@ -107,7 +107,7 @@ func UpdateBalance(amount float64, user string, transactionNum int64) bool {
 	fmt.Println("new balance set")
 
 	transaction := log.AccountTransaction{
-		Timestamp:      time.Now().UnixNano(),
+		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
 		TransactionNum: transactionNum,
 		Action:         action,

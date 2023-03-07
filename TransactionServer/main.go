@@ -31,7 +31,7 @@ func addHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	cmd := &log.UserCommand{
-		Timestamp:      time.Now().UnixNano(),
+		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
 		TransactionNum: int64(addFunds.TransactionNum),
 		Command:        "ADD",
@@ -40,7 +40,7 @@ func addHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	transaction := &log.AccountTransaction{
-		Timestamp:      time.Now().UnixNano(),
+		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
 		TransactionNum: int64(addFunds.TransactionNum),
 		Action:         "add",

@@ -43,7 +43,7 @@ func quoteHandler(w http.ResponseWriter, r *http.Request) {
 	GetQuote(quote.Stock, quote.User)
 
 	cmd := &log.UserCommand{
-		Timestamp:      time.Now().UnixNano(),
+		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
 		TransactionNum: 0, //for now
 		Command:        "QUOTE",
@@ -59,7 +59,7 @@ func displayHandler(w http.ResponseWriter, r *http.Request) {
 	user := r.URL.Query().Get("user")
 
 	cmd := &log.UserCommand{
-		Timestamp:      time.Now().UnixNano(),
+		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
 		TransactionNum: 0, //for now
 		Command:        "DISPLAY_SUMMARY",
@@ -71,7 +71,7 @@ func displayHandler(w http.ResponseWriter, r *http.Request) {
 
 func GetQuote(stock string, user string) float64 {
 	command := stock + " " + user + " \n"
-	requestTime := time.Now().UnixNano()
+	requestTime := time.Now().UnixMilli()
 	result := SendRequest(command)
 	quoteServer := &log.QuoteServer{
 		Timestamp:       requestTime,
