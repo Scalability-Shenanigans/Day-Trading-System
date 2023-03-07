@@ -28,6 +28,11 @@ type CommitSell struct {
 	TransactionNum int    `json:"transactionNum"`
 }
 
+type CancelSell struct {
+	User           string `json:"user"`
+	TransactionNum int    `json:"transactionNum"`
+}
+
 func sellHandler(w http.ResponseWriter, r *http.Request) {
 	var sell Sell
 	err := json.NewDecoder(r.Body).Decode(&sell)
@@ -93,15 +98,25 @@ func commitSell(w http.ResponseWriter, r *http.Request) {
 }
 
 func cancelSell(w http.ResponseWriter, r *http.Request) {
-	var sell Sell
-	err := json.NewDecoder(r.Body).Decode(&sell)
+	var cancelSell CancelSell
+	err := json.NewDecoder(r.Body).Decode(&cancelSell)
 	if err != nil {
 		fmt.Println(err)
 		fmt.Println("Bad Request")
 		return
 	}
+
+	cmd := &log.UserCommand{
+		Timestamp:      time.Now().UnixNano(),
+		Server:         "localhost",
+		TransactionNum: int64(cancelSell.TransactionNum),
+		Command:        "CANCEL_SELL",
+		Username:       cancelSell.User,
+	}
+	log.CreateUserCommandsLog(cmd)
+
 	//consumes the last transaction but does nothing with it so its effectively cancelled
-	db.ConsumeLastTransaction(sell.User)
+	db.ConsumeLastTransaction(cancelSell.User)
 }
 
 func setSellAmountHandler(w http.ResponseWriter, r *http.Request) {
