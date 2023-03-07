@@ -10,9 +10,10 @@ import (
 )
 
 type TriggerOrder struct {
-	User  string  `json:"user"`
-	Stock string  `json:"stock"`
-	Price float64 `json:"price"`
+	User           string  `json:"user"`
+	Stock          string  `json:"stock"`
+	Price          float64 `json:"price"`
+	TransactionNum int     `json:"transactionNum"`
 }
 
 type Buy struct {
@@ -177,6 +178,17 @@ func setBuyTriggerHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Println(triggerOrder)
+
+	cmd := &log.UserCommand{
+		Timestamp:      time.Now().UnixNano(),
+		Server:         "localhost",
+		TransactionNum: int64(triggerOrder.TransactionNum),
+		Command:        "SET_BUY_TRIGGER",
+		Username:       triggerOrder.User,
+		Funds:          triggerOrder.Price,
+	}
+
+	log.CreateUserCommandsLog(cmd)
 
 	// check mongodb for buyAmount object with same user and stock
 	found, buyAmountOrder := db.FindBuyAmountOrder(triggerOrder.User, triggerOrder.Stock)

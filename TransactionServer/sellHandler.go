@@ -155,6 +155,17 @@ func setSellTriggerHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println(triggerOrder)
 
+	cmd := &log.UserCommand{
+		Timestamp:      time.Now().UnixNano(),
+		Server:         "localhost",
+		TransactionNum: int64(triggerOrder.TransactionNum),
+		Command:        "SET_SELL_TRIGGER",
+		Username:       triggerOrder.User,
+		Funds:          triggerOrder.Price,
+	}
+
+	log.CreateUserCommandsLog(cmd)
+
 	// check mongodb for sell Amount object with same user and stock
 	found, sellAmountOrder := db.FindSellAmountOrder(triggerOrder.User, triggerOrder.Stock)
 
