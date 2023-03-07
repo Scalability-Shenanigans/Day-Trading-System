@@ -25,8 +25,14 @@ type TransactionResult struct {
 	Key       string
 }
 type Quote struct {
-	User  string `json:"user"`
-	Stock string `json:"stock"`
+	User           string `json:"user"`
+	Stock          string `json:"stock"`
+	TransactionNum int    `json:"transactionNum"`
+}
+
+type DisplaySummary struct {
+	User           string `json:"user"`
+	TransactionNum int    `json:"transactionNum"`
 }
 
 func quoteHandler(w http.ResponseWriter, r *http.Request) {
@@ -40,12 +46,12 @@ func quoteHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	GetQuote(quote.Stock, quote.User)
+	GetQuote(quote.Stock, quote.User, quote.TransactionNum)
 
 	cmd := &log.UserCommand{
 		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
-		TransactionNum: 0, //for now
+		TransactionNum: int64(quote.TransactionNum), //for now
 		Command:        "QUOTE",
 		Username:       quote.User,
 		StockSymbol:    quote.Stock,
@@ -56,12 +62,21 @@ func quoteHandler(w http.ResponseWriter, r *http.Request) {
 
 func displayHandler(w http.ResponseWriter, r *http.Request) {
 	//just add the command to logs for now
-	user := r.URL.Query().Get("user")
+	var displaySummary DisplaySummary
+	err := json.NewDecoder(r.Body).Decode(&displaySummary)
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("Bad Request")
+		return
+	}
+
+	user := displaySummary.User
+	transactionNum := displaySummary.TransactionNum
 
 	cmd := &log.UserCommand{
 		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
-		TransactionNum: 0, //for now
+		TransactionNum: int64(transactionNum), //for now
 		Command:        "DISPLAY_SUMMARY",
 		Username:       user,
 	}
@@ -69,7 +84,7 @@ func displayHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func GetQuote(stock string, user string) float64 {
+func GetQuote(stock string, user string, transactionNum int) float64 {
 	command := stock + " " + user + " \n"
 	requestTime := time.Now().UnixMilli()
 	result := SendRequest(command)

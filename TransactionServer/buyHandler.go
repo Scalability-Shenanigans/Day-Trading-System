@@ -73,7 +73,7 @@ func buyHandler(w http.ResponseWriter, r *http.Request) {
 	log.CreateUserCommandsLog(cmd)
 	log.CreateSystemEventLog(sysEvent)
 
-	quote := GetQuote(buy.Stock, buy.User)
+	quote := GetQuote(buy.Stock, buy.User, buy.TransactionNum)
 
 	transaction := db.Transaction{
 		User:   buy.User,

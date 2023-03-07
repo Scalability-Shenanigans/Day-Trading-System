@@ -52,7 +52,7 @@ func sellHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	log.CreateUserCommandsLog(cmd)
 
-	quote := GetQuote(sell.Stock, sell.User)
+	quote := GetQuote(sell.Stock, sell.User, sell.TransactionNum)
 
 	transaction := db.Transaction{
 		User:   sell.User,
