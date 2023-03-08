@@ -252,9 +252,20 @@ func DeleteSellAmountOrder(user string, stock string) {
 	sellAmountOrders.FindOneAndDelete(context.TODO(), filter)
 }
 
-func ConsumeLastTransaction(user string) Transaction {
+func ConsumeLastBuyTransaction(user string) Transaction {
 	opts := options.FindOneAndDelete().SetSort(bson.M{"$natural": -1})
-	filter := bson.M{"user": user}
+	filter := bson.M{"user": user, "is_buy": true}
+	var transaction Transaction
+	err := transactions.FindOneAndDelete(context.TODO(), filter, opts).Decode(&transaction)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return transaction
+}
+
+func ConsumeLastSellTransaction(user string) Transaction {
+	opts := options.FindOneAndDelete().SetSort(bson.M{"$natural": -1})
+	filter := bson.M{"user": user, "is_buy": false}
 	var transaction Transaction
 	err := transactions.FindOneAndDelete(context.TODO(), filter, opts).Decode(&transaction)
 	if err != nil {

@@ -84,7 +84,7 @@ func commitSell(w http.ResponseWriter, r *http.Request) {
 	log.CreateUserCommandsLog(cmd)
 
 	user := commitSell.User
-	transaction := db.ConsumeLastTransaction(user)
+	transaction := db.ConsumeLastSellTransaction(user)
 	// transaction.Amount is no. of shares, transaction.Price is the selling price for one share
 	transactionCost := float64(transaction.Amount) * transaction.Price
 	// update how much stock they hold after selling
@@ -114,7 +114,7 @@ func cancelSell(w http.ResponseWriter, r *http.Request) {
 	log.CreateUserCommandsLog(cmd)
 
 	//consumes the last transaction but does nothing with it so its effectively cancelled
-	db.ConsumeLastTransaction(cancelSell.User)
+	db.ConsumeLastSellTransaction(cancelSell.User)
 }
 
 func setSellAmountHandler(w http.ResponseWriter, r *http.Request) {

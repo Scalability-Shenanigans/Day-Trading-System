@@ -101,7 +101,7 @@ func commitBuy(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user := commitBuy.User
-	transaction := db.ConsumeLastTransaction(user)
+	transaction := db.ConsumeLastBuyTransaction(user)
 
 	cmd := &log.UserCommand{
 		Timestamp:      time.Now().UnixMilli(),
@@ -141,7 +141,7 @@ func cancelBuy(w http.ResponseWriter, r *http.Request) {
 	log.CreateUserCommandsLog(cmd)
 
 	//consumes the last transaction but does nothing with it so its effectively cancelled
-	db.ConsumeLastTransaction(cancelBuy.User)
+	db.ConsumeLastBuyTransaction(cancelBuy.User)
 
 }
 
