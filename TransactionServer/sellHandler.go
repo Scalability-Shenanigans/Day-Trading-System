@@ -50,7 +50,16 @@ func sellHandler(w http.ResponseWriter, r *http.Request) {
 		Username:       sell.User,
 		Funds:          sell.Amount,
 	}
+	sysEvent := &log.SystemEvent{
+		Timestamp:      time.Now().UnixMilli(),
+		Server:         "localhost",
+		TransactionNum: int64(sell.TransactionNum),
+		Command:        "SELL",
+		Username:       sell.User,
+		Funds:          sell.Amount,
+	}
 	log.CreateUserCommandsLog(cmd)
+	log.CreateSystemEventLog(sysEvent)
 
 	quote := GetQuote(sell.Stock, sell.User, sell.TransactionNum)
 

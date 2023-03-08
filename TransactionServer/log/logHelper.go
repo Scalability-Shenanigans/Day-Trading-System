@@ -93,6 +93,19 @@ func CreateQuoteServerLog(cmd *QuoteServer) {
 	}
 }
 
+func CreateErrorEventLog(cmd *ErrorEvent) {
+
+	cmd.XMLName = xml.Name{Local: "ErrorEvent"}
+
+	res, err := logs.InsertOne(context.TODO(), cmd)
+
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println(res.InsertedID)
+	}
+}
+
 func DumplogHandler(w http.ResponseWriter, r *http.Request) {
 	var dumplog Dumplog
 

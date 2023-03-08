@@ -89,7 +89,15 @@ func UpdateBalance(amount float64, user string, transactionNum int64) bool {
 		*/
 	}
 	if amount < 0 && (result.Balance+amount) < 0 {
-		fmt.Println("ERROR: funds will go below 0")
+		errorEvent := &log.ErrorEvent{
+			Timestamp:    time.Now().UnixMilli(),
+			Server:       "localhost",
+			Command:      "remove",
+			Username:     user,
+			Funds:        amount,
+			ErrorMessage: "Error: funds will go below 0",
+		}
+		log.CreateErrorEventLog(errorEvent)
 		return false
 	}
 
@@ -152,6 +160,14 @@ func UpdateStockHolding(user string, stock string, amount int) bool {
 	// if stock is decreasing make sure enough is held
 	if stockToChange.Amount+amount < 0 {
 		fmt.Println("Not enough stock held for change")
+		errorEvent := &log.ErrorEvent{
+			Timestamp:    time.Now().UnixMilli(),
+			Server:       "localhost",
+			Command:      "sell",
+			Username:     user,
+			ErrorMessage: "Error: Not enough stock held for change",
+		}
+		log.CreateErrorEventLog(errorEvent)
 		return false
 	}
 	stockToChange.Amount += amount
