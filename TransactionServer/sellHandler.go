@@ -89,7 +89,7 @@ func commitSell(w http.ResponseWriter, r *http.Request) {
 		errorEvent := &log.ErrorEvent{
 			Timestamp:    time.Now().UnixMilli(),
 			Server:       "localhost",
-			Command:      "commitBuy",
+			Command:      "commitSell",
 			Username:     commitSell.User,
 			ErrorMessage: "Error: no sell to commit",
 		}
