@@ -103,6 +103,18 @@ func commitBuy(w http.ResponseWriter, r *http.Request) {
 	user := commitBuy.User
 	transaction := db.ConsumeLastBuyTransaction(user)
 
+	if transaction.Transaction_ID == -1 {
+		errorEvent := &log.ErrorEvent{
+			Timestamp:    time.Now().UnixMilli(),
+			Server:       "localhost",
+			Command:      "commitBuy",
+			Username:     commitBuy.User,
+			ErrorMessage: "Error: no buy to commit",
+		}
+		log.CreateErrorEventLog(errorEvent)
+		return
+	}
+
 	cmd := &log.UserCommand{
 		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",

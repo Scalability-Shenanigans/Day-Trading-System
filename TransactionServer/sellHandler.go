@@ -82,6 +82,20 @@ func commitSell(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Bad Request")
 		return
 	}
+	user := commitSell.User
+	transaction := db.ConsumeLastSellTransaction(user)
+
+	if transaction.Transaction_ID == -1 {
+		errorEvent := &log.ErrorEvent{
+			Timestamp:    time.Now().UnixMilli(),
+			Server:       "localhost",
+			Command:      "commitBuy",
+			Username:     commitSell.User,
+			ErrorMessage: "Error: no sell to commit",
+		}
+		log.CreateErrorEventLog(errorEvent)
+		return
+	}
 
 	cmd := &log.UserCommand{
 		Timestamp:      time.Now().UnixMilli(),
@@ -92,8 +106,6 @@ func commitSell(w http.ResponseWriter, r *http.Request) {
 	}
 	log.CreateUserCommandsLog(cmd)
 
-	user := commitSell.User
-	transaction := db.ConsumeLastSellTransaction(user)
 	// transaction.Amount is no. of shares, transaction.Price is the selling price for one share
 	transactionCost := float64(transaction.Amount) * transaction.Price
 	// update how much stock they hold after selling

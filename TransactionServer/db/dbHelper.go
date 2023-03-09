@@ -274,7 +274,7 @@ func ConsumeLastBuyTransaction(user string) Transaction {
 	var transaction Transaction
 	err := transactions.FindOneAndDelete(context.TODO(), filter, opts).Decode(&transaction)
 	if err != nil {
-		fmt.Println(err)
+		transaction = Transaction{Transaction_ID: -1}
 	}
 	return transaction
 }
@@ -285,7 +285,7 @@ func ConsumeLastSellTransaction(user string) Transaction {
 	var transaction Transaction
 	err := transactions.FindOneAndDelete(context.TODO(), filter, opts).Decode(&transaction)
 	if err != nil {
-		fmt.Println(err)
+		transaction = Transaction{Transaction_ID: -1}
 	}
 	return transaction
 }
