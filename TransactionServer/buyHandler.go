@@ -128,11 +128,24 @@ func commitBuy(w http.ResponseWriter, r *http.Request) {
 
 	transactionCost := float64(transaction.Amount) * transaction.Price
 
-	if db.UpdateBalance(transactionCost*-1.0, user, int64(commitBuy.TransactionNum)) {
-		if db.UpdateStockHolding(user, transaction.Stock, transaction.Amount, int64(commitBuy.TransactionNum)) {
-			fmt.Println("Transaction Commited")
+	if transactionCost != 0 {
+		if db.UpdateBalance(transactionCost*-1.0, user, int64(commitBuy.TransactionNum)) {
+			if db.UpdateStockHolding(user, transaction.Stock, transaction.Amount, int64(commitBuy.TransactionNum)) {
+				fmt.Println("Transaction Commited")
+			}
 		}
+	} else {
+		errorEvent := &log.ErrorEvent{
+			Timestamp:      time.Now().UnixMilli(),
+			Server:         "localhost",
+			TransactionNum: int64(commitBuy.TransactionNum),
+			Command:        "COMMIT_BUY",
+			Username:       commitBuy.User,
+		}
+		log.CreateErrorEventLog(errorEvent)
+		return
 	}
+
 }
 
 func cancelBuy(w http.ResponseWriter, r *http.Request) {

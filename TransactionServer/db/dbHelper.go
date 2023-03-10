@@ -92,7 +92,7 @@ func UpdateBalance(amount float64, user string, transactionNum int64) bool {
 		errorEvent := &log.ErrorEvent{
 			Timestamp:      time.Now().UnixMilli(),
 			Server:         "localhost",
-			Command:        "remove",
+			Command:        "COMMIT_BUY",
 			TransactionNum: transactionNum,
 			Username:       user,
 			Funds:          amount,
@@ -124,7 +124,20 @@ func UpdateBalance(amount float64, user string, transactionNum int64) bool {
 		Username:       user,
 		Funds:          amount,
 	}
-	log.CreateAccountTransactionLog(&transaction)
+	if amount != 0 {
+		log.CreateAccountTransactionLog(&transaction)
+	} else {
+		errorEvent := &log.ErrorEvent{
+			Timestamp:      time.Now().UnixMilli(),
+			Server:         "localhost",
+			Command:        "COMMIT_BUY",
+			TransactionNum: transactionNum,
+			Username:       user,
+			Funds:          amount,
+		}
+		log.CreateErrorEventLog(errorEvent)
+		return false
+	}
 
 	return true
 
@@ -165,7 +178,7 @@ func UpdateStockHolding(user string, stock string, amount int, transactionNum in
 			Timestamp:      time.Now().UnixMilli(),
 			Server:         "localhost",
 			TransactionNum: transactionNum,
-			Command:        "sell",
+			Command:        "SELL",
 			Username:       user,
 			ErrorMessage:   "Error: Not enough stock held for change",
 		}

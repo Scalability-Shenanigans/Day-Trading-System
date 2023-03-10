@@ -109,12 +109,25 @@ func commitSell(w http.ResponseWriter, r *http.Request) {
 
 	// transaction.Amount is no. of shares, transaction.Price is the selling price for one share
 	transactionCost := float64(transaction.Amount) * transaction.Price
-	// update how much stock they hold after selling
-	if db.UpdateStockHolding(user, transaction.Stock, -1*transaction.Amount, int64(commitSell.TransactionNum)) {
-		if db.UpdateBalance(transactionCost, user, int64(commitSell.TransactionNum)) { // update account balance after selling
-			fmt.Println("Transaction Commited")
+	if transactionCost != 0 {
+		// update how much stock they hold after selling
+		if db.UpdateStockHolding(user, transaction.Stock, -1*transaction.Amount, int64(commitSell.TransactionNum)) {
+			if db.UpdateBalance(transactionCost, user, int64(commitSell.TransactionNum)) { // update account balance after selling
+				fmt.Println("Transaction Commited")
+			}
 		}
+	} else {
+		errorEvent := &log.ErrorEvent{
+			Timestamp:      time.Now().UnixMilli(),
+			Server:         "localhost",
+			TransactionNum: int64(commitSell.TransactionNum),
+			Command:        "COMMIT_SELL",
+			Username:       commitSell.User,
+		}
+		log.CreateErrorEventLog(errorEvent)
+		return
 	}
+
 }
 
 func cancelSell(w http.ResponseWriter, r *http.Request) {

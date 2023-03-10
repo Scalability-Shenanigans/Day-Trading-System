@@ -1,6 +1,6 @@
 <log>
   <userCommand>
-    <timestamp>1678401360509</timestamp>
+    <timestamp>1678454671818</timestamp>
     <server>localhost</server>
     <transactionNum>1</transactionNum>
     <command>ADD</command>
@@ -8,15 +8,7 @@
     <funds>63511.53</funds>
   </userCommand>
   <accountTransaction>
-    <timestamp>1678401360509</timestamp>
-    <server>localhost</server>
-    <transactionNum>1</transactionNum>
-    <action>add</action>
-    <username>oY01WVirLr</username>
-    <funds>63511.53</funds>
-  </accountTransaction>
-  <accountTransaction>
-    <timestamp>1678401360511</timestamp>
+    <timestamp>1678454671819</timestamp>
     <server>localhost</server>
     <transactionNum>1</transactionNum>
     <action>add</action>
@@ -24,17 +16,17 @@
     <funds>63511.53</funds>
   </accountTransaction>
   <quoteServer>
-    <timestamp>1678401360513</timestamp>
+    <timestamp>1678454671821</timestamp>
     <server>localhost</server>
     <transactionNum>2</transactionNum>
-    <price>4999</price>
+    <price>850.85</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>+ab7TX0qxkucm7DqUdZaBcmx7BhEg7lysrmOqjAXMdQ=</cryptokey>
+    <cryptokey>YjivAAk61V0cwAaud/Yfkz/9RayRY85M19jCgcs2jfQ=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401364722</timestamp>
+    <timestamp>1678454676831</timestamp>
     <server>localhost</server>
     <transactionNum>2</transactionNum>
     <command>QUOTE</command>
@@ -42,7 +34,7 @@
     <stockSymbol>S</stockSymbol>
   </userCommand>
   <userCommand>
-    <timestamp>1678401364724</timestamp>
+    <timestamp>1678454676833</timestamp>
     <server>localhost</server>
     <transactionNum>3</transactionNum>
     <command>BUY</command>
@@ -50,7 +42,7 @@
     <funds>276.83</funds>
   </userCommand>
   <systemEvent>
-    <timestamp>1678401364724</timestamp>
+    <timestamp>1678454676833</timestamp>
     <server>localhost</server>
     <transactionNum>3</transactionNum>
     <command>BUY</command>
@@ -58,33 +50,31 @@
     <funds>276.83</funds>
   </systemEvent>
   <quoteServer>
-    <timestamp>1678401364725</timestamp>
+    <timestamp>1678454676834</timestamp>
     <server>localhost</server>
     <transactionNum>3</transactionNum>
-    <price>1.01</price>
+    <price>997.95</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>tHz8Y2pUb5AaG7ymz3GG5g5Y2ruZ07zKkounIFvd9sg=</cryptokey>
+    <cryptokey>r6NSbdPVG/QcwAaud/Yfkz/9RayRY85Mt0ijOh9bgXg=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401364730</timestamp>
+    <timestamp>1678454676840</timestamp>
     <server>localhost</server>
     <transactionNum>4</transactionNum>
     <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>274</funds>
   </userCommand>
-  <accountTransaction>
-    <timestamp>1678401364731</timestamp>
+  <errorEvent>
+    <timestamp>1678454676841</timestamp>
     <server>localhost</server>
     <transactionNum>4</transactionNum>
-    <action>remove</action>
+    <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>-276.74</funds>
-  </accountTransaction>
+  </errorEvent>
   <errorEvent>
-    <timestamp>1678401364735</timestamp>
+    <timestamp>1678454676844</timestamp>
     <server>localhost</server>
     <transactionNum>5</transactionNum>
     <command>COMMIT_SELL</command>
@@ -92,24 +82,24 @@
     <errorMessage>Error: no sell to commit</errorMessage>
   </errorEvent>
   <userCommand>
-    <timestamp>1678401364737</timestamp>
+    <timestamp>1678454676847</timestamp>
     <server>localhost</server>
     <transactionNum>6</transactionNum>
     <command>CANCEL_SELL</command>
     <username>oY01WVirLr</username>
   </userCommand>
   <quoteServer>
-    <timestamp>1678401364749</timestamp>
+    <timestamp>1678454676849</timestamp>
     <server>localhost</server>
     <transactionNum>7</transactionNum>
-    <price>1.11</price>
+    <price>950.11</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>x1MZ5Zg67aQaG7ymz3GG5i1EXjcNj00Mf+ueANPpanw=</cryptokey>
+    <cryptokey>4tdS7fdFUbscwAaud/Yfkz/9RayRY85MaLE9YV/JfTE=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401364755</timestamp>
+    <timestamp>1678454676853</timestamp>
     <server>localhost</server>
     <transactionNum>7</transactionNum>
     <command>QUOTE</command>
@@ -117,7 +107,7 @@
     <stockSymbol>S</stockSymbol>
   </userCommand>
   <userCommand>
-    <timestamp>1678401364759</timestamp>
+    <timestamp>1678454676854</timestamp>
     <server>localhost</server>
     <transactionNum>8</transactionNum>
     <command>ADD</command>
@@ -125,15 +115,7 @@
     <funds>45016.23</funds>
   </userCommand>
   <accountTransaction>
-    <timestamp>1678401364759</timestamp>
-    <server>localhost</server>
-    <transactionNum>8</transactionNum>
-    <action>add</action>
-    <username>oY01WVirLr</username>
-    <funds>45016.23</funds>
-  </accountTransaction>
-  <accountTransaction>
-    <timestamp>1678401364761</timestamp>
+    <timestamp>1678454676855</timestamp>
     <server>localhost</server>
     <transactionNum>8</transactionNum>
     <action>add</action>
@@ -141,7 +123,7 @@
     <funds>45016.23</funds>
   </accountTransaction>
   <errorEvent>
-    <timestamp>1678401364765</timestamp>
+    <timestamp>1678454676859</timestamp>
     <server>localhost</server>
     <transactionNum>9</transactionNum>
     <command>COMMIT_BUY</command>
@@ -149,7 +131,7 @@
     <errorMessage>Error: no buy to commit</errorMessage>
   </errorEvent>
   <errorEvent>
-    <timestamp>1678401364771</timestamp>
+    <timestamp>1678454676862</timestamp>
     <server>localhost</server>
     <transactionNum>10</transactionNum>
     <command>COMMIT_BUY</command>
@@ -157,24 +139,24 @@
     <errorMessage>Error: no buy to commit</errorMessage>
   </errorEvent>
   <quoteServer>
-    <timestamp>1678401364775</timestamp>
+    <timestamp>1678454676863</timestamp>
     <server>localhost</server>
     <transactionNum>11</transactionNum>
-    <price>343.68</price>
+    <price>84.44</price>
     <stockSymbol>OY0</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>stpfw/xmEdj6wad9lIgBJrJ+OWa7XLoE3CWvUEkWBZs=</cryptokey>
+    <cryptokey>ONqKtesWWKWzLFo8FEak1yvm47vxPnRFhzqU5zgMjNE=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401365779</timestamp>
+    <timestamp>1678454676866</timestamp>
     <server>localhost</server>
     <transactionNum>11</transactionNum>
     <command>QUOTE</command>
     <username>oY01WVirLr</username>
   </userCommand>
   <userCommand>
-    <timestamp>1678401365781</timestamp>
+    <timestamp>1678454676876</timestamp>
     <server>localhost</server>
     <transactionNum>12</transactionNum>
     <command>ADD</command>
@@ -182,15 +164,7 @@
     <funds>71879.98</funds>
   </userCommand>
   <accountTransaction>
-    <timestamp>1678401365781</timestamp>
-    <server>localhost</server>
-    <transactionNum>12</transactionNum>
-    <action>add</action>
-    <username>oY01WVirLr</username>
-    <funds>71879.98</funds>
-  </accountTransaction>
-  <accountTransaction>
-    <timestamp>1678401365783</timestamp>
+    <timestamp>1678454676879</timestamp>
     <server>localhost</server>
     <transactionNum>12</transactionNum>
     <action>add</action>
@@ -198,7 +172,7 @@
     <funds>71879.98</funds>
   </accountTransaction>
   <userCommand>
-    <timestamp>1678401365784</timestamp>
+    <timestamp>1678454676882</timestamp>
     <server>localhost</server>
     <transactionNum>13</transactionNum>
     <command>BUY</command>
@@ -206,7 +180,7 @@
     <funds>303.83</funds>
   </userCommand>
   <systemEvent>
-    <timestamp>1678401365784</timestamp>
+    <timestamp>1678454676882</timestamp>
     <server>localhost</server>
     <transactionNum>13</transactionNum>
     <command>BUY</command>
@@ -214,33 +188,31 @@
     <funds>303.83</funds>
   </systemEvent>
   <quoteServer>
-    <timestamp>1678401365785</timestamp>
+    <timestamp>1678454676883</timestamp>
     <server>localhost</server>
     <transactionNum>13</transactionNum>
-    <price>2.09</price>
+    <price>1134.55</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>iuPPZ6YjuKsaG7ymz3GG5nutTKWDc7DEkounIFvd9sg=</cryptokey>
+    <cryptokey>O2Prmj29Npucm7DqUdZaBUZimyXrDKWy0mUpBmPI8V4=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401365792</timestamp>
+    <timestamp>1678454676893</timestamp>
     <server>localhost</server>
     <transactionNum>14</transactionNum>
     <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>145</funds>
   </userCommand>
-  <accountTransaction>
-    <timestamp>1678401365794</timestamp>
+  <errorEvent>
+    <timestamp>1678454676894</timestamp>
     <server>localhost</server>
     <transactionNum>14</transactionNum>
-    <action>remove</action>
+    <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>-303.04999999999995</funds>
-  </accountTransaction>
+  </errorEvent>
   <errorEvent>
-    <timestamp>1678401365798</timestamp>
+    <timestamp>1678454676901</timestamp>
     <server>localhost</server>
     <transactionNum>15</transactionNum>
     <command>COMMIT_BUY</command>
@@ -248,7 +220,7 @@
     <errorMessage>Error: no buy to commit</errorMessage>
   </errorEvent>
   <errorEvent>
-    <timestamp>1678401365815</timestamp>
+    <timestamp>1678454676908</timestamp>
     <server>localhost</server>
     <transactionNum>16</transactionNum>
     <command>COMMIT_BUY</command>
@@ -256,7 +228,7 @@
     <errorMessage>Error: no buy to commit</errorMessage>
   </errorEvent>
   <errorEvent>
-    <timestamp>1678401365830</timestamp>
+    <timestamp>1678454676912</timestamp>
     <server>localhost</server>
     <transactionNum>17</transactionNum>
     <command>COMMIT_SELL</command>
@@ -264,7 +236,7 @@
     <errorMessage>Error: no sell to commit</errorMessage>
   </errorEvent>
   <userCommand>
-    <timestamp>1678401365833</timestamp>
+    <timestamp>1678454676915</timestamp>
     <server>localhost</server>
     <transactionNum>18</transactionNum>
     <command>ADD</command>
@@ -272,15 +244,7 @@
     <funds>74315.15</funds>
   </userCommand>
   <accountTransaction>
-    <timestamp>1678401365833</timestamp>
-    <server>localhost</server>
-    <transactionNum>18</transactionNum>
-    <action>add</action>
-    <username>oY01WVirLr</username>
-    <funds>74315.15</funds>
-  </accountTransaction>
-  <accountTransaction>
-    <timestamp>1678401365834</timestamp>
+    <timestamp>1678454676918</timestamp>
     <server>localhost</server>
     <transactionNum>18</transactionNum>
     <action>add</action>
@@ -288,21 +252,21 @@
     <funds>74315.15</funds>
   </accountTransaction>
   <userCommand>
-    <timestamp>1678401365837</timestamp>
+    <timestamp>1678454676923</timestamp>
     <server>localhost</server>
     <transactionNum>19</transactionNum>
     <command>CANCEL_BUY</command>
     <username>oY01WVirLr</username>
   </userCommand>
   <userCommand>
-    <timestamp>1678401365839</timestamp>
+    <timestamp>1678454676927</timestamp>
     <server>localhost</server>
     <transactionNum>20</transactionNum>
     <command>CANCEL_SET_BUY</command>
     <username>oY01WVirLr</username>
   </userCommand>
   <errorEvent>
-    <timestamp>1678401365842</timestamp>
+    <timestamp>1678454676939</timestamp>
     <server>localhost</server>
     <transactionNum>21</transactionNum>
     <command>COMMIT_SELL</command>
@@ -310,7 +274,7 @@
     <errorMessage>Error: no sell to commit</errorMessage>
   </errorEvent>
   <userCommand>
-    <timestamp>1678401365844</timestamp>
+    <timestamp>1678454676942</timestamp>
     <server>localhost</server>
     <transactionNum>22</transactionNum>
     <command>BUY</command>
@@ -318,7 +282,7 @@
     <funds>51.49</funds>
   </userCommand>
   <systemEvent>
-    <timestamp>1678401365844</timestamp>
+    <timestamp>1678454676942</timestamp>
     <server>localhost</server>
     <transactionNum>22</transactionNum>
     <command>BUY</command>
@@ -326,33 +290,31 @@
     <funds>51.49</funds>
   </systemEvent>
   <quoteServer>
-    <timestamp>1678401365845</timestamp>
+    <timestamp>1678454676944</timestamp>
     <server>localhost</server>
     <transactionNum>22</transactionNum>
-    <price>6.09</price>
+    <price>1383.11</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>nRFMLobn9oEaG7ymz3GG5rPTr0qbWsABkounIFvd9sg=</cryptokey>
+    <cryptokey>FMUJe9CY+9Wcm7DqUdZaBUZimyXrDKWyRAYYby6SuBE=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401365854</timestamp>
+    <timestamp>1678454676957</timestamp>
     <server>localhost</server>
     <transactionNum>23</transactionNum>
     <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>8</funds>
   </userCommand>
-  <accountTransaction>
-    <timestamp>1678401365856</timestamp>
+  <errorEvent>
+    <timestamp>1678454676958</timestamp>
     <server>localhost</server>
     <transactionNum>23</transactionNum>
-    <action>remove</action>
+    <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>-48.72</funds>
-  </accountTransaction>
+  </errorEvent>
   <errorEvent>
-    <timestamp>1678401365867</timestamp>
+    <timestamp>1678454676971</timestamp>
     <server>localhost</server>
     <transactionNum>24</transactionNum>
     <command>COMMIT_SELL</command>
@@ -360,7 +322,7 @@
     <errorMessage>Error: no sell to commit</errorMessage>
   </errorEvent>
   <userCommand>
-    <timestamp>1678401365869</timestamp>
+    <timestamp>1678454676975</timestamp>
     <server>localhost</server>
     <transactionNum>25</transactionNum>
     <command>BUY</command>
@@ -368,7 +330,7 @@
     <funds>156.07</funds>
   </userCommand>
   <systemEvent>
-    <timestamp>1678401365869</timestamp>
+    <timestamp>1678454676975</timestamp>
     <server>localhost</server>
     <transactionNum>25</transactionNum>
     <command>BUY</command>
@@ -376,33 +338,31 @@
     <funds>156.07</funds>
   </systemEvent>
   <quoteServer>
-    <timestamp>1678401365870</timestamp>
+    <timestamp>1678454676976</timestamp>
     <server>localhost</server>
     <transactionNum>25</transactionNum>
-    <price>2.9</price>
+    <price>1697.02</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>mQnI6n8ll4saG7ymz3GG5pHvNJoOV3z1/UU9Ag53fJk=</cryptokey>
+    <cryptokey>EJ9C9xwgli+cm7DqUdZaBeXjsB4GKxk5UUbXv6riGhs=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401365886</timestamp>
+    <timestamp>1678454712208</timestamp>
     <server>localhost</server>
     <transactionNum>26</transactionNum>
     <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>53</funds>
   </userCommand>
-  <accountTransaction>
-    <timestamp>1678401365893</timestamp>
+  <errorEvent>
+    <timestamp>1678454712208</timestamp>
     <server>localhost</server>
     <transactionNum>26</transactionNum>
-    <action>remove</action>
+    <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>-153.7</funds>
-  </accountTransaction>
+  </errorEvent>
   <userCommand>
-    <timestamp>1678401365905</timestamp>
+    <timestamp>1678454712210</timestamp>
     <server>localhost</server>
     <transactionNum>27</transactionNum>
     <command>BUY</command>
@@ -410,7 +370,7 @@
     <funds>575.27</funds>
   </userCommand>
   <systemEvent>
-    <timestamp>1678401365905</timestamp>
+    <timestamp>1678454712210</timestamp>
     <server>localhost</server>
     <transactionNum>27</transactionNum>
     <command>BUY</command>
@@ -418,41 +378,41 @@
     <funds>575.27</funds>
   </systemEvent>
   <quoteServer>
-    <timestamp>1678401365908</timestamp>
+    <timestamp>1678454712210</timestamp>
     <server>localhost</server>
     <transactionNum>27</transactionNum>
-    <price>5.26</price>
+    <price>1753.73</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>c30pRoUjfCkaG7ymz3GG5pyXFfrNx1AkUp4WsVGO9zM=</cryptokey>
+    <cryptokey>9B1tbYygcpucm7DqUdZaBfovQiWzBsasMLTyAqemwN4=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401365917</timestamp>
+    <timestamp>1678454712215</timestamp>
     <server>localhost</server>
     <transactionNum>28</transactionNum>
     <command>CANCEL_SELL</command>
     <username>oY01WVirLr</username>
   </userCommand>
   <quoteServer>
-    <timestamp>1678401365926</timestamp>
+    <timestamp>1678454712218</timestamp>
     <server>localhost</server>
     <transactionNum>29</transactionNum>
-    <price>751.67</price>
+    <price>146.91</price>
     <stockSymbol>OY0</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>zIkeiKILG3H6wad9lIgBJpEvOUicsxlQJn2Id2DDu2Y=</cryptokey>
+    <cryptokey>y+9EnDmtQYz6wad9lIgBJnP3/VKX8acxA7TjZ6A713A=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401367930</timestamp>
+    <timestamp>1678454712221</timestamp>
     <server>localhost</server>
     <transactionNum>29</transactionNum>
     <command>QUOTE</command>
     <username>oY01WVirLr</username>
   </userCommand>
   <userCommand>
-    <timestamp>1678401367932</timestamp>
+    <timestamp>1678454712222</timestamp>
     <server>localhost</server>
     <transactionNum>30</transactionNum>
     <command>SET_BUY_AMOUNT</command>
@@ -460,7 +420,7 @@
     <funds>658.38</funds>
   </userCommand>
   <userCommand>
-    <timestamp>1678401367934</timestamp>
+    <timestamp>1678454712225</timestamp>
     <server>localhost</server>
     <transactionNum>31</transactionNum>
     <command>SELL</command>
@@ -468,7 +428,7 @@
     <funds>641.9</funds>
   </userCommand>
   <systemEvent>
-    <timestamp>1678401367934</timestamp>
+    <timestamp>1678454712225</timestamp>
     <server>localhost</server>
     <transactionNum>31</transactionNum>
     <command>SELL</command>
@@ -476,55 +436,52 @@
     <funds>641.9</funds>
   </systemEvent>
   <quoteServer>
-    <timestamp>1678401367935</timestamp>
+    <timestamp>1678454712225</timestamp>
     <server>localhost</server>
     <transactionNum>31</transactionNum>
-    <price>11.13</price>
+    <price>1573.78</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>1PJmsiMifdgDnv2ITHwtmdf1C4SLYpip6GHLSwjn1mE=</cryptokey>
+    <cryptokey>mLD6709zqrCcm7DqUdZaBfovQiWzBsasFB+wSszwT7I=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401367940</timestamp>
+    <timestamp>1678454713245</timestamp>
     <server>localhost</server>
     <transactionNum>32</transactionNum>
     <command>COMMIT_SELL</command>
     <username>oY01WVirLr</username>
   </userCommand>
-  <accountTransaction>
-    <timestamp>1678401367942</timestamp>
+  <errorEvent>
+    <timestamp>1678454713245</timestamp>
     <server>localhost</server>
     <transactionNum>32</transactionNum>
-    <action>add</action>
+    <command>COMMIT_SELL</command>
     <username>oY01WVirLr</username>
-    <funds>634.4100000000001</funds>
-  </accountTransaction>
+  </errorEvent>
   <userCommand>
-    <timestamp>1678401367948</timestamp>
+    <timestamp>1678454713247</timestamp>
     <server>localhost</server>
     <transactionNum>33</transactionNum>
     <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>109</funds>
   </userCommand>
-  <accountTransaction>
-    <timestamp>1678401367949</timestamp>
+  <errorEvent>
+    <timestamp>1678454713247</timestamp>
     <server>localhost</server>
     <transactionNum>33</transactionNum>
-    <action>remove</action>
+    <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>-573.34</funds>
-  </accountTransaction>
+  </errorEvent>
   <userCommand>
-    <timestamp>1678401367958</timestamp>
+    <timestamp>1678454713249</timestamp>
     <server>localhost</server>
     <transactionNum>34</transactionNum>
     <command>CANCEL_SET_SELL</command>
     <username>oY01WVirLr</username>
   </userCommand>
   <errorEvent>
-    <timestamp>1678401367960</timestamp>
+    <timestamp>1678454713252</timestamp>
     <server>localhost</server>
     <transactionNum>35</transactionNum>
     <command>COMMIT_SELL</command>
@@ -532,21 +489,21 @@
     <errorMessage>Error: no sell to commit</errorMessage>
   </errorEvent>
   <userCommand>
-    <timestamp>1678401367962</timestamp>
+    <timestamp>1678454713254</timestamp>
     <server>localhost</server>
     <transactionNum>36</transactionNum>
     <command>CANCEL_BUY</command>
     <username>oY01WVirLr</username>
   </userCommand>
   <userCommand>
-    <timestamp>1678401367967</timestamp>
+    <timestamp>1678454713256</timestamp>
     <server>localhost</server>
     <transactionNum>37</transactionNum>
     <command>CANCEL_SELL</command>
     <username>oY01WVirLr</username>
   </userCommand>
   <userCommand>
-    <timestamp>1678401367971</timestamp>
+    <timestamp>1678454713258</timestamp>
     <server>localhost</server>
     <transactionNum>38</transactionNum>
     <command>BUY</command>
@@ -554,7 +511,7 @@
     <funds>264.17</funds>
   </userCommand>
   <systemEvent>
-    <timestamp>1678401367971</timestamp>
+    <timestamp>1678454713258</timestamp>
     <server>localhost</server>
     <transactionNum>38</transactionNum>
     <command>BUY</command>
@@ -562,27 +519,27 @@
     <funds>264.17</funds>
   </systemEvent>
   <quoteServer>
-    <timestamp>1678401367972</timestamp>
+    <timestamp>1678454713259</timestamp>
     <server>localhost</server>
     <transactionNum>38</transactionNum>
-    <price>21.5</price>
+    <price>1573.53</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>DgIueSwp6e8Dnv2ITHwtmdf1C4SLYpip4Fl3bfJ0JZ0=</cryptokey>
+    <cryptokey>FiaDJjc+hDmcm7DqUdZaBfovQiWzBsasHZJpPkx6QKY=</cryptokey>
   </quoteServer>
   <quoteServer>
-    <timestamp>1678401367979</timestamp>
+    <timestamp>1678454716265</timestamp>
     <server>localhost</server>
     <transactionNum>39</transactionNum>
-    <price>1.01</price>
+    <price>1753.62</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>tHz8Y2pUb5AaG7ymz3GG5qPNafN+mlj2Up4WsVGO9zM=</cryptokey>
+    <cryptokey>qBzWe7iqIhWcm7DqUdZaBfovQiWzBsasyRODdP/jo/U=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401367983</timestamp>
+    <timestamp>1678454719268</timestamp>
     <server>localhost</server>
     <transactionNum>39</transactionNum>
     <command>QUOTE</command>
@@ -590,7 +547,7 @@
     <stockSymbol>S</stockSymbol>
   </userCommand>
   <userCommand>
-    <timestamp>1678401367987</timestamp>
+    <timestamp>1678454719271</timestamp>
     <server>localhost</server>
     <transactionNum>40</transactionNum>
     <command>BUY</command>
@@ -598,7 +555,7 @@
     <funds>657.49</funds>
   </userCommand>
   <systemEvent>
-    <timestamp>1678401367987</timestamp>
+    <timestamp>1678454719271</timestamp>
     <server>localhost</server>
     <transactionNum>40</transactionNum>
     <command>BUY</command>
@@ -606,50 +563,48 @@
     <funds>657.49</funds>
   </systemEvent>
   <quoteServer>
-    <timestamp>1678401367989</timestamp>
+    <timestamp>1678454719272</timestamp>
     <server>localhost</server>
     <transactionNum>40</transactionNum>
-    <price>1.01</price>
+    <price>1293.17</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>tHz8Y2pUb5AaG7ymz3GG5nnZG02aYwy3kounIFvd9sg=</cryptokey>
+    <cryptokey>7U3Qcof1sWCcm7DqUdZaBfovQiWzBsasIy3KVwMzfFg=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401368005</timestamp>
+    <timestamp>1678454719278</timestamp>
     <server>localhost</server>
     <transactionNum>41</transactionNum>
     <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>650</funds>
   </userCommand>
-  <accountTransaction>
-    <timestamp>1678401368007</timestamp>
+  <errorEvent>
+    <timestamp>1678454719279</timestamp>
     <server>localhost</server>
     <transactionNum>41</transactionNum>
-    <action>remove</action>
+    <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>-656.5</funds>
-  </accountTransaction>
+  </errorEvent>
   <quoteServer>
-    <timestamp>1678401368015</timestamp>
+    <timestamp>1678454719281</timestamp>
     <server>localhost</server>
     <transactionNum>42</transactionNum>
-    <price>852.21</price>
+    <price>277.87</price>
     <stockSymbol>OY0</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>mWQWECtOks/6wad9lIgBJr5E7CQjQhxx0ErfQVRX4w4=</cryptokey>
+    <cryptokey>yhaoYCJiqMf6wad9lIgBJqvxjVBsTtyAZsU4VHXR8kw=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401370019</timestamp>
+    <timestamp>1678454720285</timestamp>
     <server>localhost</server>
     <transactionNum>42</transactionNum>
     <command>QUOTE</command>
     <username>oY01WVirLr</username>
   </userCommand>
   <userCommand>
-    <timestamp>1678401370021</timestamp>
+    <timestamp>1678454720287</timestamp>
     <server>localhost</server>
     <transactionNum>43</transactionNum>
     <command>BUY</command>
@@ -657,7 +612,7 @@
     <funds>710.47</funds>
   </userCommand>
   <systemEvent>
-    <timestamp>1678401370021</timestamp>
+    <timestamp>1678454720287</timestamp>
     <server>localhost</server>
     <transactionNum>43</transactionNum>
     <command>BUY</command>
@@ -665,33 +620,31 @@
     <funds>710.47</funds>
   </systemEvent>
   <quoteServer>
-    <timestamp>1678401370022</timestamp>
+    <timestamp>1678454720288</timestamp>
     <server>localhost</server>
     <transactionNum>43</transactionNum>
-    <price>1.01</price>
+    <price>1387.48</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>tHz8Y2pUb5AaG7ymz3GG5o1/nwGh+Z+F42NSgzCnKHk=</cryptokey>
+    <cryptokey>mrcJAsVffKGcm7DqUdZaBfovQiWzBsas3h20+HCFtGg=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401370029</timestamp>
+    <timestamp>1678454720293</timestamp>
     <server>localhost</server>
     <transactionNum>44</transactionNum>
     <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>703</funds>
   </userCommand>
-  <accountTransaction>
-    <timestamp>1678401370030</timestamp>
+  <errorEvent>
+    <timestamp>1678454720294</timestamp>
     <server>localhost</server>
     <transactionNum>44</transactionNum>
-    <action>remove</action>
+    <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>-710.03</funds>
-  </accountTransaction>
+  </errorEvent>
   <userCommand>
-    <timestamp>1678401370033</timestamp>
+    <timestamp>1678454720295</timestamp>
     <server>localhost</server>
     <transactionNum>45</transactionNum>
     <command>BUY</command>
@@ -699,7 +652,7 @@
     <funds>208.11</funds>
   </userCommand>
   <systemEvent>
-    <timestamp>1678401370033</timestamp>
+    <timestamp>1678454720295</timestamp>
     <server>localhost</server>
     <transactionNum>45</transactionNum>
     <command>BUY</command>
@@ -707,50 +660,48 @@
     <funds>208.11</funds>
   </systemEvent>
   <quoteServer>
-    <timestamp>1678401370034</timestamp>
+    <timestamp>1678454720296</timestamp>
     <server>localhost</server>
     <transactionNum>45</transactionNum>
-    <price>1.43</price>
+    <price>1305.25</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>gDIQCyE9uaEaG7ymz3GG5tGcgZescr88cZ4WMgRc8DE=</cryptokey>
+    <cryptokey>l9tESf/SfJCcm7DqUdZaBfovQiWzBsasUHCR1dx9Ly0=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401370045</timestamp>
+    <timestamp>1678454721303</timestamp>
     <server>localhost</server>
     <transactionNum>46</transactionNum>
     <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>145</funds>
   </userCommand>
-  <accountTransaction>
-    <timestamp>1678401370046</timestamp>
+  <errorEvent>
+    <timestamp>1678454721303</timestamp>
     <server>localhost</server>
     <transactionNum>46</transactionNum>
-    <action>remove</action>
+    <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>-207.35</funds>
-  </accountTransaction>
+  </errorEvent>
   <quoteServer>
-    <timestamp>1678401370049</timestamp>
+    <timestamp>1678454721304</timestamp>
     <server>localhost</server>
     <transactionNum>47</transactionNum>
-    <price>966.76</price>
+    <price>357.99</price>
     <stockSymbol>OY0</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>dJsOUBWwDDL6wad9lIgBJgYRuyqnfYcOjejjRXi4yE4=</cryptokey>
+    <cryptokey>ODEEkeyZqn/6wad9lIgBJqRnGqfjuK3HJS2pmiUf/WE=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401370052</timestamp>
+    <timestamp>1678454722308</timestamp>
     <server>localhost</server>
     <transactionNum>47</transactionNum>
     <command>QUOTE</command>
     <username>oY01WVirLr</username>
   </userCommand>
   <userCommand>
-    <timestamp>1678401370054</timestamp>
+    <timestamp>1678454722311</timestamp>
     <server>localhost</server>
     <transactionNum>48</transactionNum>
     <command>ADD</command>
@@ -758,15 +709,7 @@
     <funds>52802.93</funds>
   </userCommand>
   <accountTransaction>
-    <timestamp>1678401370054</timestamp>
-    <server>localhost</server>
-    <transactionNum>48</transactionNum>
-    <action>add</action>
-    <username>oY01WVirLr</username>
-    <funds>52802.93</funds>
-  </accountTransaction>
-  <accountTransaction>
-    <timestamp>1678401370059</timestamp>
+    <timestamp>1678454722312</timestamp>
     <server>localhost</server>
     <transactionNum>48</transactionNum>
     <action>add</action>
@@ -774,7 +717,7 @@
     <funds>52802.93</funds>
   </accountTransaction>
   <userCommand>
-    <timestamp>1678401370062</timestamp>
+    <timestamp>1678454722314</timestamp>
     <server>localhost</server>
     <transactionNum>49</transactionNum>
     <command>BUY</command>
@@ -782,7 +725,7 @@
     <funds>433.22</funds>
   </userCommand>
   <systemEvent>
-    <timestamp>1678401370062</timestamp>
+    <timestamp>1678454722314</timestamp>
     <server>localhost</server>
     <transactionNum>49</transactionNum>
     <command>BUY</command>
@@ -790,24 +733,32 @@
     <funds>433.22</funds>
   </systemEvent>
   <quoteServer>
-    <timestamp>1678401370063</timestamp>
+    <timestamp>1678454722315</timestamp>
     <server>localhost</server>
     <transactionNum>49</transactionNum>
-    <price>2.03</price>
+    <price>2475.13</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>HDv9KOwaxDoaG7ymz3GG5vkzybwr2XBhkounIFvd9sg=</cryptokey>
+    <cryptokey>SfGDcGssAX6cm7DqUdZaBeRFCwIt1kkZ0EMTFTqOqM8=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401370079</timestamp>
+    <timestamp>1678454722320</timestamp>
     <server>localhost</server>
     <transactionNum>50</transactionNum>
     <command>SET_SELL_TRIGGER</command>
     <username>oY01WVirLr</username>
   </userCommand>
+  <errorEvent>
+    <timestamp>1678454722322</timestamp>
+    <server>localhost</server>
+    <transactionNum>30</transactionNum>
+    <command>SELL</command>
+    <username>oY01WVirLr</username>
+    <errorMessage>Error: Not enough stock held for change</errorMessage>
+  </errorEvent>
   <userCommand>
-    <timestamp>1678401370082</timestamp>
+    <timestamp>1678454722324</timestamp>
     <server>localhost</server>
     <transactionNum>51</transactionNum>
     <command>BUY</command>
@@ -815,7 +766,7 @@
     <funds>387.59</funds>
   </userCommand>
   <systemEvent>
-    <timestamp>1678401370082</timestamp>
+    <timestamp>1678454722324</timestamp>
     <server>localhost</server>
     <transactionNum>51</transactionNum>
     <command>BUY</command>
@@ -823,56 +774,52 @@
     <funds>387.59</funds>
   </systemEvent>
   <quoteServer>
-    <timestamp>1678401370083</timestamp>
+    <timestamp>1678454722324</timestamp>
     <server>localhost</server>
     <transactionNum>51</transactionNum>
-    <price>3.93</price>
+    <price>3354.45</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>1NPw8aRPNm8aG7ymz3GG5rgiru1sfBcEkounIFvd9sg=</cryptokey>
+    <cryptokey>vAJJrpqWq6Ocm7DqUdZaBeRFCwIt1kkZu+wFOaVDUD8=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401370093</timestamp>
+    <timestamp>1678454723332</timestamp>
     <server>localhost</server>
     <transactionNum>52</transactionNum>
     <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>98</funds>
   </userCommand>
-  <accountTransaction>
-    <timestamp>1678401370094</timestamp>
+  <errorEvent>
+    <timestamp>1678454723332</timestamp>
     <server>localhost</server>
     <transactionNum>52</transactionNum>
-    <action>remove</action>
+    <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>-385.14000000000004</funds>
-  </accountTransaction>
+  </errorEvent>
   <userCommand>
-    <timestamp>1678401370106</timestamp>
+    <timestamp>1678454723334</timestamp>
     <server>localhost</server>
     <transactionNum>53</transactionNum>
     <command>CANCEL_BUY</command>
     <username>oY01WVirLr</username>
   </userCommand>
   <userCommand>
-    <timestamp>1678401370111</timestamp>
+    <timestamp>1678454723337</timestamp>
     <server>localhost</server>
     <transactionNum>54</transactionNum>
     <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>12</funds>
   </userCommand>
-  <accountTransaction>
-    <timestamp>1678401370112</timestamp>
+  <errorEvent>
+    <timestamp>1678454723337</timestamp>
     <server>localhost</server>
     <transactionNum>54</transactionNum>
-    <action>remove</action>
+    <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>-258</funds>
-  </accountTransaction>
+  </errorEvent>
   <errorEvent>
-    <timestamp>1678401370115</timestamp>
+    <timestamp>1678454723339</timestamp>
     <server>localhost</server>
     <transactionNum>55</transactionNum>
     <command>COMMIT_SELL</command>
@@ -880,48 +827,48 @@
     <errorMessage>Error: no sell to commit</errorMessage>
   </errorEvent>
   <userCommand>
-    <timestamp>1678401370132</timestamp>
+    <timestamp>1678454723341</timestamp>
     <server>localhost</server>
     <transactionNum>56</transactionNum>
     <command>CANCEL_SET_BUY</command>
     <username>oY01WVirLr</username>
   </userCommand>
   <userCommand>
-    <timestamp>1678401370136</timestamp>
+    <timestamp>1678454723343</timestamp>
     <server>localhost</server>
     <transactionNum>57</transactionNum>
     <command>CANCEL_SET_BUY</command>
     <username>oY01WVirLr</username>
   </userCommand>
   <quoteServer>
-    <timestamp>1678401370140</timestamp>
+    <timestamp>1678454723345</timestamp>
     <server>localhost</server>
     <transactionNum>58</transactionNum>
-    <price>1039.24</price>
+    <price>451.43</price>
     <stockSymbol>OY0</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>fFxWvgwtZ1exkaxSJTlodNhhKAHjzs6w7sYJv0Lzkts=</cryptokey>
+    <cryptokey>EuDO6KrteLH6wad9lIgBJnLRptcLcobCLxtRnSKFx3c=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401370145</timestamp>
+    <timestamp>1678454724349</timestamp>
     <server>localhost</server>
     <transactionNum>58</transactionNum>
     <command>QUOTE</command>
     <username>oY01WVirLr</username>
   </userCommand>
   <quoteServer>
-    <timestamp>1678401370159</timestamp>
+    <timestamp>1678454724351</timestamp>
     <server>localhost</server>
     <transactionNum>59</transactionNum>
-    <price>4.42</price>
+    <price>3609.08</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>eQ5xretz4xsaG7ymz3GG5qTNxYWowJ4Nf+ueANPpanw=</cryptokey>
+    <cryptokey>XHkHlRrf+Yycm7DqUdZaBeRFCwIt1kkZELQPiHLJMVI=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401370164</timestamp>
+    <timestamp>1678454724354</timestamp>
     <server>localhost</server>
     <transactionNum>59</transactionNum>
     <command>QUOTE</command>
@@ -929,17 +876,17 @@
     <stockSymbol>S</stockSymbol>
   </userCommand>
   <quoteServer>
-    <timestamp>1678401370166</timestamp>
+    <timestamp>1678454724356</timestamp>
     <server>localhost</server>
     <transactionNum>60</transactionNum>
-    <price>4.89</price>
+    <price>2394.46</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>xoHYkL755X4aG7ymz3GG5qTNxYWowJ4N2bMMzbNQAmE=</cryptokey>
+    <cryptokey>71YTsi+vUTKcm7DqUdZaBeRFCwIt1kkZdOvsecski/o=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401370170</timestamp>
+    <timestamp>1678454724359</timestamp>
     <server>localhost</server>
     <transactionNum>60</transactionNum>
     <command>QUOTE</command>
@@ -947,7 +894,7 @@
     <stockSymbol>S</stockSymbol>
   </userCommand>
   <userCommand>
-    <timestamp>1678401370177</timestamp>
+    <timestamp>1678454724361</timestamp>
     <server>localhost</server>
     <transactionNum>61</transactionNum>
     <command>SELL</command>
@@ -955,7 +902,7 @@
     <funds>429.74</funds>
   </userCommand>
   <systemEvent>
-    <timestamp>1678401370177</timestamp>
+    <timestamp>1678454724361</timestamp>
     <server>localhost</server>
     <transactionNum>61</transactionNum>
     <command>SELL</command>
@@ -963,24 +910,24 @@
     <funds>429.74</funds>
   </systemEvent>
   <quoteServer>
-    <timestamp>1678401370180</timestamp>
+    <timestamp>1678454724362</timestamp>
     <server>localhost</server>
     <transactionNum>61</transactionNum>
-    <price>5.4</price>
+    <price>2437.78</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>tihdEW7T2g0aG7ymz3GG5jG7Gt//gnSj/UU9Ag53fJk=</cryptokey>
+    <cryptokey>S8ygqu0yFn6cm7DqUdZaBeRFCwIt1kkZzcsO5LbhYW0=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401372187</timestamp>
+    <timestamp>1678454724367</timestamp>
     <server>localhost</server>
     <transactionNum>62</transactionNum>
     <command>SET_SELL_TRIGGER</command>
     <username>oY01WVirLr</username>
   </userCommand>
   <userCommand>
-    <timestamp>1678401372189</timestamp>
+    <timestamp>1678454724369</timestamp>
     <server>localhost</server>
     <transactionNum>63</transactionNum>
     <command>BUY</command>
@@ -988,7 +935,7 @@
     <funds>384.67</funds>
   </userCommand>
   <systemEvent>
-    <timestamp>1678401372189</timestamp>
+    <timestamp>1678454724369</timestamp>
     <server>localhost</server>
     <transactionNum>63</transactionNum>
     <command>BUY</command>
@@ -996,33 +943,31 @@
     <funds>384.67</funds>
   </systemEvent>
   <quoteServer>
-    <timestamp>1678401372190</timestamp>
+    <timestamp>1678454724370</timestamp>
     <server>localhost</server>
     <transactionNum>63</transactionNum>
-    <price>5.28</price>
+    <price>2708.1</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>urSQqZlfJDQaG7ymz3GG5lD7/uEszweCdZMbaxgvIHE=</cryptokey>
+    <cryptokey>CtwGK60KXbGcm7DqUdZaBeRFCwIt1kkZ8mQ3M7+0o/U=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401373196</timestamp>
+    <timestamp>1678454724375</timestamp>
     <server>localhost</server>
     <transactionNum>64</transactionNum>
     <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>72</funds>
   </userCommand>
-  <accountTransaction>
-    <timestamp>1678401373197</timestamp>
+  <errorEvent>
+    <timestamp>1678454724375</timestamp>
     <server>localhost</server>
     <transactionNum>64</transactionNum>
-    <action>remove</action>
+    <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>-380.16</funds>
-  </accountTransaction>
+  </errorEvent>
   <errorEvent>
-    <timestamp>1678401373199</timestamp>
+    <timestamp>1678454724377</timestamp>
     <server>localhost</server>
     <transactionNum>65</transactionNum>
     <command>COMMIT_BUY</command>
@@ -1030,7 +975,7 @@
     <errorMessage>Error: no buy to commit</errorMessage>
   </errorEvent>
   <userCommand>
-    <timestamp>1678401373201</timestamp>
+    <timestamp>1678454724380</timestamp>
     <server>localhost</server>
     <transactionNum>66</transactionNum>
     <command>BUY</command>
@@ -1038,7 +983,7 @@
     <funds>357.57</funds>
   </userCommand>
   <systemEvent>
-    <timestamp>1678401373201</timestamp>
+    <timestamp>1678454724380</timestamp>
     <server>localhost</server>
     <transactionNum>66</transactionNum>
     <command>BUY</command>
@@ -1046,24 +991,24 @@
     <funds>357.57</funds>
   </systemEvent>
   <quoteServer>
-    <timestamp>1678401373202</timestamp>
+    <timestamp>1678454724381</timestamp>
     <server>localhost</server>
     <transactionNum>66</transactionNum>
-    <price>7.16</price>
+    <price>1664.79</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>96ULXQhrj3gaG7ymz3GG5gGTCs+jRpRd/UU9Ag53fJk=</cryptokey>
+    <cryptokey>t5FHymJF2bycm7DqUdZaBeRFCwIt1kkZdKMCjtWKGpQ=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401376207</timestamp>
+    <timestamp>1678454724394</timestamp>
     <server>localhost</server>
     <transactionNum>67</transactionNum>
     <command>CANCEL_BUY</command>
     <username>oY01WVirLr</username>
   </userCommand>
   <userCommand>
-    <timestamp>1678401376209</timestamp>
+    <timestamp>1678454724399</timestamp>
     <server>localhost</server>
     <transactionNum>68</transactionNum>
     <command>SET_SELL_AMOUNT</command>
@@ -1071,14 +1016,14 @@
     <funds>216.83</funds>
   </userCommand>
   <userCommand>
-    <timestamp>1678401376211</timestamp>
+    <timestamp>1678454724402</timestamp>
     <server>localhost</server>
     <transactionNum>69</transactionNum>
     <command>CANCEL_SET_SELL</command>
     <username>oY01WVirLr</username>
   </userCommand>
   <userCommand>
-    <timestamp>1678401376213</timestamp>
+    <timestamp>1678454724407</timestamp>
     <server>localhost</server>
     <transactionNum>70</transactionNum>
     <command>BUY</command>
@@ -1086,7 +1031,7 @@
     <funds>516.29</funds>
   </userCommand>
   <systemEvent>
-    <timestamp>1678401376213</timestamp>
+    <timestamp>1678454724407</timestamp>
     <server>localhost</server>
     <transactionNum>70</transactionNum>
     <command>BUY</command>
@@ -1094,24 +1039,24 @@
     <funds>516.29</funds>
   </systemEvent>
   <quoteServer>
-    <timestamp>1678401376214</timestamp>
+    <timestamp>1678454724408</timestamp>
     <server>localhost</server>
     <transactionNum>70</transactionNum>
-    <price>6.86</price>
+    <price>3168.36</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>NygA7zO6QboaG7ymz3GG5nSGDlS8KoTm42NSgzCnKHk=</cryptokey>
+    <cryptokey>MZfkPeJ6xi+cm7DqUdZaBeRFCwIt1kkZkujpWh634TY=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401392368</timestamp>
+    <timestamp>1678454724424</timestamp>
     <server>localhost</server>
     <transactionNum>71</transactionNum>
     <command>CANCEL_BUY</command>
     <username>oY01WVirLr</username>
   </userCommand>
   <userCommand>
-    <timestamp>1678401392371</timestamp>
+    <timestamp>1678454724427</timestamp>
     <server>localhost</server>
     <transactionNum>72</transactionNum>
     <command>SELL</command>
@@ -1119,7 +1064,7 @@
     <funds>41.47</funds>
   </userCommand>
   <systemEvent>
-    <timestamp>1678401392371</timestamp>
+    <timestamp>1678454724427</timestamp>
     <server>localhost</server>
     <transactionNum>72</transactionNum>
     <command>SELL</command>
@@ -1127,53 +1072,52 @@
     <funds>41.47</funds>
   </systemEvent>
   <quoteServer>
-    <timestamp>1678401392372</timestamp>
+    <timestamp>1678454724428</timestamp>
     <server>localhost</server>
     <transactionNum>72</transactionNum>
-    <price>7.31</price>
+    <price>3222.34</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>6vQiFwkErh0aG7ymz3GG5t07pG7dZwrL42NSgzCnKHk=</cryptokey>
+    <cryptokey>kpFoKKMTgIqcm7DqUdZaBeRFCwIt1kkZFdftr9zC6mE=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401394378</timestamp>
+    <timestamp>1678454727436</timestamp>
     <server>localhost</server>
     <transactionNum>73</transactionNum>
     <command>SET_SELL_TRIGGER</command>
     <username>oY01WVirLr</username>
   </userCommand>
   <userCommand>
-    <timestamp>1678401394380</timestamp>
+    <timestamp>1678454727439</timestamp>
     <server>localhost</server>
     <transactionNum>74</transactionNum>
     <command>COMMIT_SELL</command>
     <username>oY01WVirLr</username>
   </userCommand>
-  <accountTransaction>
-    <timestamp>1678401394382</timestamp>
+  <errorEvent>
+    <timestamp>1678454727440</timestamp>
     <server>localhost</server>
     <transactionNum>74</transactionNum>
-    <action>add</action>
+    <command>COMMIT_SELL</command>
     <username>oY01WVirLr</username>
-    <funds>36.55</funds>
-  </accountTransaction>
+  </errorEvent>
   <userCommand>
-    <timestamp>1678401394384</timestamp>
+    <timestamp>1678454727442</timestamp>
     <server>localhost</server>
     <transactionNum>75</transactionNum>
     <command>CANCEL_SET_BUY</command>
     <username>oY01WVirLr</username>
   </userCommand>
   <userCommand>
-    <timestamp>1678401394386</timestamp>
+    <timestamp>1678454727444</timestamp>
     <server>localhost</server>
     <transactionNum>76</transactionNum>
     <command>CANCEL_SET_SELL</command>
     <username>oY01WVirLr</username>
   </userCommand>
   <userCommand>
-    <timestamp>1678401394388</timestamp>
+    <timestamp>1678454727447</timestamp>
     <server>localhost</server>
     <transactionNum>77</transactionNum>
     <command>BUY</command>
@@ -1181,7 +1125,7 @@
     <funds>289.68</funds>
   </userCommand>
   <systemEvent>
-    <timestamp>1678401394388</timestamp>
+    <timestamp>1678454727447</timestamp>
     <server>localhost</server>
     <transactionNum>77</transactionNum>
     <command>BUY</command>
@@ -1189,24 +1133,24 @@
     <funds>289.68</funds>
   </systemEvent>
   <quoteServer>
-    <timestamp>1678401394388</timestamp>
+    <timestamp>1678454727448</timestamp>
     <server>localhost</server>
     <transactionNum>77</transactionNum>
-    <price>8.65</price>
+    <price>3009.07</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>hku9mAC2004aG7ymz3GG5p9jffksnXkgdZMbaxgvIHE=</cryptokey>
+    <cryptokey>1ZQ79KdnR0icm7DqUdZaBeRFCwIt1kkZmS+qeC8JSnw=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401394402</timestamp>
+    <timestamp>1678454727453</timestamp>
     <server>localhost</server>
     <transactionNum>78</transactionNum>
     <command>CANCEL_SET_BUY</command>
     <username>oY01WVirLr</username>
   </userCommand>
   <userCommand>
-    <timestamp>1678401394405</timestamp>
+    <timestamp>1678454727456</timestamp>
     <server>localhost</server>
     <transactionNum>79</transactionNum>
     <command>ADD</command>
@@ -1214,15 +1158,7 @@
     <funds>87863.73</funds>
   </userCommand>
   <accountTransaction>
-    <timestamp>1678401394405</timestamp>
-    <server>localhost</server>
-    <transactionNum>79</transactionNum>
-    <action>add</action>
-    <username>oY01WVirLr</username>
-    <funds>87863.73</funds>
-  </accountTransaction>
-  <accountTransaction>
-    <timestamp>1678401394406</timestamp>
+    <timestamp>1678454727458</timestamp>
     <server>localhost</server>
     <transactionNum>79</transactionNum>
     <action>add</action>
@@ -1230,17 +1166,17 @@
     <funds>87863.73</funds>
   </accountTransaction>
   <quoteServer>
-    <timestamp>1678401394408</timestamp>
+    <timestamp>1678454727460</timestamp>
     <server>localhost</server>
     <transactionNum>80</transactionNum>
-    <price>10.41</price>
+    <price>4452.54</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>SHL+pfyjCdMDnv2ITHwtmYNfU1n41xkKi/3Rp9irRDs=</cryptokey>
+    <cryptokey>uF7qHQ4FgKucm7DqUdZaBeRFCwIt1kkZ5KN0B5rmpKU=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401394414</timestamp>
+    <timestamp>1678454728464</timestamp>
     <server>localhost</server>
     <transactionNum>80</transactionNum>
     <command>QUOTE</command>
@@ -1248,7 +1184,7 @@
     <stockSymbol>S</stockSymbol>
   </userCommand>
   <userCommand>
-    <timestamp>1678401394420</timestamp>
+    <timestamp>1678454728466</timestamp>
     <server>localhost</server>
     <transactionNum>81</transactionNum>
     <command>BUY</command>
@@ -1256,7 +1192,7 @@
     <funds>333.91</funds>
   </userCommand>
   <systemEvent>
-    <timestamp>1678401394420</timestamp>
+    <timestamp>1678454728466</timestamp>
     <server>localhost</server>
     <transactionNum>81</transactionNum>
     <command>BUY</command>
@@ -1264,33 +1200,31 @@
     <funds>333.91</funds>
   </systemEvent>
   <quoteServer>
-    <timestamp>1678401394421</timestamp>
+    <timestamp>1678454728467</timestamp>
     <server>localhost</server>
     <transactionNum>81</transactionNum>
-    <price>11.6</price>
+    <price>854.15</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>3aEUhh/1TnwDnv2ITHwtmYNfU1n41xkKKm7wG9EiBjw=</cryptokey>
+    <cryptokey>xgGN2dbQX84cwAaud/Yfk5obxF+bVGJAaXFXYSViXvg=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401394430</timestamp>
+    <timestamp>1678454728473</timestamp>
     <server>localhost</server>
     <transactionNum>82</transactionNum>
     <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>28</funds>
   </userCommand>
-  <accountTransaction>
-    <timestamp>1678401394432</timestamp>
+  <errorEvent>
+    <timestamp>1678454728473</timestamp>
     <server>localhost</server>
     <transactionNum>82</transactionNum>
-    <action>remove</action>
+    <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>-324.8</funds>
-  </accountTransaction>
+  </errorEvent>
   <userCommand>
-    <timestamp>1678401394439</timestamp>
+    <timestamp>1678454728475</timestamp>
     <server>localhost</server>
     <transactionNum>83</transactionNum>
     <command>SELL</command>
@@ -1298,7 +1232,7 @@
     <funds>213.24</funds>
   </userCommand>
   <systemEvent>
-    <timestamp>1678401394439</timestamp>
+    <timestamp>1678454728475</timestamp>
     <server>localhost</server>
     <transactionNum>83</transactionNum>
     <command>SELL</command>
@@ -1306,17 +1240,17 @@
     <funds>213.24</funds>
   </systemEvent>
   <quoteServer>
-    <timestamp>1678401394440</timestamp>
+    <timestamp>1678454728476</timestamp>
     <server>localhost</server>
     <transactionNum>83</transactionNum>
-    <price>12.68</price>
+    <price>920.96</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>wwGPexS8auADnv2ITHwtmYNfU1n41xkKCo7eIbFvQCI=</cryptokey>
+    <cryptokey>MUNlDJGHRHscwAaud/Yfk5obxF+bVGJAeCucYx5CKwM=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401394453</timestamp>
+    <timestamp>1678454729482</timestamp>
     <server>localhost</server>
     <transactionNum>84</transactionNum>
     <command>BUY</command>
@@ -1324,7 +1258,7 @@
     <funds>427.36</funds>
   </userCommand>
   <systemEvent>
-    <timestamp>1678401394453</timestamp>
+    <timestamp>1678454729482</timestamp>
     <server>localhost</server>
     <transactionNum>84</transactionNum>
     <command>BUY</command>
@@ -1332,24 +1266,24 @@
     <funds>427.36</funds>
   </systemEvent>
   <quoteServer>
-    <timestamp>1678401394454</timestamp>
+    <timestamp>1678454729483</timestamp>
     <server>localhost</server>
     <transactionNum>84</transactionNum>
-    <price>13.27</price>
+    <price>758.87</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>r9r5O0bLEucDnv2ITHwtmYNfU1n41xkKNrQHW1os5h0=</cryptokey>
+    <cryptokey>LX9m7myTYKMcwAaud/Yfk4wIpkB8Px/v8ZOmMGE+uQ4=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401394460</timestamp>
+    <timestamp>1678454729488</timestamp>
     <server>localhost</server>
     <transactionNum>85</transactionNum>
     <command>CANCEL_SELL</command>
     <username>oY01WVirLr</username>
   </userCommand>
   <userCommand>
-    <timestamp>1678401394464</timestamp>
+    <timestamp>1678454729490</timestamp>
     <server>localhost</server>
     <transactionNum>86</transactionNum>
     <command>BUY</command>
@@ -1357,7 +1291,7 @@
     <funds>730.08</funds>
   </userCommand>
   <systemEvent>
-    <timestamp>1678401394464</timestamp>
+    <timestamp>1678454729490</timestamp>
     <server>localhost</server>
     <transactionNum>86</transactionNum>
     <command>BUY</command>
@@ -1365,33 +1299,31 @@
     <funds>730.08</funds>
   </systemEvent>
   <quoteServer>
-    <timestamp>1678401394465</timestamp>
+    <timestamp>1678454729492</timestamp>
     <server>localhost</server>
     <transactionNum>86</transactionNum>
-    <price>14.48</price>
+    <price>1255.73</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>gJiE0tLUEmcDnv2ITHwtmYNfU1n41xkKqJVcxUgP8Xg=</cryptokey>
+    <cryptokey>27HEVUe9OVicm7DqUdZaBeRFCwIt1kkZDioz96g2CCA=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401394473</timestamp>
+    <timestamp>1678454729497</timestamp>
     <server>localhost</server>
     <transactionNum>87</transactionNum>
     <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>50</funds>
   </userCommand>
-  <accountTransaction>
-    <timestamp>1678401394475</timestamp>
+  <errorEvent>
+    <timestamp>1678454729497</timestamp>
     <server>localhost</server>
     <transactionNum>87</transactionNum>
-    <action>remove</action>
+    <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>-724</funds>
-  </accountTransaction>
+  </errorEvent>
   <userCommand>
-    <timestamp>1678401394483</timestamp>
+    <timestamp>1678454729499</timestamp>
     <server>localhost</server>
     <transactionNum>88</transactionNum>
     <command>BUY</command>
@@ -1399,7 +1331,7 @@
     <funds>36.79</funds>
   </userCommand>
   <systemEvent>
-    <timestamp>1678401394483</timestamp>
+    <timestamp>1678454729499</timestamp>
     <server>localhost</server>
     <transactionNum>88</transactionNum>
     <command>BUY</command>
@@ -1407,33 +1339,31 @@
     <funds>36.79</funds>
   </systemEvent>
   <quoteServer>
-    <timestamp>1678401394484</timestamp>
+    <timestamp>1678454729500</timestamp>
     <server>localhost</server>
     <transactionNum>88</transactionNum>
-    <price>16.34</price>
+    <price>1275.34</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>NjpvZCaSNtkDnv2ITHwtmYNfU1n41xkK8ztQk31UegM=</cryptokey>
+    <cryptokey>ppWaeOHmFZacm7DqUdZaBeRFCwIt1kkZ49E6RsUNLUk=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401398493</timestamp>
+    <timestamp>1678454729505</timestamp>
     <server>localhost</server>
     <transactionNum>89</transactionNum>
     <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>2</funds>
   </userCommand>
-  <accountTransaction>
-    <timestamp>1678401398494</timestamp>
+  <errorEvent>
+    <timestamp>1678454729506</timestamp>
     <server>localhost</server>
     <transactionNum>89</transactionNum>
-    <action>remove</action>
+    <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>-32.68</funds>
-  </accountTransaction>
+  </errorEvent>
   <userCommand>
-    <timestamp>1678401398496</timestamp>
+    <timestamp>1678454729510</timestamp>
     <server>localhost</server>
     <transactionNum>90</transactionNum>
     <command>SELL</command>
@@ -1441,7 +1371,7 @@
     <funds>644.65</funds>
   </userCommand>
   <systemEvent>
-    <timestamp>1678401398496</timestamp>
+    <timestamp>1678454729510</timestamp>
     <server>localhost</server>
     <transactionNum>90</transactionNum>
     <command>SELL</command>
@@ -1449,61 +1379,59 @@
     <funds>644.65</funds>
   </systemEvent>
   <quoteServer>
-    <timestamp>1678401398497</timestamp>
+    <timestamp>1678454729511</timestamp>
     <server>localhost</server>
     <transactionNum>90</transactionNum>
-    <price>22.83</price>
+    <price>1281.33</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>I8w5ARjXKrEDnv2ITHwtmWGL5M3VDNuVnEPVjW+t80E=</cryptokey>
+    <cryptokey>b9Vm8fKYob6cm7DqUdZaBeRFCwIt1kkZBtUxaryvkv0=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401398502</timestamp>
+    <timestamp>1678454729523</timestamp>
     <server>localhost</server>
     <transactionNum>91</transactionNum>
     <command>CANCEL_SELL</command>
     <username>oY01WVirLr</username>
   </userCommand>
   <userCommand>
-    <timestamp>1678401398504</timestamp>
+    <timestamp>1678454729530</timestamp>
     <server>localhost</server>
     <transactionNum>92</transactionNum>
     <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>32</funds>
   </userCommand>
-  <accountTransaction>
-    <timestamp>1678401398505</timestamp>
+  <errorEvent>
+    <timestamp>1678454729531</timestamp>
     <server>localhost</server>
     <transactionNum>92</transactionNum>
-    <action>remove</action>
+    <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>-424.64</funds>
-  </accountTransaction>
+  </errorEvent>
   <userCommand>
-    <timestamp>1678401398508</timestamp>
+    <timestamp>1678454729533</timestamp>
     <server>localhost</server>
     <transactionNum>93</transactionNum>
     <command>CANCEL_SET_SELL</command>
     <username>oY01WVirLr</username>
   </userCommand>
   <userCommand>
-    <timestamp>1678401398510</timestamp>
+    <timestamp>1678454729536</timestamp>
     <server>localhost</server>
     <transactionNum>94</transactionNum>
     <command>CANCEL_SELL</command>
     <username>oY01WVirLr</username>
   </userCommand>
   <userCommand>
-    <timestamp>1678401398512</timestamp>
+    <timestamp>1678454729555</timestamp>
     <server>localhost</server>
     <transactionNum>95</transactionNum>
     <command>CANCEL_SET_SELL</command>
     <username>oY01WVirLr</username>
   </userCommand>
   <userCommand>
-    <timestamp>1678401398516</timestamp>
+    <timestamp>1678454729559</timestamp>
     <server>localhost</server>
     <transactionNum>96</transactionNum>
     <command>BUY</command>
@@ -1511,7 +1439,7 @@
     <funds>749.86</funds>
   </userCommand>
   <systemEvent>
-    <timestamp>1678401398516</timestamp>
+    <timestamp>1678454729559</timestamp>
     <server>localhost</server>
     <transactionNum>96</transactionNum>
     <command>BUY</command>
@@ -1519,40 +1447,38 @@
     <funds>749.86</funds>
   </systemEvent>
   <quoteServer>
-    <timestamp>1678401398517</timestamp>
+    <timestamp>1678454729560</timestamp>
     <server>localhost</server>
     <transactionNum>96</transactionNum>
-    <price>24.01</price>
+    <price>1384.21</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>JMmE3s7b5lwDnv2ITHwtmSRqSUiIL9pO1j8GqueRnrc=</cryptokey>
+    <cryptokey>ViY/IE/vXxScm7DqUdZaBeRFCwIt1kkZdCirLXFeIFo=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401398529</timestamp>
+    <timestamp>1678454729568</timestamp>
     <server>localhost</server>
     <transactionNum>97</transactionNum>
     <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>31</funds>
   </userCommand>
-  <accountTransaction>
-    <timestamp>1678401398530</timestamp>
+  <errorEvent>
+    <timestamp>1678454729568</timestamp>
     <server>localhost</server>
     <transactionNum>97</transactionNum>
-    <action>remove</action>
+    <command>COMMIT_BUY</command>
     <username>oY01WVirLr</username>
-    <funds>-744.3100000000001</funds>
-  </accountTransaction>
+  </errorEvent>
   <userCommand>
-    <timestamp>1678401398533</timestamp>
+    <timestamp>1678454729571</timestamp>
     <server>localhost</server>
     <transactionNum>98</transactionNum>
     <command>CANCEL_BUY</command>
     <username>oY01WVirLr</username>
   </userCommand>
   <userCommand>
-    <timestamp>1678401398539</timestamp>
+    <timestamp>1678454729578</timestamp>
     <server>localhost</server>
     <transactionNum>99</transactionNum>
     <command>SELL</command>
@@ -1560,7 +1486,7 @@
     <funds>664.1</funds>
   </userCommand>
   <systemEvent>
-    <timestamp>1678401398539</timestamp>
+    <timestamp>1678454729578</timestamp>
     <server>localhost</server>
     <transactionNum>99</transactionNum>
     <command>SELL</command>
@@ -1568,17 +1494,17 @@
     <funds>664.1</funds>
   </systemEvent>
   <quoteServer>
-    <timestamp>1678401398540</timestamp>
+    <timestamp>1678454729579</timestamp>
     <server>localhost</server>
     <transactionNum>99</transactionNum>
-    <price>24.9</price>
+    <price>1458.16</price>
     <stockSymbol>S O</stockSymbol>
     <username>oY01WVirLr</username>
     <quoteServerTime>0</quoteServerTime>
-    <cryptokey>Nu6prYtnnwwDnv2ITHwtmXf3EVTznoMpcWxNeu5CM3Q=</cryptokey>
+    <cryptokey>R0jazlbqXSKcm7DqUdZaBeRFCwIt1kkZ44bEROyKkQM=</cryptokey>
   </quoteServer>
   <userCommand>
-    <timestamp>1678401414643</timestamp>
+    <timestamp>1678454730585</timestamp>
     <server>localhost</server>
     <transactionNum>100</transactionNum>
     <command>DUMPLOG</command>

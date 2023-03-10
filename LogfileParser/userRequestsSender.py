@@ -1,5 +1,6 @@
 import requests
 import re
+import datetime
 
 TRANSACTION_SERVER_URL = "http://localhost:8080/"
 
@@ -175,9 +176,18 @@ def main():
     elif choice == "dbwipe": # command I added for wiping all the collections
         print(send_request("dbwipe"))    
     elif choice == "automatic":
-        with open("user1.txt", "r") as f:
+        startTime = datetime.datetime.now()
+        with open("user10.txt", "r") as f:
             for line in f:
                 line_processor(line)
+        endTime = datetime.datetime.now()
+        difference = endTime - startTime
+
+        hours = difference.seconds // 3600
+        minutes = (difference.seconds % 3600) // 60
+        seconds = difference.seconds % 60
+
+        print(f"The difference is {hours} hours, {minutes} minutes, and {seconds} seconds.")
     
     
 
