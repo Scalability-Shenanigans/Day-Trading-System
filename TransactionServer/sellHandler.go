@@ -87,11 +87,12 @@ func commitSell(w http.ResponseWriter, r *http.Request) {
 
 	if transaction.Transaction_ID == -1 {
 		errorEvent := &log.ErrorEvent{
-			Timestamp:    time.Now().UnixMilli(),
-			Server:       "localhost",
-			Command:      "commitSell",
-			Username:     commitSell.User,
-			ErrorMessage: "Error: no sell to commit",
+			Timestamp:      time.Now().UnixMilli(),
+			Server:         "localhost",
+			TransactionNum: int64(commitSell.TransactionNum),
+			Command:        "COMMIT_SELL",
+			Username:       commitSell.User,
+			ErrorMessage:   "Error: no sell to commit",
 		}
 		log.CreateErrorEventLog(errorEvent)
 		return
@@ -109,7 +110,7 @@ func commitSell(w http.ResponseWriter, r *http.Request) {
 	// transaction.Amount is no. of shares, transaction.Price is the selling price for one share
 	transactionCost := float64(transaction.Amount) * transaction.Price
 	// update how much stock they hold after selling
-	if db.UpdateStockHolding(user, transaction.Stock, -1*transaction.Amount) {
+	if db.UpdateStockHolding(user, transaction.Stock, -1*transaction.Amount, int64(commitSell.TransactionNum)) {
 		if db.UpdateBalance(transactionCost, user, int64(commitSell.TransactionNum)) { // update account balance after selling
 			fmt.Println("Transaction Commited")
 		}
@@ -194,7 +195,7 @@ func setSellTriggerHandler(w http.ResponseWriter, r *http.Request) {
 		var no_of_shares_to_sell = int(sellAmountOrder.Amount / triggerOrder.Price)
 
 		// check user account to see if they have enough shares of the stock to sell and decrement stock holding
-		if db.UpdateStockHolding(sellAmountOrder.User, sellAmountOrder.Stock, -1*no_of_shares_to_sell) {
+		if db.UpdateStockHolding(sellAmountOrder.User, sellAmountOrder.Stock, -1*no_of_shares_to_sell, int64(sellAmountOrder.TransactionNum)) {
 			fmt.Println("Creating SellAmountOrder")
 			// add TriggeredSellAmountOrder to db for PollingService to act on
 			var triggeredSellAmountOrder db.TriggeredSellAmountOrder

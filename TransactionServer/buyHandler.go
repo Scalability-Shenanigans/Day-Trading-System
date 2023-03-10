@@ -105,11 +105,12 @@ func commitBuy(w http.ResponseWriter, r *http.Request) {
 
 	if transaction.Transaction_ID == -1 {
 		errorEvent := &log.ErrorEvent{
-			Timestamp:    time.Now().UnixMilli(),
-			Server:       "localhost",
-			Command:      "commitBuy",
-			Username:     commitBuy.User,
-			ErrorMessage: "Error: no buy to commit",
+			Timestamp:      time.Now().UnixMilli(),
+			Server:         "localhost",
+			TransactionNum: int64(commitBuy.TransactionNum),
+			Command:        "COMMIT_BUY",
+			Username:       commitBuy.User,
+			ErrorMessage:   "Error: no buy to commit",
 		}
 		log.CreateErrorEventLog(errorEvent)
 		return
@@ -128,7 +129,7 @@ func commitBuy(w http.ResponseWriter, r *http.Request) {
 	transactionCost := float64(transaction.Amount) * transaction.Price
 
 	if db.UpdateBalance(transactionCost*-1.0, user, int64(commitBuy.TransactionNum)) {
-		if db.UpdateStockHolding(user, transaction.Stock, transaction.Amount) {
+		if db.UpdateStockHolding(user, transaction.Stock, transaction.Amount, int64(commitBuy.TransactionNum)) {
 			fmt.Println("Transaction Commited")
 		}
 	}

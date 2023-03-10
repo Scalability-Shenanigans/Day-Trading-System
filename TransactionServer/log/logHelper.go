@@ -6,6 +6,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"net/http"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -115,6 +116,15 @@ func DumplogHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Bad Request")
 		return
 	}
+
+	cmd := &UserCommand{
+		Timestamp:      time.Now().UnixMilli(),
+		Server:         "localhost",
+		TransactionNum: int64(dumplog.TransactionNum),
+		Command:        "DUMPLOG",
+		Filename:       dumplog.Filename,
+	}
+	CreateUserCommandsLog(cmd)
 
 	cursor, err := logs.Find(context.TODO(), bson.D{})
 

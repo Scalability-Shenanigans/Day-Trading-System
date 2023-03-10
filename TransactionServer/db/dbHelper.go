@@ -90,12 +90,13 @@ func UpdateBalance(amount float64, user string, transactionNum int64) bool {
 	}
 	if amount < 0 && (result.Balance+amount) < 0 {
 		errorEvent := &log.ErrorEvent{
-			Timestamp:    time.Now().UnixMilli(),
-			Server:       "localhost",
-			Command:      "remove",
-			Username:     user,
-			Funds:        amount,
-			ErrorMessage: "Error: funds will go below 0",
+			Timestamp:      time.Now().UnixMilli(),
+			Server:         "localhost",
+			Command:        "remove",
+			TransactionNum: transactionNum,
+			Username:       user,
+			Funds:          amount,
+			ErrorMessage:   "Error: funds will go below 0",
 		}
 		log.CreateErrorEventLog(errorEvent)
 		return false
@@ -129,7 +130,7 @@ func UpdateBalance(amount float64, user string, transactionNum int64) bool {
 
 }
 
-func UpdateStockHolding(user string, stock string, amount int) bool {
+func UpdateStockHolding(user string, stock string, amount int, transactionNum int64) bool {
 	filter := bson.M{"user": user}
 	var result Account
 	accounts.FindOne(context.TODO(), filter).Decode(&result)
@@ -161,11 +162,12 @@ func UpdateStockHolding(user string, stock string, amount int) bool {
 	if stockToChange.Amount+amount < 0 {
 		fmt.Println("Not enough stock held for change")
 		errorEvent := &log.ErrorEvent{
-			Timestamp:    time.Now().UnixMilli(),
-			Server:       "localhost",
-			Command:      "sell",
-			Username:     user,
-			ErrorMessage: "Error: Not enough stock held for change",
+			Timestamp:      time.Now().UnixMilli(),
+			Server:         "localhost",
+			TransactionNum: transactionNum,
+			Command:        "sell",
+			Username:       user,
+			ErrorMessage:   "Error: Not enough stock held for change",
 		}
 		log.CreateErrorEventLog(errorEvent)
 		return false
