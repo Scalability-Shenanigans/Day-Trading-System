@@ -71,7 +71,7 @@ func main() {
 	http.HandleFunc("/setSellTrigger", setSellTriggerHandler)
 	http.HandleFunc("/dumplog", log.DumplogHandler)
 	http.HandleFunc("/quote", quoteHandler)
-	http.HandleFunc("/display", quoteHandler)
+	http.HandleFunc("/display", displayHandler)
 	http.HandleFunc("/dbwipe", db.DBWiper)
 	http.ListenAndServe(port, nil)
 }

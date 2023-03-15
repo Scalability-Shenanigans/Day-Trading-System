@@ -2,6 +2,7 @@ package main
 
 import (
 	"TransactionServer/log"
+	"day-trading-system/cache"
 	"encoding/json"
 	"fmt"
 	"net"
@@ -85,6 +86,15 @@ func displayHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetQuote(stock string, user string, transactionNum int) float64 {
+	redisClient := cache.NewRedisClient()
+
+	// First check cache
+	ok, value := redisClient.Get(stock)
+	if ok {
+		fmt.Println("Cache hit for " + stock)
+		return value // cache hit
+	}
+
 	command := stock + " " + user + " \n"
 	requestTime := time.Now().UnixMilli()
 	result := SendRequest(command)
@@ -99,6 +109,9 @@ func GetQuote(stock string, user string, transactionNum int) float64 {
 		Cryptokey:       result.Key,
 	}
 	log.CreateQuoteServerLog(quoteServer)
+
+	// cache the price
+	redisClient.Set(stock, strconv.FormatFloat(result.Price, 'E', -1, 64), 60*time.Second)
 	return result.Price
 }
 
