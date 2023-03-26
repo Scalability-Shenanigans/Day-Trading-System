@@ -8,7 +8,7 @@ RUN mkdir /src
 WORKDIR /src
 
 # Copying Files
-COPY ./TransactionServer .
+COPY . .
 
 # Fetching dependencies.
 RUN go get -d -v

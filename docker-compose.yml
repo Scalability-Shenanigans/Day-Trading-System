@@ -1,56 +1,46 @@
-version: "3.9"
+version: "3.8"
 
 services:
 
-  # Create service with RabbitMQ.
-  message-broker:
-    image: rabbitmq:3-management-alpine
-    container_name: message-broker
-    ports:
-      - 5672:5672   # for sender and consumer connections
-      - 15672:15672 # for serving RabbitMQ GUI
-    restart: always
+  db:
+    build: ./Database
     networks:
-      - dev-network
-
-
-  # Create service with Fiber sender.
-  logfileparser:
-    container_name: logfileparser
-    ports:
-      - 3000:3000
-    build:
-      context: .
-      dockerfile: LogfileParser/Dockerfile
-    environment:
-      AMQP_SERVER_URL: amqp://guest:guest@message-broker:5672/
-    restart: always
-    networks:
-      - dev-network
+      - day-trading
+  
+  pollingservice:
+    build: ./PollingService
     depends_on:
-      message-broker:
-        condition: service_started
-
-
-  # Create service with message consumer.
-  consumer:
-    container_name: consumer
-    build:
-      context: .
-      dockerfile: TransactionServer/Dockerfile
-    environment:
-      AMQP_SERVER_URL: amqp://guest:guest@message-broker:5672/
-    restart: always
+      - db
     networks:
-      - dev-network
-    depends_on:
-      message-broker:
-        condition: service_started
-      logfileparser:
-        condition: service_started  
+      - day-trading
 
+  transactionserver:
+    build: ./TransactionServer
+    depends_on:
+      - db
+      - redis
+    networks:
+      - day-trading
+    deploy:
+      replicas: 5
+
+  redis:
+    build: ./cache
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    ports:
+      - "6379:6379"
+
+
+  loadbalancer:
+    build: ./LoadBalancer
+    depends_on:
+      - transactionserver
+      - pollingservice
+    ports:
+      - "5100:5100"
+    networks:
+      - day-trading
 
 networks:
   # Create a new Docker network.
-  dev-network:
-    driver: bridge
+  day-trading:

@@ -19,7 +19,7 @@ type Dumplog struct {
 }
 
 // var mongoURI = "mongodb://localhost:5000" //for local testing
-var mongoURI = "mongodb://localhost:27017" //use this for when everything is containerized
+var mongoURI = "mongodb://db:27017" //use this for when everything is containerized
 var client *mongo.Client
 var logs *mongo.Collection
 
