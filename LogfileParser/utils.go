@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -37,23 +38,20 @@ func GetCommandStrings(contents []string) []string {
 		if err != nil {
 			panic(err.Error() + "\n Error while parsing commands from logfile")
 		}
-		commands = append(commands, commandString)
+		commands = append(commands, strconv.Itoa(commandNumber)+","+commandString)
 	}
 	return commands
 }
 
-// func GetCommands(contents []string) []TradingCommand {
-// 	commands := []TradingCommand{}
-// 	fmt.Println("Contents of file:\n ")
-// 	for i := 0; i < len(contents); i++ {
-// 		var commandString string
-// 		var commandNumber int
-// 		_, err := fmt.Sscanf(contents[i], "[%d] %s", &commandNumber, &commandString)
-// 		if err != nil {
-// 			panic(err.Error() + "\n Error while parsing commands from logfile")
-// 		}
-// 		commands = append(commands, CreateCommand(commandString))
-// 	}
-
-// 	return commands
-// }
+func MakeUserMap(content []string) map[string][]string {
+	userMap := make(map[string][]string)
+	for _, command := range content {
+		arguments := strings.Split(string(command), ",")
+		if arguments[1] == "DUMPLOG" {
+			continue
+		}
+		user := arguments[2]
+		userMap[user] = append(userMap[user], command)
+	}
+	return userMap
+}
