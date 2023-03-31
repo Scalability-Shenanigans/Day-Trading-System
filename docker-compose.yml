@@ -13,7 +13,9 @@ services:
       - db
     networks:
       - day-trading
+    restart: always
 
+  #Create replicas of transaction server replicated is default deploy mode
   transactionserver:
     build: ./TransactionServer
     depends_on:
@@ -40,7 +42,10 @@ services:
       - "5100:5100"
     networks:
       - day-trading
+    restart: always
+
 
 networks:
   # Create a new Docker network.
+  # Bridge by Default
   day-trading:
