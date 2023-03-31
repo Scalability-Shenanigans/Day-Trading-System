@@ -14,7 +14,6 @@ import (
 
 const (
 	SERVER_HOST = "quoteserve.seng.uvic.ca"
-	SERVER_PORT = "4444"
 	SERVER_TYPE = "tcp"
 )
 
@@ -115,48 +114,52 @@ func GetQuote(stock string, user string, transactionNum int) float64 {
 	return result.Price
 }
 
-func TransactionServerRequest(stock string, user string) *TransactionResult {
-	command := stock + " " + user + " \n"
-	return SendRequest(command)
-}
-
 func SendRequest(command string) *TransactionResult {
+	serverPorts := [20]string{"4441", "4442", "4443", "4444", "4445", "4446", "4447", "4448", "4449", "4450", "4451", "4452", "4453", "4454", "4455", "4456", "4457", "4458", "4459", "4460"}
 	for {
 		//Establish Connection
-		connection, err := net.Dial(SERVER_TYPE, SERVER_HOST+":"+SERVER_PORT)
-		if err != nil {
-			fmt.Println("Error connecting to server:", err)
-			time.Sleep(time.Second) // Wait for a second before retrying
-			continue                // Retry connection
-		}
+		for _, port := range serverPorts {
+			connection, err := net.Dial(SERVER_TYPE, SERVER_HOST+":"+port)
+			if err != nil {
+				fmt.Println("Error connecting to server:", err)
+				time.Sleep(time.Second) // Wait for a second before retrying
+				continue                // Retry connection
+			}
 
-		//Send Command
-		_, err = connection.Write([]byte(command))
-		if err != nil {
-			fmt.Println("Error sending command:", err)
+			//Send Command
+			_, err = connection.Write([]byte(command))
+			if err != nil {
+				fmt.Println("Error sending command:", err)
+				err := connection.Close()
+				if err != nil {
+					continue
+				}
+				time.Sleep(time.Second) // Wait for a second before retrying
+				continue                // Retry connection
+			}
+
+			// Read Response
+			buffer := make([]byte, 1024)
+			mLen, err := connection.Read(buffer)
+			if err != nil {
+				fmt.Println("Error reading response:", err)
+				err := connection.Close()
+				if err != nil {
+					continue
+				}
+				time.Sleep(time.Second) // Wait for a second before retrying
+				continue                // Retry connection
+			}
+
+			// Process Result
+			result := strings.Split(strings.Split(string(buffer[:mLen]), "\n")[0], ",")
+			Amount, err := strconv.ParseFloat(result[0], 64)
+			timeStamp, err := strconv.Atoi(result[2])
+			transactionResult := TransactionResult{Amount, result[1], result[2], timeStamp, result[4]}
+
+			// Close connection and return result
 			connection.Close()
-			time.Sleep(time.Second) // Wait for a second before retrying
-			continue                // Retry connection
+			return &transactionResult
 		}
-
-		// Read Response
-		buffer := make([]byte, 1024)
-		mLen, err := connection.Read(buffer)
-		if err != nil {
-			fmt.Println("Error reading response:", err)
-			connection.Close()
-			time.Sleep(time.Second) // Wait for a second before retrying
-			continue                // Retry connection
-		}
-
-		// Process Result
-		result := strings.Split(strings.Split(string(buffer[:mLen]), "\n")[0], ",")
-		Amount, err := strconv.ParseFloat(result[0], 64)
-		time, err := strconv.Atoi(result[2])
-		transactionResult := TransactionResult{Amount, result[1], result[2], time, result[4]}
-
-		// Close connection and return result
-		connection.Close()
-		return &transactionResult
 	}
 }
