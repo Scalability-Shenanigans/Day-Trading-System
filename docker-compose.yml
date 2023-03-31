@@ -22,7 +22,7 @@ services:
     networks:
       - day-trading
     deploy:
-      replicas: 5
+      replicas: 10
 
   redis:
     build: ./cache
