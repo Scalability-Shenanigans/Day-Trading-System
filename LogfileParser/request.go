@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	TRANSACTION_SERVER_URL = "http://localhost:8080/"
+	TRANSACTION_SERVER_URL = "http://localhost:5100/"
 )
 
 func DUMPLOG() {

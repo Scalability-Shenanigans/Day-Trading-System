@@ -16,7 +16,5 @@ RUN go get -d -v
 # Building the binary executable.
 RUN go build -o /transactionserver
 
-EXPOSE 8080
-
 # Running Executable
 CMD [ "/transactionserver" ]
