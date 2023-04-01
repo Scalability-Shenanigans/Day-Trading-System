@@ -43,6 +43,14 @@ services:
     networks:
       - day-trading
     restart: always
+  
+  quoteserver:
+    build: ./QuoteServer
+    ports:
+      - "4444:4444"
+    networks:
+      - day-trading
+    restart: always
 
 
 networks:

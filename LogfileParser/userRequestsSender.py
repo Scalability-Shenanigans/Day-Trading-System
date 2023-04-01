@@ -2,7 +2,7 @@ import requests
 import re
 import datetime
 
-TRANSACTION_SERVER_URL = "http://localhost:8080/"
+TRANSACTION_SERVER_URL = "http://localhost:5100/"
 
 
 def send_request(endpoint, data=None):
@@ -15,6 +15,7 @@ def send_request(endpoint, data=None):
     else:
         # Raise an exception if the request was not successful
         response.raise_for_status()
+
 
 def line_processor(line):
     transactionNum = int(re.search('\[(\d*)\]', line).group(1))
@@ -155,7 +156,6 @@ def line_processor(line):
         print(send_request("display", data))
 
 
-
 def main():
     choice = input("mode: manual, dumplog, dbwipe, or automatic? ")
     if choice == "manual":
@@ -173,11 +173,11 @@ def main():
         }
         print(data)
         print(send_request("dumplog", data))
-    elif choice == "dbwipe": # command I added for wiping all the collections
-        print(send_request("dbwipe"))    
+    elif choice == "dbwipe":  # command I added for wiping all the collections
+        print(send_request("dbwipe"))
     elif choice == "automatic":
         startTime = datetime.datetime.now()
-        with open("user10.txt", "r") as f:
+        with open("user100.txt", "r") as f:
             for line in f:
                 line_processor(line)
         endTime = datetime.datetime.now()
@@ -187,11 +187,8 @@ def main():
         minutes = (difference.seconds % 3600) // 60
         seconds = difference.seconds % 60
 
-        print(f"The difference is {hours} hours, {minutes} minutes, and {seconds} seconds.")
-    
-    
-
-
+        print(
+            f"The difference is {hours} hours, {minutes} minutes, and {seconds} seconds.")
 
 
 if __name__ == "__main__":
