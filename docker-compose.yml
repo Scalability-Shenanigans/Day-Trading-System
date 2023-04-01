@@ -6,6 +6,8 @@ services:
     build: ./Database
     networks:
       - day-trading
+    ports:
+      - "27017:27017"
   
   pollingservice:
     build: ./PollingService
