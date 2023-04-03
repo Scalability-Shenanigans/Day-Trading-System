@@ -90,6 +90,7 @@ def line_processor(line):
             "transactionNum": transactionNum
         }
         print(data)
+        print("ended at: ", datetime.datetime.now())
         print(send_request("dumplog", data))
     elif command == 'SELL':
         data = {
