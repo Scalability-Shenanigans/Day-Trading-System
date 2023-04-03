@@ -183,7 +183,7 @@ func main() {
 	case "automatic":
 		startTime := time.Now()
 		fmt.Println("Starting at:", startTime)
-		file, err := os.Open("workload_files/user10.txt")
+		file, err := os.Open("workload_files/user100.txt")
 		if err != nil {
 			fmt.Println("Error:", err)
 			return
