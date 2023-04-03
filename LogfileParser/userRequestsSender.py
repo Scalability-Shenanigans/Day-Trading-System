@@ -178,7 +178,8 @@ def main():
         print(send_request("dbwipe"))
     elif choice == "automatic":
         startTime = datetime.datetime.now()
-        with open("workload_files/user100.txt", "r") as f:
+        print("Starting at: ", startTime)
+        with open("final.txt", "r") as f:
             for line in f:
                 line_processor(line)
         endTime = datetime.datetime.now()
