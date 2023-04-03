@@ -30,10 +30,14 @@ services:
 
   redis:
     build: ./cache
+    container_name: redis
     command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    networks:
+      - day-trading
     ports:
       - "6379:6379"
-
+    expose:
+      - "6379"
 
   loadbalancer:
     build: ./LoadBalancer

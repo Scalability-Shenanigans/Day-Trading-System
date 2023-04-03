@@ -36,6 +36,8 @@ type DisplaySummary struct {
 	TransactionNum int    `json:"transactionNum"`
 }
 
+var redisClient = cache.NewRedisClient()
+
 func quoteHandler(w http.ResponseWriter, r *http.Request) {
 	//get stock price
 	//add user command to log
@@ -86,7 +88,6 @@ func displayHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetQuote(stock string, user string, transactionNum int) float64 {
-	redisClient := cache.NewRedisClient()
 
 	// First check cache
 	ok, value := redisClient.Get(stock)
@@ -111,7 +112,7 @@ func GetQuote(stock string, user string, transactionNum int) float64 {
 	log.CreateQuoteServerLog(quoteServer)
 
 	// cache the price
-	redisClient.Set(stock, strconv.FormatFloat(result.Price, 'E', -1, 64), 0)
+	fmt.Println(redisClient.Set(stock, strconv.FormatFloat(result.Price, 'E', -1, 64), 120*time.Second))
 	return result.Price
 }
 
