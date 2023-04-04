@@ -30,6 +30,14 @@ func sendRequest(endpoint string, data map[string]interface{}) (string, error) {
 	return "", fmt.Errorf("request failed with status code: %d", response.StatusCode)
 }
 
+func cyanString(s string) string {
+	return fmt.Sprintf("\x1b[36m%s\x1b[0m", s)
+}
+
+func greenString(s string) string {
+	return fmt.Sprintf("\x1b[32m%s\x1b[0m", s)
+}
+
 func lineProcessor(line string) {
 	regex := regexp.MustCompile(`\[(\d*)\]`)
 	matches := regex.FindStringSubmatch(line)
@@ -181,13 +189,53 @@ func main() {
 			fmt.Println(resp)
 		}
 	case "automatic":
-		startTime := time.Now()
-		fmt.Println("Starting at:", startTime)
-		file, err := os.Open("workload_files/user100.txt")
+		var workload string
+		workload_lines_map := map[string]int{
+			"1":     100,
+			"10":    10000,
+			"100":   100000,
+			"1000":  1000000,
+			"10000": 1100001,
+		}
+
+		fmt.Print("choose workload: 1, 10, 100, 1000, or 10000 ")
+		fmt.Scanln(&workload)
+
+		var workload_file string
+		switch workload {
+		case "1":
+			workload_file = "workload_files/user1.txt"
+		case "10":
+			workload_file = "workload_files/user10.txt"
+		case "100":
+			workload_file = "workload_files/user100.txt"
+		case "1000":
+			workload_file = "workload_files/user1000.txt"
+		case "10000":
+			workload_file = "workload_files/final.txt"
+		default:
+			fmt.Println("Please enter a valid workload")
+			return
+		}
+
+		workload_lines := workload_lines_map[workload]
+
+		file, err := os.Open(workload_file)
 		if err != nil {
 			fmt.Println("Error:", err)
 			return
 		}
+
+		resp, err := sendRequest("dbwipe", map[string]interface{}{})
+		if err != nil {
+			fmt.Println("Error:", err)
+		} else {
+			fmt.Println("db wipe: " + resp)
+		}
+
+		startTime := time.Now()
+		fmt.Println("Starting at:", startTime)
+
 		defer file.Close()
 
 		scanner := bufio.NewScanner(file)
@@ -197,7 +245,23 @@ func main() {
 		}
 		endTime := time.Now()
 		difference := endTime.Sub(startTime)
-		fmt.Println("The difference is", difference)
+
+		var throughput int
+
+		if difference.Seconds() == 0 {
+			diff := difference.Milliseconds() / 1
+			throughput = int(float64(workload_lines) / float64(diff))
+		} else {
+			fmt.Println(difference.Seconds())
+			throughput = int(float64(workload_lines) / difference.Seconds())
+		}
+		elapsed_time := "Elapsed time: " + difference.String()
+		throughput_str := "Throughput: " + strconv.Itoa(throughput)
+
+		fmt.Println("\n\nWorkload info:")
+		fmt.Println(cyanString(elapsed_time))
+		fmt.Println(greenString(throughput_str))
+
 	default:
 		fmt.Println("Invalid choice")
 	}
