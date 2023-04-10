@@ -8,7 +8,7 @@ export let options = {
     ]
 };
 
-const BASE_URL = "http://localhost:5100";
+const BASE_URL = "http://loadbalancer:5100";
 
 export default function () {
     const userId = 'user1';

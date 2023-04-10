@@ -41,6 +41,7 @@ services:
 
   loadbalancer:
     build: ./LoadBalancer
+    container_name: loadbalancer
     depends_on:
       - transactionserver
       - pollingservice
@@ -58,6 +59,53 @@ services:
       - day-trading
     restart: always
 
+  influxdb:
+    image: influxdb:1.8
+    container_name: influxdb
+    expose:
+      - "8086"
+    ports:
+      - "8086:8086"
+    networks:
+      - day-trading
+    volumes:
+      - influxdb-data:/var/lib/influxdb
+    environment:
+      - INFLUXDB_DB=myk6db
+      - INFLUXDB_HTTP_AUTH_ENABLED=false
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3001:3000"
+    networks:
+      - day-trading
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - grafana-config:/etc/grafana
+      - grafana-logs:/var/log/grafana
+      - grafana-plugins:/var/lib/grafana/plugins
+
+  k6:
+    image: loadimpact/k6
+    container_name: k6
+    networks:
+      - day-trading
+    depends_on:
+      - influxdb
+    command: >
+      run /testing/k6_test.js
+      -o influxdb=http://influxdb:8086/myk6db
+    volumes:
+      - ./testing:/testing
+
+volumes:
+  influxdb-data: {}
+  grafana-data:
+  grafana-config:
+  grafana-logs:
+  grafana-plugins:
 
 networks:
   # Create a new Docker network.
