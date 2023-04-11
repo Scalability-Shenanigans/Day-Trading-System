@@ -2,7 +2,15 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import TransactionForm from "./components/TransactionForm";
 import styled from "styled-components";
-import { addFunds, buyStock, getBalance, sellStock } from "./requests/requests";
+import {
+  addFunds,
+  buyStock,
+  commitBuy,
+  commitSell,
+  getAllTransactionsByUser,
+  getBalance,
+  sellStock,
+} from "./requests/requests";
 import TransactionsList, {
   TransactionsListItemProps,
 } from "./components/TransactionsList";
@@ -38,17 +46,33 @@ const TopContainer = styled.div`
   color: white;
 `;
 
-function getCurrentDateFormatted(): string {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = (now.getMonth() + 1).toString().padStart(2, "0");
-  const day = now.getDate().toString().padStart(2, "0");
+const CommitButtonsContainer = styled.div`
+  display: flex;
+  flex-direction: horizontal;
+  justify-content: center;
+`;
 
-  return `${year}-${month}-${day}`;
-}
+const CommitButton = styled.button`
+  margin: 0px 5px;
+`;
 
 function App() {
   const user = "USER";
+
+  const fetchUserTransactions = async () => {
+    const userTransactions = await getAllTransactionsByUser({
+      user: user,
+    });
+
+    console.log("the user transactions response is", userTransactions);
+    setTransactions(userTransactions as TransactionsListItemProps[]);
+  };
+
+  const fetchBalance = async () => {
+    const getBalanceResponse = await getBalance({ user: user });
+    const balance = parseFloat(getBalanceResponse?.data["balance"].toFixed(2));
+    setFunds(balance);
+  };
 
   const handleQuoteSubmit = async (stock: string) => {
     console.log("Quote submitted", stock);
@@ -57,56 +81,25 @@ function App() {
   const handleBuySubmit = async (stock: string, amount: number) => {
     console.log("Buy submitted", stock, amount);
 
-    const buyRequestStatus = await buyStock({
+    await buyStock({
       user: user,
       stock: stock,
       amount: amount,
     });
 
-    if (buyRequestStatus === 200) {
-      // console.log("Buy successful");
-
-      const newTransaction = {
-        type: "Buy",
-        date: getCurrentDateFormatted(),
-        asset: stock,
-        amount: amount,
-      } as TransactionsListItemProps;
-
-      setTransactions((prevTransactions) => [
-        ...prevTransactions,
-        newTransaction,
-      ]);
-    }
+    fetchUserTransactions();
   };
 
   const handleSellSubmit = async (stock: string, amount: number) => {
     console.log("Sell submitted", stock, amount);
 
-    const sellRequest: AxiosResponse<any, any> | null = await sellStock({
+    await sellStock({
       user: user,
       stock: stock,
       amount: amount,
     });
 
-    console.log(sellRequest);
-
-    if (sellRequest?.data["status"] === "success") {
-      const newTransaction = {
-        type: "Sell",
-        date: getCurrentDateFormatted(),
-        asset: stock,
-        amount: amount,
-      } as TransactionsListItemProps;
-
-      setTransactions((prevTransactions) => [
-        ...prevTransactions,
-        newTransaction,
-      ]);
-    } else {
-      const failureMsg = sellRequest?.data["message"];
-      alert(failureMsg);
-    }
+    fetchUserTransactions();
   };
 
   const [selectedFunds, setSelectedFunds] = useState(0);
@@ -116,19 +109,13 @@ function App() {
 
   useEffect(() => {
     console.log("transaction committed");
-    // update funds with a request to getBalance
-    const fetchBalance = async () => {
-      const getBalanceResponse = await getBalance({ user: user });
-      const balance = parseFloat(
-        getBalanceResponse?.data["balance"].toFixed(2)
-      );
-      setFunds(balance);
-    };
 
     if (transactionCommitted === true) {
       setTransactionCommitted(false);
     }
+
     fetchBalance();
+    fetchUserTransactions();
   }, [transactionCommitted]);
 
   const [transactions, setTransactions] = useState<TransactionsListItemProps[]>(
@@ -161,7 +148,28 @@ function App() {
           Add funds
         </button>
       </TopContainer>
-
+      <CommitButtonsContainer>
+        <CommitButton
+          onClick={async () => {
+            await commitBuy({
+              user: user,
+            });
+            setTransactionCommitted(true);
+          }}
+        >
+          Commit Buy
+        </CommitButton>
+        <CommitButton
+          onClick={async () => {
+            await commitSell({
+              user: user,
+            });
+            setTransactionCommitted(true);
+          }}
+        >
+          Commit Sell
+        </CommitButton>
+      </CommitButtonsContainer>
       <FormsContainer>
         <TransactionForm
           title="Quote"

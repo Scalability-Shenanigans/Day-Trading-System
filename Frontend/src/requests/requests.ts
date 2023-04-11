@@ -13,9 +13,28 @@ interface buyAndSellStockProps {
   amount: number;
 }
 
-interface commitBuySellGetBalanceProps {
+interface userOnlyProps {
   user: string;
 }
+
+interface TransactionData {
+  type: string;
+  date: string;
+  asset: string;
+  amount: number;
+  timestamp: number;
+  isCommitted: boolean;
+}
+
+type Transaction = {
+  Transaction_ID: number;
+  Stock: string;
+  Is_Buy: boolean;
+  Amount: number;
+  Price: number;
+  User: string;
+  Timestamp: number;
+};
 
 async function addFunds({ user, amount }: addFundsProps) {
   const data = {
@@ -68,7 +87,7 @@ async function buyStock({ user, stock, amount }: buyAndSellStockProps) {
   }
 }
 
-async function commitBuy({ user }: commitBuySellGetBalanceProps) {
+async function commitBuy({ user }: userOnlyProps) {
   const data = {
     user,
   };
@@ -119,7 +138,7 @@ async function sellStock({ user, stock, amount }: buyAndSellStockProps) {
   }
 }
 
-async function commitSell({ user }: commitBuySellGetBalanceProps) {
+async function commitSell({ user }: userOnlyProps) {
   const data = {
     user,
   };
@@ -144,7 +163,7 @@ async function commitSell({ user }: commitBuySellGetBalanceProps) {
   }
 }
 
-async function getBalance({ user }: commitBuySellGetBalanceProps) {
+async function getBalance({ user }: userOnlyProps) {
   const data = {
     user,
   };
@@ -169,4 +188,73 @@ async function getBalance({ user }: commitBuySellGetBalanceProps) {
   }
 }
 
-export { addFunds, buyStock, commitBuy, sellStock, commitSell, getBalance };
+async function getAllTransactionsByUser({
+  user,
+}: userOnlyProps): Promise<TransactionData[]> {
+  const data = {
+    user,
+  };
+
+  try {
+    const response = await axios.post(
+      `${transaction_server_url}/allTransactionsByUser`,
+      JSON.stringify(data),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const pendingTransactions = response.data["pending_transactions"];
+    const finishedTransactions = response.data["finished_transactions"];
+
+    console.log("pending transactions are", pendingTransactions);
+    console.log("finished transactions are", finishedTransactions);
+
+    const formattedPendingTransactions =
+      pendingTransactions?.map((transaction: Transaction) => ({
+        type: transaction.Is_Buy ? "Buy" : "Sell",
+        date: new Date(transaction.Timestamp).toISOString().slice(0, 10),
+        asset: transaction.Stock,
+        amount: transaction.Amount,
+        user: transaction.User,
+        timestamp: transaction.Timestamp,
+        isCommitted: false,
+      })) ?? [];
+
+    // Map finished transactions to the desired format
+    const formattedFinishedTransactions =
+      finishedTransactions?.map((transaction: Transaction) => ({
+        type: transaction.Is_Buy ? "Buy" : "Sell",
+        date: new Date(transaction.Timestamp).toISOString().slice(0, 10),
+        asset: transaction.Stock,
+        amount: transaction.Amount,
+        user: transaction.User,
+        timestamp: transaction.Timestamp,
+        isCommitted: true,
+      })) ?? [];
+
+    const allTransactions = formattedPendingTransactions
+      ?.concat(formattedFinishedTransactions)
+      ?.sort(
+        (a: TransactionData, b: TransactionData) => a.timestamp - b.timestamp
+      )
+      .map(({ timestamp, ...rest }: TransactionData) => rest);
+
+    return allTransactions;
+  } catch (error) {
+    console.log("the error", error);
+    return [];
+  }
+}
+
+export {
+  addFunds,
+  buyStock,
+  commitBuy,
+  sellStock,
+  commitSell,
+  getBalance,
+  getAllTransactionsByUser,
+};

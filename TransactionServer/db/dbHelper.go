@@ -277,6 +277,42 @@ func CreateSellAmountOrder(sellAmountOrder SellAmountOrder) {
 	fmt.Println(res.InsertedID)
 }
 
+func GetPendingTransactionsByUser(user string) ([]Transaction, error) {
+	var transactions []Transaction
+
+	filter := bson.M{"user": user}
+	cursor, err := pendingTransactions.Find(context.TODO(), filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(context.Background())
+
+	err = cursor.All(context.Background(), &transactions)
+	if err != nil {
+		return nil, err
+	}
+
+	return transactions, nil
+}
+
+func GetFinishedTransactionsByUser(user string) ([]Transaction, error) {
+	var transactions []Transaction
+
+	filter := bson.M{"user": user}
+	cursor, err := finishedTransactions.Find(context.TODO(), filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(context.Background())
+
+	err = cursor.All(context.Background(), &transactions)
+	if err != nil {
+		return nil, err
+	}
+
+	return transactions, nil
+}
+
 func CreateTriggeredBuyAmountOrder(triggeredBuyAmountOrder TriggeredBuyAmountOrder) {
 	res, err := triggeredBuyAmountOrders.InsertOne(context.TODO(), triggeredBuyAmountOrder)
 
@@ -357,6 +393,7 @@ func DBWiper(w http.ResponseWriter, r *http.Request) {
 	logs := client.Database("DayTrading").Collection("Logs")
 	allCollections := []*mongo.Collection{accounts,
 		pendingTransactions,
+		finishedTransactions,
 		buyOrders,
 		buyAmountOrders,
 		sellAmountOrders,

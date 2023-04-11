@@ -82,11 +82,12 @@ func buyHandler(w http.ResponseWriter, r *http.Request) {
 	quote := GetQuote(buy.Stock, buy.User, int(transactionNumber))
 
 	transaction := db.Transaction{
-		User:   buy.User,
-		Stock:  buy.Stock,
-		Amount: int(buy.Amount / quote),
-		Price:  quote,
-		Is_Buy: true,
+		User:      buy.User,
+		Stock:     buy.Stock,
+		Amount:    int(buy.Amount / quote),
+		Price:     quote,
+		Is_Buy:    true,
+		Timestamp: time.Now().UnixMilli(),
 	}
 
 	db.CreatePendingTransaction(transaction)
@@ -111,7 +112,6 @@ func commitBuy(w http.ResponseWriter, r *http.Request) {
 
 	user := commitBuy.User
 	transaction := db.ConsumeLastBuyTransaction(user)
-	db.CreateFinishedTransaction(transaction)
 
 	if transaction.Transaction_ID == -1 {
 		errorEvent := &log.ErrorEvent{
@@ -125,6 +125,8 @@ func commitBuy(w http.ResponseWriter, r *http.Request) {
 		log.CreateErrorEventLog(errorEvent)
 		return
 	}
+
+	db.CreateFinishedTransaction(transaction)
 
 	cmd := &log.UserCommand{
 		Timestamp:      time.Now().UnixMilli(),

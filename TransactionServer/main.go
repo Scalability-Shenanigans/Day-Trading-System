@@ -31,6 +31,48 @@ type GetBalanceResponse struct {
 	Balance float64 `json:"balance"`
 }
 
+type TransactionsByUserRequest struct {
+	User string `json:"user"`
+}
+
+type GetAllUserTransactions struct {
+	User string `json:"user"`
+}
+
+type TransactionsByUserResponse struct {
+	PendingTransactions  []db.Transaction `json:"pending_transactions"`
+	FinishedTransactions []db.Transaction `json:"finished_transactions"`
+}
+
+func allTransactionsByUserHandler(w http.ResponseWriter, r *http.Request) {
+	var req TransactionsByUserRequest
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		return
+	}
+
+	pendingTransactions, err := db.GetPendingTransactionsByUser(req.User)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	finishedTransactions, err := db.GetFinishedTransactionsByUser(req.User)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	resp := TransactionsByUserResponse{
+		PendingTransactions:  pendingTransactions,
+		FinishedTransactions: finishedTransactions,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(resp)
+}
+
 func addHandler(w http.ResponseWriter, r *http.Request) {
 	//check if user exists in db
 	//if not create user
@@ -133,8 +175,10 @@ func main() {
 	http.HandleFunc("/dbwipe", db.DBWiper)
 
 	http.Handle("/", corsWrapper.Handler(middleware.TransactionNumberMiddleware(mux)))
-	http.Handle("/getBalance", corsWrapper.Handler(http.HandlerFunc(getBalanceHandler)))
 
-	// http.Handle("/", middleware.TransactionNumberMiddleware(mux))
+	// frontend specific endpoints
+	http.Handle("/getBalance", corsWrapper.Handler(http.HandlerFunc(getBalanceHandler)))
+	http.Handle("/allTransactionsByUser", corsWrapper.Handler(http.HandlerFunc(allTransactionsByUserHandler)))
+
 	http.ListenAndServe(port, nil)
 }

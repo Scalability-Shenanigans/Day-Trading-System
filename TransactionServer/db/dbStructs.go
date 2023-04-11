@@ -58,4 +58,5 @@ type Transaction struct {
 	Amount         int     `bson:"amount"`
 	Price          float64 `bson:"price"`
 	User           string  `bson:"user"`
+	Timestamp      int64   `bson:"timestamp"`
 }

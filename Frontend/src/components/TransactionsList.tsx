@@ -14,10 +14,12 @@ const TransactionsListContainer = styled.div`
 const TransactionsTable = styled.table`
   width: 100%;
   border-collapse: collapse;
+  box-sizing: border-box;
 `;
 
 const TransactionsTableHeader = styled.thead`
   font-weight: bold;
+  box-sizing: border-box;
 `;
 
 const TransactionsTableRow = styled.tr`
@@ -26,15 +28,13 @@ const TransactionsTableRow = styled.tr`
   &:nth-child(even) {
     background: #f2f2f2;
   }
+  box-sizing: border-box;
 `;
 
 const TransactionsTableCell = styled.td`
   padding: 8px;
   text-align: center;
-`;
-
-const StatusButton = styled.button`
-  margin: 0;
+  box-sizing: border-box;
 `;
 
 export interface TransactionsListItemProps {
@@ -42,8 +42,7 @@ export interface TransactionsListItemProps {
   date: string;
   asset: string;
   amount: number;
-  user: string;
-  setCommit: React.Dispatch<React.SetStateAction<boolean>>;
+  isCommitted: boolean;
 }
 
 interface TransactionsListProps {
@@ -57,54 +56,18 @@ const TransactionsListItem: React.FC<TransactionsListItemProps> = ({
   date,
   asset,
   amount,
-  user,
-  setCommit,
+  isCommitted,
 }) => {
-  const [status, setStatus] = useState("Not committed");
-
   return (
     <TransactionsTableRow>
       <TransactionsTableCell>{type}</TransactionsTableCell>
       <TransactionsTableCell>{date}</TransactionsTableCell>
       <TransactionsTableCell>{asset}</TransactionsTableCell>
       <TransactionsTableCell>{amount}</TransactionsTableCell>
-      {status === "Committed" ? (
+      {isCommitted === true ? (
         <TransactionsTableCell>Committed</TransactionsTableCell>
       ) : (
-        <TransactionsTableCell>
-          <StatusButton
-            onClick={async () => {
-              // send request here
-              if (type === "Buy") {
-                const commitBuyResponse = await commitBuy({
-                  user: user,
-                });
-
-                if (
-                  commitBuyResponse?.status === 200 &&
-                  commitBuyResponse.data["stock"] === asset
-                ) {
-                  setStatus("Committed");
-                  setCommit(true);
-                }
-              } else if (type === "Sell") {
-                const commitSellResponse = await commitSell({
-                  user: user,
-                });
-
-                if (
-                  commitSellResponse?.status === 200 &&
-                  commitSellResponse.data["stock"] === asset
-                ) {
-                  setStatus("Committed");
-                  setCommit(true);
-                }
-              }
-            }}
-          >
-            commit
-          </StatusButton>
-        </TransactionsTableCell>
+        <TransactionsTableCell>Not Committed</TransactionsTableCell>
       )}
     </TransactionsTableRow>
   );
@@ -112,8 +75,6 @@ const TransactionsListItem: React.FC<TransactionsListItemProps> = ({
 
 const TransactionsList: React.FC<TransactionsListProps> = ({
   transactions,
-  user,
-  setCommit,
 }) => {
   return (
     <TransactionsListContainer>
@@ -135,8 +96,7 @@ const TransactionsList: React.FC<TransactionsListProps> = ({
               date={transaction.date}
               asset={transaction.asset}
               amount={transaction.amount}
-              user={user}
-              setCommit={setCommit}
+              isCommitted={transaction.isCommitted}
             />
           ))}
         </tbody>

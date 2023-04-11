@@ -98,11 +98,12 @@ func sellHandler(w http.ResponseWriter, r *http.Request) {
 	log.CreateSystemEventLog(sysEvent)
 
 	transaction := db.Transaction{
-		User:   sell.User,
-		Stock:  sell.Stock,
-		Amount: int(sell.Amount / quote), // Amount = no. of shares to be sold
-		Price:  quote,
-		Is_Buy: false,
+		User:      sell.User,
+		Stock:     sell.Stock,
+		Amount:    int(sell.Amount / quote),
+		Price:     quote,
+		Is_Buy:    false,
+		Timestamp: time.Now().UnixMilli(),
 	}
 
 	db.CreatePendingTransaction(transaction)
