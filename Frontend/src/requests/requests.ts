@@ -13,7 +13,7 @@ interface buyAndSellStockProps {
   amount: number;
 }
 
-interface commitBuyProps {
+interface commitBuySellGetBalanceProps {
   user: string;
 }
 
@@ -68,7 +68,7 @@ async function buyStock({ user, stock, amount }: buyAndSellStockProps) {
   }
 }
 
-async function commitBuy({ user }: commitBuyProps) {
+async function commitBuy({ user }: commitBuySellGetBalanceProps) {
   const data = {
     user,
   };
@@ -119,7 +119,7 @@ async function sellStock({ user, stock, amount }: buyAndSellStockProps) {
   }
 }
 
-async function commitSell({ user }: commitBuyProps) {
+async function commitSell({ user }: commitBuySellGetBalanceProps) {
   const data = {
     user,
   };
@@ -144,4 +144,29 @@ async function commitSell({ user }: commitBuyProps) {
   }
 }
 
-export { addFunds, buyStock, commitBuy, sellStock, commitSell };
+async function getBalance({ user }: commitBuySellGetBalanceProps) {
+  const data = {
+    user,
+  };
+
+  try {
+    const response = await axios.post(
+      `${transaction_server_url}/getBalance`,
+      JSON.stringify(data),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    console.log("the response is", response);
+
+    return response;
+  } catch (error) {
+    console.log("the error", error);
+    return null;
+  }
+}
+
+export { addFunds, buyStock, commitBuy, sellStock, commitSell, getBalance };

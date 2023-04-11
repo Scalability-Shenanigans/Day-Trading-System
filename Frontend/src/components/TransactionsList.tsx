@@ -43,11 +43,13 @@ export interface TransactionsListItemProps {
   asset: string;
   amount: number;
   user: string;
+  setCommit: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface TransactionsListProps {
   transactions: TransactionsListItemProps[];
   user: string;
+  setCommit: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const TransactionsListItem: React.FC<TransactionsListItemProps> = ({
@@ -56,6 +58,7 @@ const TransactionsListItem: React.FC<TransactionsListItemProps> = ({
   asset,
   amount,
   user,
+  setCommit,
 }) => {
   const [status, setStatus] = useState("Not committed");
 
@@ -82,6 +85,7 @@ const TransactionsListItem: React.FC<TransactionsListItemProps> = ({
                   commitBuyResponse.data["stock"] === asset
                 ) {
                   setStatus("Committed");
+                  setCommit(true);
                 }
               } else if (type === "Sell") {
                 const commitSellResponse = await commitSell({
@@ -93,6 +97,7 @@ const TransactionsListItem: React.FC<TransactionsListItemProps> = ({
                   commitSellResponse.data["stock"] === asset
                 ) {
                   setStatus("Committed");
+                  setCommit(true);
                 }
               }
             }}
@@ -108,6 +113,7 @@ const TransactionsListItem: React.FC<TransactionsListItemProps> = ({
 const TransactionsList: React.FC<TransactionsListProps> = ({
   transactions,
   user,
+  setCommit,
 }) => {
   return (
     <TransactionsListContainer>
@@ -130,6 +136,7 @@ const TransactionsList: React.FC<TransactionsListProps> = ({
               asset={transaction.asset}
               amount={transaction.amount}
               user={user}
+              setCommit={setCommit}
             />
           ))}
         </tbody>

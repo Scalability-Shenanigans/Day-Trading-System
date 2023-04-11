@@ -23,6 +23,14 @@ type AddResponse struct {
 	Balance float64 `json:"balance,omitempty"`
 }
 
+type GetBalance struct {
+	User string `json:"user"`
+}
+
+type GetBalanceResponse struct {
+	Balance float64 `json:"balance"`
+}
+
 func addHandler(w http.ResponseWriter, r *http.Request) {
 	//check if user exists in db
 	//if not create user
@@ -69,6 +77,23 @@ func addHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
+func getBalanceHandler(w http.ResponseWriter, r *http.Request) {
+	var getBalance GetBalance
+	var response GetBalanceResponse
+
+	err := json.NewDecoder(r.Body).Decode(&getBalance)
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("Bad Request")
+		return
+	}
+
+	response.Balance = db.GetBalance(getBalance.User)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
+}
+
 func createUser() {
 	//create user in db
 }
@@ -108,6 +133,7 @@ func main() {
 	http.HandleFunc("/dbwipe", db.DBWiper)
 
 	http.Handle("/", corsWrapper.Handler(middleware.TransactionNumberMiddleware(mux)))
+	http.Handle("/getBalance", corsWrapper.Handler(http.HandlerFunc(getBalanceHandler)))
 
 	// http.Handle("/", middleware.TransactionNumberMiddleware(mux))
 	http.ListenAndServe(port, nil)

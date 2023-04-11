@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import TransactionForm from "./components/TransactionForm";
 import styled from "styled-components";
-import { addFunds, buyStock, sellStock } from "./requests/requests";
+import { addFunds, buyStock, getBalance, sellStock } from "./requests/requests";
 import TransactionsList, {
   TransactionsListItemProps,
 } from "./components/TransactionsList";
@@ -112,6 +112,25 @@ function App() {
   const [selectedFunds, setSelectedFunds] = useState(0);
   const [funds, setFunds] = useState(0);
 
+  const [transactionCommitted, setTransactionCommitted] = useState(false);
+
+  useEffect(() => {
+    console.log("transaction committed");
+    // update funds with a request to getBalance
+    const fetchBalance = async () => {
+      const getBalanceResponse = await getBalance({ user: user });
+      const balance = parseFloat(
+        getBalanceResponse?.data["balance"].toFixed(2)
+      );
+      setFunds(balance);
+    };
+
+    if (transactionCommitted === true) {
+      setTransactionCommitted(false);
+    }
+    fetchBalance();
+  }, [transactionCommitted]);
+
   const [transactions, setTransactions] = useState<TransactionsListItemProps[]>(
     []
   );
@@ -163,7 +182,11 @@ function App() {
           showAmount={true}
         />
       </FormsContainer>
-      <TransactionsList transactions={transactions} user={user} />
+      <TransactionsList
+        transactions={transactions}
+        user={user}
+        setCommit={setTransactionCommitted}
+      />
     </AppContainer>
   );
 }
