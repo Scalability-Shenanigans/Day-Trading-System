@@ -3,6 +3,7 @@ package main
 import (
 	"TransactionServer/db"
 	"TransactionServer/log"
+	"TransactionServer/middleware"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -10,30 +11,28 @@ import (
 )
 
 type Sell struct {
-	User           string  `json:"user"`
-	Stock          string  `json:"stock"`
-	Amount         float64 `json:"amount"`
-	TransactionNum int     `json:"transactionNum"`
+	User   string  `json:"user"`
+	Stock  string  `json:"stock"`
+	Amount float64 `json:"amount"`
 }
 
 type CancelSetSell struct {
-	User           string  `json:"user"`
-	Stock          string  `json:"stock"`
-	Amount         float64 `json:"amount"`
-	TransactionNum int     `json:"transactionNum"`
+	User   string  `json:"user"`
+	Stock  string  `json:"stock"`
+	Amount float64 `json:"amount"`
 }
 
 type CommitSell struct {
-	User           string `json:"user"`
-	TransactionNum int    `json:"transactionNum"`
+	User string `json:"user"`
 }
 
 type CancelSell struct {
-	User           string `json:"user"`
-	TransactionNum int    `json:"transactionNum"`
+	User string `json:"user"`
 }
 
 func sellHandler(w http.ResponseWriter, r *http.Request) {
+	transactionNumber := middleware.GetTransactionNumberFromContext(r)
+
 	var sell Sell
 	err := json.NewDecoder(r.Body).Decode(&sell)
 	if err != nil {
@@ -45,7 +44,7 @@ func sellHandler(w http.ResponseWriter, r *http.Request) {
 	cmd := &log.UserCommand{
 		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
-		TransactionNum: int64(sell.TransactionNum),
+		TransactionNum: int64(transactionNumber),
 		Command:        "SELL",
 		Username:       sell.User,
 		Funds:          sell.Amount,
@@ -53,7 +52,7 @@ func sellHandler(w http.ResponseWriter, r *http.Request) {
 	sysEvent := &log.SystemEvent{
 		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
-		TransactionNum: int64(sell.TransactionNum),
+		TransactionNum: int64(transactionNumber),
 		Command:        "SELL",
 		Username:       sell.User,
 		Funds:          sell.Amount,
@@ -61,7 +60,7 @@ func sellHandler(w http.ResponseWriter, r *http.Request) {
 	log.CreateUserCommandsLog(cmd)
 	log.CreateSystemEventLog(sysEvent)
 
-	quote := GetQuote(sell.Stock, sell.User, sell.TransactionNum)
+	quote := GetQuote(sell.Stock, sell.User, int(transactionNumber))
 
 	transaction := db.Transaction{
 		User:   sell.User,
@@ -75,6 +74,8 @@ func sellHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func commitSell(w http.ResponseWriter, r *http.Request) {
+	transactionNumber := middleware.GetTransactionNumberFromContext(r)
+
 	var commitSell CommitSell
 	err := json.NewDecoder(r.Body).Decode(&commitSell)
 	if err != nil {
@@ -89,7 +90,7 @@ func commitSell(w http.ResponseWriter, r *http.Request) {
 		errorEvent := &log.ErrorEvent{
 			Timestamp:      time.Now().UnixMilli(),
 			Server:         "localhost",
-			TransactionNum: int64(commitSell.TransactionNum),
+			TransactionNum: int64(transactionNumber),
 			Command:        "COMMIT_SELL",
 			Username:       commitSell.User,
 			ErrorMessage:   "Error: no sell to commit",
@@ -101,7 +102,7 @@ func commitSell(w http.ResponseWriter, r *http.Request) {
 	cmd := &log.UserCommand{
 		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
-		TransactionNum: int64(commitSell.TransactionNum),
+		TransactionNum: int64(transactionNumber),
 		Command:        "COMMIT_SELL",
 		Username:       commitSell.User,
 	}
@@ -111,8 +112,8 @@ func commitSell(w http.ResponseWriter, r *http.Request) {
 	transactionCost := float64(transaction.Amount) * transaction.Price
 	if transactionCost != 0 {
 		// update how much stock they hold after selling
-		if db.UpdateStockHolding(user, transaction.Stock, -1*transaction.Amount, int64(commitSell.TransactionNum)) {
-			if db.UpdateBalance(transactionCost, user, int64(commitSell.TransactionNum)) { // update account balance after selling
+		if db.UpdateStockHolding(user, transaction.Stock, -1*transaction.Amount, int64(transactionNumber)) {
+			if db.UpdateBalance(transactionCost, user, int64(transactionNumber)) { // update account balance after selling
 				fmt.Println("Transaction Commited")
 			}
 		}
@@ -120,7 +121,7 @@ func commitSell(w http.ResponseWriter, r *http.Request) {
 		errorEvent := &log.ErrorEvent{
 			Timestamp:      time.Now().UnixMilli(),
 			Server:         "localhost",
-			TransactionNum: int64(commitSell.TransactionNum),
+			TransactionNum: int64(transactionNumber),
 			Command:        "COMMIT_SELL",
 			Username:       commitSell.User,
 		}
@@ -131,6 +132,8 @@ func commitSell(w http.ResponseWriter, r *http.Request) {
 }
 
 func cancelSell(w http.ResponseWriter, r *http.Request) {
+	transactionNumber := middleware.GetTransactionNumberFromContext(r)
+
 	var cancelSell CancelSell
 	err := json.NewDecoder(r.Body).Decode(&cancelSell)
 	if err != nil {
@@ -142,7 +145,7 @@ func cancelSell(w http.ResponseWriter, r *http.Request) {
 	cmd := &log.UserCommand{
 		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
-		TransactionNum: int64(cancelSell.TransactionNum),
+		TransactionNum: int64(transactionNumber),
 		Command:        "CANCEL_SELL",
 		Username:       cancelSell.User,
 	}
@@ -153,6 +156,8 @@ func cancelSell(w http.ResponseWriter, r *http.Request) {
 }
 
 func setSellAmountHandler(w http.ResponseWriter, r *http.Request) {
+	transactionNumber := middleware.GetTransactionNumberFromContext(r)
+
 	var sellAmountOrder db.SellAmountOrder
 	err := json.NewDecoder(r.Body).Decode(&sellAmountOrder)
 	if err != nil {
@@ -164,7 +169,7 @@ func setSellAmountHandler(w http.ResponseWriter, r *http.Request) {
 	cmd := &log.UserCommand{
 		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
-		TransactionNum: int64(sellAmountOrder.TransactionNum),
+		TransactionNum: int64(transactionNumber),
 		Command:        "SET_SELL_AMOUNT",
 		Username:       sellAmountOrder.User,
 		Funds:          sellAmountOrder.Amount,
@@ -178,6 +183,8 @@ func setSellAmountHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func setSellTriggerHandler(w http.ResponseWriter, r *http.Request) {
+	transactionNumber := middleware.GetTransactionNumberFromContext(r)
+
 	var triggerOrder TriggerOrder
 	err := json.NewDecoder(r.Body).Decode(&triggerOrder)
 	if err != nil {
@@ -190,7 +197,7 @@ func setSellTriggerHandler(w http.ResponseWriter, r *http.Request) {
 	cmd := &log.UserCommand{
 		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
-		TransactionNum: int64(triggerOrder.TransactionNum),
+		TransactionNum: int64(transactionNumber),
 		Command:        "SET_SELL_TRIGGER",
 		Username:       triggerOrder.User,
 		Funds:          triggerOrder.Price,
@@ -208,7 +215,7 @@ func setSellTriggerHandler(w http.ResponseWriter, r *http.Request) {
 		var no_of_shares_to_sell = int(sellAmountOrder.Amount / triggerOrder.Price)
 
 		// check user account to see if they have enough shares of the stock to sell and decrement stock holding
-		if db.UpdateStockHolding(sellAmountOrder.User, sellAmountOrder.Stock, -1*no_of_shares_to_sell, int64(sellAmountOrder.TransactionNum)) {
+		if db.UpdateStockHolding(sellAmountOrder.User, sellAmountOrder.Stock, -1*no_of_shares_to_sell, int64(transactionNumber)) {
 			fmt.Println("Creating SellAmountOrder")
 			// add TriggeredSellAmountOrder to db for PollingService to act on
 			var triggeredSellAmountOrder db.TriggeredSellAmountOrder
@@ -224,6 +231,8 @@ func setSellTriggerHandler(w http.ResponseWriter, r *http.Request) {
 // In this function, I guess we also need to update Stockholding for user
 // i.e add back those shares to stockholding which were reserved to be sold
 func cancelSetSell(w http.ResponseWriter, r *http.Request) {
+	transactionNumber := middleware.GetTransactionNumberFromContext(r)
+
 	var cancelSetSell CancelSetSell
 	err := json.NewDecoder(r.Body).Decode(&cancelSetSell)
 	if err != nil {
@@ -236,7 +245,7 @@ func cancelSetSell(w http.ResponseWriter, r *http.Request) {
 	cmd := &log.UserCommand{
 		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
-		TransactionNum: int64(cancelSetSell.TransactionNum),
+		TransactionNum: int64(transactionNumber),
 		Command:        "CANCEL_SET_SELL",
 		Username:       cancelSetSell.User,
 		Funds:          cancelSetSell.Amount,

@@ -3,6 +3,7 @@ package main
 import (
 	"TransactionServer/cache"
 	"TransactionServer/log"
+	"TransactionServer/middleware"
 	"encoding/json"
 	"fmt"
 	"net"
@@ -26,19 +27,19 @@ type TransactionResult struct {
 	Key       string
 }
 type Quote struct {
-	User           string `json:"user"`
-	Stock          string `json:"stock"`
-	TransactionNum int    `json:"transactionNum"`
+	User  string `json:"user"`
+	Stock string `json:"stock"`
 }
 
 type DisplaySummary struct {
-	User           string `json:"user"`
-	TransactionNum int    `json:"transactionNum"`
+	User string `json:"user"`
 }
 
 var redisClient = cache.NewRedisClient()
 
 func quoteHandler(w http.ResponseWriter, r *http.Request) {
+	transactionNumber := middleware.GetTransactionNumberFromContext(r)
+
 	//get stock price
 	//add user command to log
 	var quote Quote
@@ -49,12 +50,12 @@ func quoteHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	GetQuote(quote.Stock, quote.User, quote.TransactionNum)
+	GetQuote(quote.Stock, quote.User, int(transactionNumber))
 
 	cmd := &log.UserCommand{
 		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
-		TransactionNum: int64(quote.TransactionNum), //for now
+		TransactionNum: int64(transactionNumber), //for now
 		Command:        "QUOTE",
 		Username:       quote.User,
 		StockSymbol:    quote.Stock,
@@ -64,6 +65,8 @@ func quoteHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func displayHandler(w http.ResponseWriter, r *http.Request) {
+	transactionNumber := middleware.GetTransactionNumberFromContext(r)
+
 	//just add the command to logs for now
 	var displaySummary DisplaySummary
 	err := json.NewDecoder(r.Body).Decode(&displaySummary)
@@ -74,12 +77,12 @@ func displayHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user := displaySummary.User
-	transactionNum := displaySummary.TransactionNum
+	// transactionNum := displaySummary.TransactionNum
 
 	cmd := &log.UserCommand{
 		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
-		TransactionNum: int64(transactionNum),
+		TransactionNum: int64(transactionNumber),
 		Command:        "DISPLAY_SUMMARY",
 		Username:       user,
 	}

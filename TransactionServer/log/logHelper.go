@@ -1,6 +1,7 @@
 package log
 
 import (
+	"TransactionServer/middleware"
 	"context"
 	"encoding/json"
 	"encoding/xml"
@@ -14,8 +15,7 @@ import (
 )
 
 type Dumplog struct {
-	Filename       string `json:"filename"`
-	TransactionNum int    `json:"transactionNum"`
+	Filename string `json:"filename"`
 }
 
 // var mongoURI = "mongodb://localhost:5000" //for local testing
@@ -108,6 +108,8 @@ func CreateErrorEventLog(cmd *ErrorEvent) {
 }
 
 func DumplogHandler(w http.ResponseWriter, r *http.Request) {
+	transactionNumber := middleware.GetTransactionNumberFromContext(r)
+
 	var dumplog Dumplog
 
 	err := json.NewDecoder(r.Body).Decode(&dumplog)
@@ -120,7 +122,7 @@ func DumplogHandler(w http.ResponseWriter, r *http.Request) {
 	cmd := &UserCommand{
 		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
-		TransactionNum: int64(dumplog.TransactionNum),
+		TransactionNum: int64(transactionNumber),
 		Command:        "DUMPLOG",
 		Filename:       dumplog.Filename,
 	}

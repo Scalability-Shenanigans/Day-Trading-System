@@ -3,6 +3,7 @@ package main
 import (
 	"TransactionServer/db"
 	"TransactionServer/log"
+	"TransactionServer/middleware"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -10,33 +11,28 @@ import (
 )
 
 type TriggerOrder struct {
-	User           string  `json:"user"`
-	Stock          string  `json:"stock"`
-	Price          float64 `json:"price"`
-	TransactionNum int     `json:"transactionNum"`
+	User  string  `json:"user"`
+	Stock string  `json:"stock"`
+	Price float64 `json:"price"`
 }
 
 type Buy struct {
-	User           string  `json:"user"`
-	Stock          string  `json:"stock"`
-	Amount         float64 `json:"amount"`
-	TransactionNum int     `json:"transactionNum"`
+	User   string  `json:"user"`
+	Stock  string  `json:"stock"`
+	Amount float64 `json:"amount"`
 }
 
 type CancelBuy struct {
-	User           string `json:"user"`
-	TransactionNum int    `json:"transactionNum"`
+	User string `json:"user"`
 }
 
 type CancelSetBuy struct {
-	User           string `json:"user"`
-	Stock          string `json:"stock"`
-	TransactionNum int    `json:"transactionNum"`
+	User  string `json:"user"`
+	Stock string `json:"stock"`
 }
 
 type CommitBuy struct {
-	User           string `json:"user"`
-	TransactionNum int    `json:"transactionNum"`
+	User string `json:"user"`
 }
 
 func buyHandler(w http.ResponseWriter, r *http.Request) {
@@ -46,6 +42,9 @@ func buyHandler(w http.ResponseWriter, r *http.Request) {
 	//we can either check if a user has enough funds here or during the commit
 	//	(both probably work commit just means we do more processing before failing)
 	var buy Buy
+
+	transactionNumber := middleware.GetTransactionNumberFromContext(r)
+
 	err := json.NewDecoder(r.Body).Decode(&buy)
 	if err != nil {
 		fmt.Println(err)
@@ -56,7 +55,7 @@ func buyHandler(w http.ResponseWriter, r *http.Request) {
 	cmd := &log.UserCommand{
 		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
-		TransactionNum: int64(buy.TransactionNum),
+		TransactionNum: int64(transactionNumber),
 		Command:        "BUY",
 		Username:       buy.User,
 		Funds:          buy.Amount,
@@ -64,7 +63,7 @@ func buyHandler(w http.ResponseWriter, r *http.Request) {
 	sysEvent := &log.SystemEvent{
 		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
-		TransactionNum: int64(buy.TransactionNum),
+		TransactionNum: int64(transactionNumber),
 		Command:        "BUY",
 		Username:       buy.User,
 		Funds:          buy.Amount,
@@ -73,7 +72,7 @@ func buyHandler(w http.ResponseWriter, r *http.Request) {
 	log.CreateUserCommandsLog(cmd)
 	log.CreateSystemEventLog(sysEvent)
 
-	quote := GetQuote(buy.Stock, buy.User, buy.TransactionNum)
+	quote := GetQuote(buy.Stock, buy.User, int(transactionNumber))
 
 	transaction := db.Transaction{
 		User:   buy.User,
@@ -91,6 +90,7 @@ func commitBuy(w http.ResponseWriter, r *http.Request) {
 	//consume it (delete it after its done)
 	//update users account in db
 	// balance, holdings, ???
+	transactionNumber := middleware.GetTransactionNumberFromContext(r)
 
 	var commitBuy CommitBuy
 	err := json.NewDecoder(r.Body).Decode(&commitBuy)
@@ -107,7 +107,7 @@ func commitBuy(w http.ResponseWriter, r *http.Request) {
 		errorEvent := &log.ErrorEvent{
 			Timestamp:      time.Now().UnixMilli(),
 			Server:         "localhost",
-			TransactionNum: int64(commitBuy.TransactionNum),
+			TransactionNum: int64(transactionNumber),
 			Command:        "COMMIT_BUY",
 			Username:       commitBuy.User,
 			ErrorMessage:   "Error: no buy to commit",
@@ -119,7 +119,7 @@ func commitBuy(w http.ResponseWriter, r *http.Request) {
 	cmd := &log.UserCommand{
 		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
-		TransactionNum: int64(commitBuy.TransactionNum),
+		TransactionNum: int64(transactionNumber),
 		Command:        "COMMIT_BUY",
 		Username:       commitBuy.User,
 		Funds:          float64(transaction.Amount),
@@ -129,8 +129,8 @@ func commitBuy(w http.ResponseWriter, r *http.Request) {
 	transactionCost := float64(transaction.Amount) * transaction.Price
 
 	if transactionCost != 0 {
-		if db.UpdateBalance(transactionCost*-1.0, user, int64(commitBuy.TransactionNum)) {
-			if db.UpdateStockHolding(user, transaction.Stock, transaction.Amount, int64(commitBuy.TransactionNum)) {
+		if db.UpdateBalance(transactionCost*-1.0, user, int64(transactionNumber)) {
+			if db.UpdateStockHolding(user, transaction.Stock, transaction.Amount, int64(transactionNumber)) {
 				fmt.Println("Transaction Commited")
 			}
 		}
@@ -138,7 +138,7 @@ func commitBuy(w http.ResponseWriter, r *http.Request) {
 		errorEvent := &log.ErrorEvent{
 			Timestamp:      time.Now().UnixMilli(),
 			Server:         "localhost",
-			TransactionNum: int64(commitBuy.TransactionNum),
+			TransactionNum: int64(transactionNumber),
 			Command:        "COMMIT_BUY",
 			Username:       commitBuy.User,
 		}
@@ -149,6 +149,8 @@ func commitBuy(w http.ResponseWriter, r *http.Request) {
 }
 
 func cancelBuy(w http.ResponseWriter, r *http.Request) {
+	transactionNumber := middleware.GetTransactionNumberFromContext(r)
+
 	var cancelBuy CancelBuy
 	err := json.NewDecoder(r.Body).Decode(&cancelBuy)
 	if err != nil {
@@ -160,7 +162,7 @@ func cancelBuy(w http.ResponseWriter, r *http.Request) {
 	cmd := &log.UserCommand{
 		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
-		TransactionNum: int64(cancelBuy.TransactionNum),
+		TransactionNum: int64(transactionNumber),
 		Command:        "CANCEL_BUY",
 		Username:       cancelBuy.User,
 	}
@@ -172,6 +174,8 @@ func cancelBuy(w http.ResponseWriter, r *http.Request) {
 }
 
 func setBuyAmountHandler(w http.ResponseWriter, r *http.Request) {
+	transactionNumber := middleware.GetTransactionNumberFromContext(r)
+
 	var buyAmountOrder db.BuyAmountOrder
 	err := json.NewDecoder(r.Body).Decode(&buyAmountOrder)
 	if err != nil {
@@ -184,7 +188,7 @@ func setBuyAmountHandler(w http.ResponseWriter, r *http.Request) {
 	cmd := &log.UserCommand{
 		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
-		TransactionNum: int64(buyAmountOrder.TransactionNum),
+		TransactionNum: int64(transactionNumber),
 		Command:        "SET_BUY_AMOUNT",
 		Username:       buyAmountOrder.User,
 		Funds:          buyAmountOrder.Amount,
@@ -195,6 +199,8 @@ func setBuyAmountHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func setBuyTriggerHandler(w http.ResponseWriter, r *http.Request) {
+	transactionNumber := middleware.GetTransactionNumberFromContext(r)
+
 	var triggerOrder TriggerOrder
 	err := json.NewDecoder(r.Body).Decode(&triggerOrder)
 	if err != nil {
@@ -207,7 +213,7 @@ func setBuyTriggerHandler(w http.ResponseWriter, r *http.Request) {
 	cmd := &log.UserCommand{
 		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
-		TransactionNum: int64(triggerOrder.TransactionNum),
+		TransactionNum: int64(transactionNumber),
 		Command:        "SET_BUY_TRIGGER",
 		Username:       triggerOrder.User,
 		Funds:          triggerOrder.Price,
@@ -222,7 +228,7 @@ func setBuyTriggerHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(buyAmountOrder)
 
 		// check user account to see if they have enough funds and decrement Account balance if they do
-		if db.UpdateBalance((buyAmountOrder.Amount * triggerOrder.Price * -1), buyAmountOrder.User, int64(triggerOrder.TransactionNum)) {
+		if db.UpdateBalance((buyAmountOrder.Amount * triggerOrder.Price * -1), buyAmountOrder.User, int64(transactionNumber)) {
 			fmt.Println("Creating BuyAmountOrder")
 			// add TriggeredBuyAmountOrder to db for PollingService to act on
 			var triggeredBuyAmountOrder db.TriggeredBuyAmountOrder
@@ -236,6 +242,8 @@ func setBuyTriggerHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func cancelSetBuy(w http.ResponseWriter, r *http.Request) {
+	transactionNumber := middleware.GetTransactionNumberFromContext(r)
+
 	var cancelSetBuy CancelSetBuy
 	err := json.NewDecoder(r.Body).Decode(&cancelSetBuy)
 	if err != nil {
@@ -248,7 +256,7 @@ func cancelSetBuy(w http.ResponseWriter, r *http.Request) {
 	cmd := &log.UserCommand{
 		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
-		TransactionNum: int64(cancelSetBuy.TransactionNum),
+		TransactionNum: int64(transactionNumber),
 		Command:        "CANCEL_SET_BUY",
 		Username:       cancelSetBuy.User,
 	}

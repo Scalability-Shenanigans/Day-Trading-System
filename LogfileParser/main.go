@@ -47,16 +47,13 @@ func lineProcessor(line string) {
 		return
 	}
 
-	transactionNum, _ := strconv.Atoi(matches[1])
 	fmt.Println(line)
 
 	lineSplit := strings.Split(line, " ")
 	args := strings.Split(lineSplit[1], ",")
 
 	command := args[0]
-	data := map[string]interface{}{
-		"transactionNum": transactionNum,
-	}
+	data := map[string]interface{}{}
 
 	switch command {
 	case "BUY":
@@ -171,8 +168,7 @@ func main() {
 		}
 	case "dumplog":
 		data := map[string]interface{}{
-			"filename":       "logfile.xml",
-			"transactionNum": 100,
+			"filename": "logfile.xml",
 		}
 		fmt.Println(data)
 		resp, err := sendRequest("dumplog", data)
@@ -247,9 +243,11 @@ func main() {
 		difference := endTime.Sub(startTime)
 
 		var throughput int
+		fmt.Println("milliseconds " + strconv.FormatInt(difference.Milliseconds(), 10))
+		fmt.Println("microseconds " + strconv.FormatInt(difference.Microseconds(), 10))
 
 		if difference.Seconds() == 0 {
-			diff := difference.Milliseconds() / 1
+			diff := difference.Milliseconds() / 1000
 			throughput = int(float64(workload_lines) / float64(diff))
 		} else {
 			fmt.Println(difference.Seconds())

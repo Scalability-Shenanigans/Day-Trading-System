@@ -3,6 +3,7 @@ package main
 import (
 	"TransactionServer/db"
 	"TransactionServer/log"
+	"TransactionServer/middleware"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -10,9 +11,8 @@ import (
 )
 
 type AddFunds struct {
-	User           string  `json:"user"`
-	Amount         float64 `json:"amount"`
-	TransactionNum int     `json:"transactionNum"`
+	User   string  `json:"user"`
+	Amount float64 `json:"amount"`
 }
 
 func addHandler(w http.ResponseWriter, r *http.Request) {
@@ -20,6 +20,8 @@ func addHandler(w http.ResponseWriter, r *http.Request) {
 	//if not create user
 	//add whatever the funds amount is
 	var addFunds AddFunds
+
+	transactionNumber := middleware.GetTransactionNumberFromContext(r)
 
 	// var addUserCommand UserCommand;
 
@@ -33,7 +35,7 @@ func addHandler(w http.ResponseWriter, r *http.Request) {
 	cmd := &log.UserCommand{
 		Timestamp:      time.Now().UnixMilli(),
 		Server:         "localhost",
-		TransactionNum: int64(addFunds.TransactionNum),
+		TransactionNum: int64(transactionNumber),
 		Command:        "ADD",
 		Username:       addFunds.User,
 		Funds:          addFunds.Amount,
@@ -41,11 +43,11 @@ func addHandler(w http.ResponseWriter, r *http.Request) {
 
 	log.CreateUserCommandsLog(cmd)
 
-	if db.UpdateBalance(addFunds.Amount, addFunds.User, int64(addFunds.TransactionNum)) {
+	if db.UpdateBalance(addFunds.Amount, addFunds.User, int64(transactionNumber)) {
 		return
 	}
 	fmt.Println("Creating an account for user")
-	db.CreateAccount(addFunds.User, addFunds.Amount, int64(addFunds.TransactionNum))
+	db.CreateAccount(addFunds.User, addFunds.Amount, int64(transactionNumber))
 }
 
 func createUser() {
@@ -54,24 +56,30 @@ func createUser() {
 
 func main() {
 	port := ":8080"
+	mux := http.NewServeMux()
 	db.InitConnection()
 	log.InitLogDBConnection()
-	http.HandleFunc("/add", addHandler)
-	http.HandleFunc("/buy", buyHandler)
-	http.HandleFunc("/commitBuy", commitBuy)
-	http.HandleFunc("/cancelBuy", cancelBuy)
-	http.HandleFunc("/cancelSetBuy", cancelSetBuy)
-	http.HandleFunc("/setBuyAmount", setBuyAmountHandler)
-	http.HandleFunc("/setBuyTrigger", setBuyTriggerHandler)
-	http.HandleFunc("/sell", sellHandler)
-	http.HandleFunc("/commitSell", commitSell)
-	http.HandleFunc("/cancelSell", cancelSell)
-	http.HandleFunc("/cancelSetSell", cancelSetSell)
-	http.HandleFunc("/setSellAmount", setSellAmountHandler)
-	http.HandleFunc("/setSellTrigger", setSellTriggerHandler)
-	http.HandleFunc("/dumplog", log.DumplogHandler)
-	http.HandleFunc("/quote", quoteHandler)
-	http.HandleFunc("/display", displayHandler)
+
+	// Register handlers with mux
+	mux.HandleFunc("/add", addHandler)
+	mux.HandleFunc("/buy", buyHandler)
+	mux.HandleFunc("/commitBuy", commitBuy)
+	mux.HandleFunc("/cancelBuy", cancelBuy)
+	mux.HandleFunc("/cancelSetBuy", cancelSetBuy)
+	mux.HandleFunc("/setBuyAmount", setBuyAmountHandler)
+	mux.HandleFunc("/setBuyTrigger", setBuyTriggerHandler)
+	mux.HandleFunc("/sell", sellHandler)
+	mux.HandleFunc("/commitSell", commitSell)
+	mux.HandleFunc("/cancelSell", cancelSell)
+	mux.HandleFunc("/cancelSetSell", cancelSetSell)
+	mux.HandleFunc("/setSellAmount", setSellAmountHandler)
+	mux.HandleFunc("/setSellTrigger", setSellTriggerHandler)
+	mux.HandleFunc("/dumplog", log.DumplogHandler)
+	mux.HandleFunc("/quote", quoteHandler)
+	mux.HandleFunc("/display", displayHandler)
+
 	http.HandleFunc("/dbwipe", db.DBWiper)
+
+	http.Handle("/", middleware.TransactionNumberMiddleware(mux))
 	http.ListenAndServe(port, nil)
 }
