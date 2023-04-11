@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -33,6 +34,12 @@ type CancelSetBuy struct {
 
 type CommitBuy struct {
 	User string `json:"user"`
+}
+
+type CommitBuyResponse struct {
+	Status  string `json:"status"`
+	Message string `json:"message"`
+	Stock   string `json:"stock,omitempty"`
 }
 
 func buyHandler(w http.ResponseWriter, r *http.Request) {
@@ -82,7 +89,7 @@ func buyHandler(w http.ResponseWriter, r *http.Request) {
 		Is_Buy: true,
 	}
 
-	db.CreateTransaction(transaction)
+	db.CreatePendingTransaction(transaction)
 }
 
 func commitBuy(w http.ResponseWriter, r *http.Request) {
@@ -93,6 +100,8 @@ func commitBuy(w http.ResponseWriter, r *http.Request) {
 	transactionNumber := middleware.GetTransactionNumberFromContext(r)
 
 	var commitBuy CommitBuy
+	var response CommitBuyResponse
+
 	err := json.NewDecoder(r.Body).Decode(&commitBuy)
 	if err != nil {
 		fmt.Println(err)
@@ -102,6 +111,7 @@ func commitBuy(w http.ResponseWriter, r *http.Request) {
 
 	user := commitBuy.User
 	transaction := db.ConsumeLastBuyTransaction(user)
+	db.CreateFinishedTransaction(transaction)
 
 	if transaction.Transaction_ID == -1 {
 		errorEvent := &log.ErrorEvent{
@@ -128,10 +138,15 @@ func commitBuy(w http.ResponseWriter, r *http.Request) {
 
 	transactionCost := float64(transaction.Amount) * transaction.Price
 
+	fmt.Println("transactionCost is " + strconv.FormatFloat(transactionCost, 'E', -1, 64))
+
 	if transactionCost != 0 {
 		if db.UpdateBalance(transactionCost*-1.0, user, int64(transactionNumber)) {
 			if db.UpdateStockHolding(user, transaction.Stock, transaction.Amount, int64(transactionNumber)) {
 				fmt.Println("Transaction Commited")
+				response.Status = "success"
+				response.Message = "Buy committed successfully"
+				response.Stock = transaction.Stock
 			}
 		}
 	} else {
@@ -143,9 +158,14 @@ func commitBuy(w http.ResponseWriter, r *http.Request) {
 			Username:       commitBuy.User,
 		}
 		log.CreateErrorEventLog(errorEvent)
-		return
+
+		response.Status = "failure"
+		response.Message = "Buy commit failure"
+		response.Stock = transaction.Stock
 	}
 
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
 }
 
 func cancelBuy(w http.ResponseWriter, r *http.Request) {

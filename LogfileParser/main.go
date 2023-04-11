@@ -39,6 +39,7 @@ func greenString(s string) string {
 }
 
 func lineProcessor(line string) {
+	fmt.Println("line is " + line)
 	regex := regexp.MustCompile(`\[(\d*)\]`)
 	matches := regex.FindStringSubmatch(line)
 
@@ -157,9 +158,18 @@ func main() {
 	switch choice {
 	case "manual":
 		for {
-			var line string
+			reader := bufio.NewReader(os.Stdin)
 			fmt.Print("enter command: ")
-			fmt.Scanln(&line)
+			line, err := reader.ReadString('\n')
+			if err != nil {
+				fmt.Println("Error reading input:", err)
+				continue
+			}
+
+			// Remove newline character at the end of the input
+			line = line[:len(line)-1]
+
+			fmt.Println("before the line is " + line)
 			if line == "quit" {
 				break
 			} else {

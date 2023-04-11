@@ -16,7 +16,8 @@ import (
 var mongoURI = "mongodb://db:27017" //use this for when everything is containerized
 var client *mongo.Client
 var accounts *mongo.Collection
-var transactions *mongo.Collection
+var pendingTransactions *mongo.Collection
+var finishedTransactions *mongo.Collection
 var buyOrders *mongo.Collection
 var buyAmountOrders *mongo.Collection
 var sellAmountOrders *mongo.Collection
@@ -40,7 +41,8 @@ func InitConnection() {
 
 	db := client.Database("DayTrading")
 	accounts = db.Collection("Accounts")
-	transactions = db.Collection("PendingTransactions")
+	pendingTransactions = db.Collection("PendingTransactions")
+	finishedTransactions = db.Collection("FinishedTransactions")
 	buyOrders = db.Collection("BuyOrders")
 	buyAmountOrders = db.Collection("BuyAmountOrders")
 	sellAmountOrders = db.Collection("SellAmountOrders")
@@ -73,6 +75,23 @@ func CreateAccount(user string, initialBalance float64, transactionNum int64) {
 		log.CreateAccountTransactionLog(&transaction)
 	}
 
+}
+
+func GetBalance(user string) float64 {
+	filter := bson.M{"user": user}
+	var result Account
+	err := accounts.FindOne(context.TODO(), filter).Decode(&result)
+	if err == mongo.ErrNoDocuments {
+		fmt.Println("ERROR: No account found for that user")
+		return 0
+		/*
+			result = Account{
+				User: user,
+			}
+		*/
+	} else {
+		return result.Balance
+	}
 }
 
 func UpdateBalance(amount float64, user string, transactionNum int64) bool {
@@ -143,6 +162,24 @@ func UpdateBalance(amount float64, user string, transactionNum int64) bool {
 
 }
 
+func CanSellStock(user string, stock string, amount int) bool {
+	filter := bson.M{"user": user}
+	var result Account
+	accounts.FindOne(context.TODO(), filter).Decode(&result)
+
+	for _, value := range result.Stocks {
+		if value.Stock == stock {
+			if value.Amount >= amount {
+				return true
+			} else {
+				return false
+			}
+		}
+	}
+
+	return false
+}
+
 func UpdateStockHolding(user string, stock string, amount int, transactionNum int64) bool {
 	filter := bson.M{"user": user}
 	var result Account
@@ -196,8 +233,19 @@ func UpdateStockHolding(user string, stock string, amount int, transactionNum in
 	return true
 }
 
-func CreateTransaction(transaction Transaction) {
-	res, err := transactions.InsertOne(context.TODO(), transaction)
+func CreatePendingTransaction(transaction Transaction) {
+	res, err := pendingTransactions.InsertOne(context.TODO(), transaction)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println(res.InsertedID)
+}
+
+func CreateFinishedTransaction(transaction Transaction) {
+	res, err := finishedTransactions.InsertOne(context.TODO(), transaction)
 
 	if err != nil {
 		fmt.Println(err)
@@ -287,7 +335,7 @@ func ConsumeLastBuyTransaction(user string) Transaction {
 	opts := options.FindOneAndDelete().SetSort(bson.M{"$natural": -1})
 	filter := bson.M{"user": user, "is_buy": true}
 	var transaction Transaction
-	err := transactions.FindOneAndDelete(context.TODO(), filter, opts).Decode(&transaction)
+	err := pendingTransactions.FindOneAndDelete(context.TODO(), filter, opts).Decode(&transaction)
 	if err != nil {
 		transaction = Transaction{Transaction_ID: -1}
 	}
@@ -298,7 +346,7 @@ func ConsumeLastSellTransaction(user string) Transaction {
 	opts := options.FindOneAndDelete().SetSort(bson.M{"$natural": -1})
 	filter := bson.M{"user": user, "is_buy": false}
 	var transaction Transaction
-	err := transactions.FindOneAndDelete(context.TODO(), filter, opts).Decode(&transaction)
+	err := pendingTransactions.FindOneAndDelete(context.TODO(), filter, opts).Decode(&transaction)
 	if err != nil {
 		transaction = Transaction{Transaction_ID: -1}
 	}
@@ -308,7 +356,7 @@ func ConsumeLastSellTransaction(user string) Transaction {
 func DBWiper(w http.ResponseWriter, r *http.Request) {
 	logs := client.Database("DayTrading").Collection("Logs")
 	allCollections := []*mongo.Collection{accounts,
-		transactions,
+		pendingTransactions,
 		buyOrders,
 		buyAmountOrders,
 		sellAmountOrders,

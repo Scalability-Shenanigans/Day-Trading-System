@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"net/http"
 	"time"
+
+	"github.com/rs/cors"
 )
 
 type AddFunds struct {
@@ -15,11 +17,18 @@ type AddFunds struct {
 	Amount float64 `json:"amount"`
 }
 
+type AddResponse struct {
+	Status  string  `json:"status"`
+	Message string  `json:"message"`
+	Balance float64 `json:"balance,omitempty"`
+}
+
 func addHandler(w http.ResponseWriter, r *http.Request) {
 	//check if user exists in db
 	//if not create user
 	//add whatever the funds amount is
 	var addFunds AddFunds
+	var response AddResponse
 
 	transactionNumber := middleware.GetTransactionNumberFromContext(r)
 
@@ -44,10 +53,20 @@ func addHandler(w http.ResponseWriter, r *http.Request) {
 	log.CreateUserCommandsLog(cmd)
 
 	if db.UpdateBalance(addFunds.Amount, addFunds.User, int64(transactionNumber)) {
-		return
+		response.Status = "success"
+		response.Message = "Funds added successfully"
+		response.Balance = db.GetBalance(addFunds.User)
+	} else {
+		fmt.Println("Creating an account for user")
+		db.CreateAccount(addFunds.User, addFunds.Amount, int64(transactionNumber))
+
+		response.Status = "success"
+		response.Message = "Account created and funds added successfully"
+		response.Balance = addFunds.Amount
 	}
-	fmt.Println("Creating an account for user")
-	db.CreateAccount(addFunds.User, addFunds.Amount, int64(transactionNumber))
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
 }
 
 func createUser() {
@@ -59,6 +78,14 @@ func main() {
 	mux := http.NewServeMux()
 	db.InitConnection()
 	log.InitLogDBConnection()
+
+	// Wrap your mux with the CORS middleware
+	corsWrapper := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"*"},
+		AllowCredentials: true,
+	})
 
 	// Register handlers with mux
 	mux.HandleFunc("/add", addHandler)
@@ -80,6 +107,8 @@ func main() {
 
 	http.HandleFunc("/dbwipe", db.DBWiper)
 
-	http.Handle("/", middleware.TransactionNumberMiddleware(mux))
+	http.Handle("/", corsWrapper.Handler(middleware.TransactionNumberMiddleware(mux)))
+
+	// http.Handle("/", middleware.TransactionNumberMiddleware(mux))
 	http.ListenAndServe(port, nil)
 }
