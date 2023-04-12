@@ -25,8 +25,14 @@ The application also has a containerized frontend developed using React.
 ## Running the application
 To run the application please follow the following steps:
 * Clone the repository
-* Run ```docker-compose up``` in the root directory of the project
+* Run ```docker-compose up --build``` in the root directory of the project to build and run the containers
 * To access the frontend go to ```localhost:3000```
+* To run the the userworkloads use the following commands after ```docker-compose up --build```
+    * Go to ```LogfileParser``` directory and run ```go build -o /main``` to build a go build file for the parser 
+    * Run ```./main``` to run the parser
+    * Type ```automatic``` to run the automatic workload
+        * This will prompt you to enter the number of users you want to run the workload for. Type it in the command line and press enter
+    * Type ```manual``` to run the manual workload to run a single command manually from the workload file
 * API endpoints can be accessed at ```localhost:5100``` and here are some of the endpoints available 
     * ```/add```: adds money to the account
 	* ```/buy``` : set buy command
