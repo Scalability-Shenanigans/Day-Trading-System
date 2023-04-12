@@ -17,6 +17,15 @@ services:
       - day-trading
     restart: always
 
+  frontend:
+    build: ./Frontend
+    depends_on:
+      - transactionserver
+    networks:
+      - day-trading
+    ports:
+      - "3000:3000"
+
   #Create replicas of transaction server replicated is default deploy mode
   transactionserver:
     build: ./TransactionServer
