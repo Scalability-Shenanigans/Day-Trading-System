@@ -17,7 +17,7 @@ const FormContainer = styled.form`
   margin: 20px 0px;
   text-align: left;
 
-  background-color: #353638;
+  background-color: #283747;
   border-radius: 5px;
   align-self: stretch;
   color: white;
@@ -36,7 +36,11 @@ const Label = styled.label`
 `;
 
 const Input = styled.input`
-  // margin-bottom: 15px;
+  padding: 5px;
+  background: #2c3e50;
+  color: #ecf0f1;
+  border: 1px solid #7f8c8d;
+  border-radius: 5px;
 `;
 
 const Quote = styled.h3`

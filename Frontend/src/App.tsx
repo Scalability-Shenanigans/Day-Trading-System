@@ -19,15 +19,24 @@ import TransactionsList, {
 import LoginAlert from "./components/LoginAlert";
 import { canSellStock } from "./utils/utils";
 
-const AddFundsText = styled.h3({
-  margin: 0,
-});
+const AddFundsText = styled.h3`
+  margin: 0;
+  color: #ecf0f1;
+`;
 
-const AddFundsInput = styled.input({
-  marginBottom: 20,
-  marginRight: 5,
-});
+const AddFundsInput = styled.input`
+  margin-bottom: 20px;
+  margin-right: 5px;
+  background: #2c3e50;
+  color: #ecf0f1;
+  border: 1px solid #7f8c8d;
+  border-radius: 5px;
+  padding: 5px;
+`;
 
+const AddFundsContainer = styled.div`
+  margin-bottom: 2rem;
+`;
 const AppContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -37,7 +46,7 @@ const AppContainer = styled.div`
   margin: 0 auto;
   text-align: center;
   font-family: "Lato", sans-serif;
-  background-color: gray;
+  background-color: #19232e;
   padding: 15px;
   border-radius: 10px;
 `;
@@ -53,18 +62,52 @@ const FormsContainer = styled.div`
   }
 `;
 
+const TopHalfContainer = styled.div`
+  background: #34495e;
+  padding: 20px;
+  border-radius: 10px 10px 0 0;
+  margin-bottom: 15px;
+`;
+
 const TopContainer = styled.div`
-  color: white;
+  color: #ecf0f1;
 `;
 
 const CommitButtonsContainer = styled.div`
   display: flex;
   flex-direction: horizontal;
   justify-content: center;
+  margin-top: 20px;
 `;
 
 const CommitButton = styled.button`
+  background: #19232e;
+  color: #ecf0f1;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 16px;
   margin: 0px 5px;
+  cursor: pointer;
+  font-weight: bold;
+
+  &:hover {
+    background: #2c3e50;
+  }
+`;
+
+const AddFundsButton = styled.button`
+  background: #19232e;
+  color: #ecf0f1;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 16px;
+  margin: 0px 5px;
+  cursor: pointer;
+  font-weight: bold;
+
+  &:hover {
+    background: #2c3e50;
+  }
 `;
 
 function App() {
@@ -174,75 +217,76 @@ function App() {
 
   return user !== "" ? (
     <AppContainer>
-      <TopContainer>
-        <h1>Daytrading Frontend</h1>
-        <h1>Logged in as {user}</h1>
+      <TopHalfContainer>
+        <TopContainer>
+          <h1>Logged in as {user}</h1>
 
-        <h2>Current funds: ${funds}</h2>
-        <AddFundsText>Add Funds</AddFundsText>
-        <AddFundsInput
-          type="number"
-          value={selectedFunds ?? ""}
-          onChange={(e) =>
-            setSelectedFunds(e.target.value ? Number(e.target.value) : 0)
-          }
-        />
-        <button
-          onClick={async () => {
-            const newBalance = (await addFunds({
-              user: user,
-              amount: selectedFunds ?? 0,
-            })) as unknown as number;
-            console.log("newBalance is", newBalance);
-            newBalance && setFunds(newBalance);
-          }}
-        >
-          Add funds
-        </button>
-      </TopContainer>
-      <CommitButtonsContainer>
-        <CommitButton
-          onClick={async () => {
-            await commitBuy({
-              user: user,
-            });
-            setTransactionCommitted(true);
-          }}
-        >
-          Commit Buy
-        </CommitButton>
-        <CommitButton
-          onClick={async () => {
-            await commitSell({
-              user: user,
-            });
-            setTransactionCommitted(true);
-          }}
-        >
-          Commit Sell
-        </CommitButton>
-      </CommitButtonsContainer>
-      <FormsContainer>
-        <TransactionForm
-          title="Quote"
-          buttonText="Get Quote"
-          onSubmit={(stock) => handleQuoteSubmit(stock)}
-          showAmount={false}
-          quotePrice={quotePrice}
-        />
-        <TransactionForm
-          title="Buy"
-          buttonText="Buy"
-          onSubmit={(stock, amount) => handleBuySubmit(stock, amount)}
-          showAmount={true}
-        />
-        <TransactionForm
-          title="Sell"
-          buttonText="Sell"
-          onSubmit={(stock, amount) => handleSellSubmit(stock, amount)}
-          showAmount={true}
-        />
-      </FormsContainer>
+          <h2>Current funds: ${funds}</h2>
+          <AddFundsInput
+            type="number"
+            value={selectedFunds ?? ""}
+            onChange={(e) =>
+              setSelectedFunds(e.target.value ? Number(e.target.value) : 0)
+            }
+          />
+          <AddFundsButton
+            onClick={async () => {
+              const newBalance = (await addFunds({
+                user: user,
+                amount: selectedFunds ?? 0,
+              })) as unknown as number;
+              console.log("newBalance is", newBalance);
+              newBalance && setFunds(newBalance);
+            }}
+          >
+            Add funds
+          </AddFundsButton>
+        </TopContainer>
+        <CommitButtonsContainer>
+          <CommitButton
+            onClick={async () => {
+              await commitBuy({
+                user: user,
+              });
+              setTransactionCommitted(true);
+            }}
+          >
+            Commit Buy
+          </CommitButton>
+          <CommitButton
+            onClick={async () => {
+              await commitSell({
+                user: user,
+              });
+              setTransactionCommitted(true);
+            }}
+          >
+            Commit Sell
+          </CommitButton>
+        </CommitButtonsContainer>
+        <FormsContainer>
+          <TransactionForm
+            title="Quote"
+            buttonText="Get Quote"
+            onSubmit={(stock) => handleQuoteSubmit(stock)}
+            showAmount={false}
+            quotePrice={quotePrice}
+          />
+          <TransactionForm
+            title="Buy"
+            buttonText="Buy"
+            onSubmit={(stock, amount) => handleBuySubmit(stock, amount)}
+            showAmount={true}
+          />
+          <TransactionForm
+            title="Sell"
+            buttonText="Sell"
+            onSubmit={(stock, amount) => handleSellSubmit(stock, amount)}
+            showAmount={true}
+          />
+        </FormsContainer>
+      </TopHalfContainer>
+
       <TransactionsList
         transactions={transactions}
         user={user}

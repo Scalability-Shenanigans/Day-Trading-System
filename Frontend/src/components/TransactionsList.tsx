@@ -7,7 +7,7 @@ const TransactionsListContainer = styled.div`
   box-sizing: border-box;
   overflow-y: auto;
   width: 100%;
-  background: lightgray;
+  background: #2c3e50;
   border-radius: 5px;
   padding: 10px;
 `;
@@ -16,6 +16,7 @@ const TransactionsTable = styled.table`
   width: 100%;
   border-collapse: collapse;
   box-sizing: border-box;
+  color: #ecf0f1;
 `;
 
 const TransactionsTableHeader = styled.thead`
@@ -24,10 +25,10 @@ const TransactionsTableHeader = styled.thead`
 `;
 
 const TransactionsTableRow = styled.tr`
-  background: white;
+  background: #34495e;
   border-radius: 3px;
   &:nth-child(even) {
-    background: #f2f2f2;
+    background: #2c3e50;
   }
   box-sizing: border-box;
 `;
@@ -36,6 +37,7 @@ const TransactionsTableCell = styled.td`
   padding: 8px;
   text-align: center;
   box-sizing: border-box;
+  border-bottom: 1px solid #7f8c8d;
 `;
 
 export interface TransactionsListItemProps {
@@ -66,9 +68,13 @@ const TransactionsListItem: React.FC<TransactionsListItemProps> = ({
       <TransactionsTableCell>{asset}</TransactionsTableCell>
       <TransactionsTableCell>{amount}</TransactionsTableCell>
       {isCommitted === true ? (
-        <TransactionsTableCell>Committed</TransactionsTableCell>
+        <TransactionsTableCell style={{ color: "lightgreen" }}>
+          Committed
+        </TransactionsTableCell>
       ) : (
-        <TransactionsTableCell>Not Committed</TransactionsTableCell>
+        <TransactionsTableCell style={{ color: "orange" }}>
+          Not Committed
+        </TransactionsTableCell>
       )}
     </TransactionsTableRow>
   );

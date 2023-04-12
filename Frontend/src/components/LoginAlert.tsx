@@ -10,6 +10,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   height: calc(100vh - 120px);
+  background-color: transparent;
 `;
 
 const Container = styled.div`
@@ -20,7 +21,7 @@ const Container = styled.div`
 `;
 
 const LoginForm = styled.form`
-  background-color: #ffffff;
+  background-color: #34495e;
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -37,14 +38,17 @@ const Label = styled.label`
   font-size: 14px;
   font-weight: bold;
   margin-bottom: 5px;
+  color: #ecf0f1;
 `;
 
 const Input = styled.input`
-  border: 1px solid #ccc;
+  border: 1px solid #7f8c8d;
   border-radius: 4px;
   font-size: 14px;
   padding: 8px;
   outline: none;
+  background-color: #2c3e50;
+  color: #ecf0f1;
   &:focus {
     border-color: #4a90e2;
   }
