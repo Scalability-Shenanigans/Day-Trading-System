@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import { commitBuy, commitSell } from "../requests/requests";
 
 const TransactionsListContainer = styled.div`
   flex: 1;

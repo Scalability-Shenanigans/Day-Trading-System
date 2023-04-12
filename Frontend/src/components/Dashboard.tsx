@@ -5,13 +5,21 @@ import {
   buyStock,
   commitBuy,
   commitSell,
-  getBalance,
   getQuote,
   getStocks,
   sellStock,
 } from "../requests/requests";
 import { canSellStock } from "../utils/utils";
 import TransactionForm from "./TransactionForm";
+
+interface DashboardProps {
+  user: string;
+  funds: number;
+  fetchBalance: () => Promise<void>;
+  setFunds: React.Dispatch<React.SetStateAction<number>>;
+  setTransactionCommitted: React.Dispatch<React.SetStateAction<boolean>>;
+  fetchUserTransactions: () => Promise<void>;
+}
 
 const AddFundsInput = styled.input`
   margin-bottom: 20px;
@@ -21,23 +29,6 @@ const AddFundsInput = styled.input`
   border: 1px solid #7f8c8d;
   border-radius: 5px;
   padding: 5px;
-`;
-
-const AddFundsContainer = styled.div`
-  margin-bottom: 2rem;
-`;
-const AppContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 120px);
-  box-sizing: border-box;
-  max-width: 760px;
-  margin: 0 auto;
-  text-align: center;
-  font-family: "Lato", sans-serif;
-  background-color: #19232e;
-  padding: 15px;
-  border-radius: 10px;
 `;
 
 const FormsContainer = styled.div`
@@ -98,16 +89,6 @@ const AddFundsButton = styled.button`
     background: #2c3e50;
   }
 `;
-
-interface DashboardProps {
-  // onSubmit: (username: string, password: string) => void;
-  user: string;
-  funds: number;
-  fetchBalance: () => Promise<void>;
-  setFunds: React.Dispatch<React.SetStateAction<number>>;
-  setTransactionCommitted: React.Dispatch<React.SetStateAction<boolean>>;
-  fetchUserTransactions: () => Promise<void>;
-}
 
 const Dashboard: React.FC<DashboardProps> = ({
   user,
