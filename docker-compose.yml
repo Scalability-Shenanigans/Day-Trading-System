@@ -68,6 +68,7 @@ services:
       - day-trading
     restart: always
 
+  # uncomment the following to run load testing
   # influxdb:
   #   image: influxdb:1.8
   #   container_name: influxdb
