@@ -125,6 +125,8 @@ const Dashboard: React.FC<DashboardProps> = ({
         });
       }
     }
+
+    await fetchUserTransactions();
   };
 
   const handleSellSubmit = async (stock: string, amount: number) => {
@@ -142,6 +144,8 @@ const Dashboard: React.FC<DashboardProps> = ({
         });
       }
     }
+
+    await fetchUserTransactions();
   };
 
   useEffect(() => {
@@ -150,10 +154,6 @@ const Dashboard: React.FC<DashboardProps> = ({
       fetchUserTransactions();
     }
   }, [user]);
-
-  useEffect(() => {
-    fetchUserTransactions();
-  }, [handleBuySubmit, handleSellSubmit]);
 
   return (
     <TopHalfContainer>
