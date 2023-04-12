@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import TransactionForm from "./components/TransactionForm";
 import styled from "styled-components";
@@ -101,12 +101,16 @@ function App() {
   const handleBuySubmit = async (stock: string, amount: number) => {
     console.log("Buy submitted", stock, amount);
 
-    stock.length > 0 &&
-      (await buyStock({
-        user: user,
-        stock: stock,
-        amount: amount,
-      }));
+    if (stock.length > 0 && selectedFunds && selectedFunds > 0) {
+      const buyResponse = await buyStock({
+        user,
+        stock,
+        amount,
+      });
+      if (buyResponse?.data["status"] === "failure") {
+        alert(buyResponse.data["message"]);
+      }
+    }
 
     await fetchUserTransactions();
   };
@@ -114,12 +118,16 @@ function App() {
   const handleSellSubmit = async (stock: string, amount: number) => {
     console.log("Sell submitted", stock, amount);
 
-    stock.length > 0 &&
-      (await sellStock({
-        user: user,
-        stock: stock,
-        amount: amount,
-      }));
+    if (stock.length > 0 && selectedFunds && selectedFunds > 0) {
+      const sellResponse = await sellStock({
+        user,
+        stock,
+        amount,
+      });
+      if (sellResponse?.data["status"] === "failure") {
+        alert(sellResponse.data["message"]);
+      }
+    }
 
     await fetchUserTransactions();
   };

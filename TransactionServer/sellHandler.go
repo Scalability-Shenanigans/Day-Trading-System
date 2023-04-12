@@ -77,14 +77,14 @@ func sellHandler(w http.ResponseWriter, r *http.Request) {
 	if !db.CanSellStock(sell.User, sell.Stock, int(sell.Amount/quote)) {
 		// Log an error message and return an appropriate HTTP response
 		response.Status = "failure"
-		response.Message = "not enough to sell"
+		response.Message = "insufficent shares to sell"
 		errorEvent := &log.ErrorEvent{
 			Timestamp:      time.Now().UnixMilli(),
 			Server:         "localhost",
 			TransactionNum: int64(transactionNumber),
 			Command:        "COMMIT_SELL",
 			Username:       sell.User,
-			ErrorMessage:   "Error: not enough to sell",
+			ErrorMessage:   "Error: insufficent shares to sell",
 		}
 		log.CreateErrorEventLog(errorEvent)
 

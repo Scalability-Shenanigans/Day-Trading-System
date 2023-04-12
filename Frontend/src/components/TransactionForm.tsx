@@ -68,11 +68,11 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   quotePrice,
 }) => {
   const [stock, setStock] = useState("");
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState<number | null>(null);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit(stock, amount);
+    onSubmit(stock, amount ?? 0);
   };
 
   return (
@@ -94,7 +94,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
             <Input
               type="number"
               name="amount"
-              value={amount}
+              value={amount ?? ""}
               onChange={(e) => setAmount(Number(e.target.value))}
             />
           </FieldContainer>

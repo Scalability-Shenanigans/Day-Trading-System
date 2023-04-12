@@ -85,10 +85,10 @@ async function buyStock({ user, stock, amount }: buyAndSellStockProps) {
     );
 
     console.log("the response is", response);
-    return response.status;
+    return response;
   } catch (error) {
     console.log("the error", error);
-    return 0;
+    return null;
   }
 }
 

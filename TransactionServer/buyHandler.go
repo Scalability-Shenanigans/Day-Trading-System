@@ -42,6 +42,11 @@ type CommitBuyResponse struct {
 	Stock   string `json:"stock,omitempty"`
 }
 
+type BuyResponse struct {
+	Status  string `json:"status"`
+	Message string `json:"message"`
+}
+
 func buyHandler(w http.ResponseWriter, r *http.Request) {
 	//get stock price
 	//add transaction to pending transactions collection
@@ -49,6 +54,7 @@ func buyHandler(w http.ResponseWriter, r *http.Request) {
 	//we can either check if a user has enough funds here or during the commit
 	//	(both probably work commit just means we do more processing before failing)
 	var buy Buy
+	var response BuyResponse
 
 	transactionNumber := middleware.GetTransactionNumberFromContext(r)
 
@@ -80,6 +86,29 @@ func buyHandler(w http.ResponseWriter, r *http.Request) {
 	log.CreateSystemEventLog(sysEvent)
 
 	quote := GetQuote(buy.Stock, buy.User, int(transactionNumber))
+	totalCost := quote * float64(int(buy.Amount/quote))
+
+	if !(db.GetBalance(buy.User) >= totalCost) {
+		response.Status = "failure"
+		response.Message = "not enough funds"
+
+		errorEvent := &log.ErrorEvent{
+			Timestamp:      time.Now().UnixMilli(),
+			Server:         "localhost",
+			TransactionNum: int64(transactionNumber),
+			Command:        "BUY",
+			Username:       buy.User,
+			ErrorMessage:   "Error: not enough funds",
+		}
+		log.CreateErrorEventLog(errorEvent)
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+
+		return
+	}
+
+	response.Status = "success"
 
 	transaction := db.Transaction{
 		User:      buy.User,
@@ -91,6 +120,9 @@ func buyHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	db.CreatePendingTransaction(transaction)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
 }
 
 func commitBuy(w http.ResponseWriter, r *http.Request) {
