@@ -57,8 +57,6 @@ function App() {
   }, [transactionCommitted]);
 
   const handleLoginSubmit = (username: string, password: string) => {
-    console.log("Username:", username);
-    console.log("Password:", password);
     setUser(username);
   };
 

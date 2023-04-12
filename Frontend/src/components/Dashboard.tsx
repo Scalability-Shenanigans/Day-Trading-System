@@ -173,7 +173,6 @@ const Dashboard: React.FC<DashboardProps> = ({
               user: user,
               amount: selectedFunds ?? 0,
             })) as unknown as number;
-            console.log("newBalance is", newBalance);
             newBalance && setFunds(newBalance);
           }}
         >

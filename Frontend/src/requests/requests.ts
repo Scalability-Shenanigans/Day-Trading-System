@@ -63,7 +63,6 @@ async function addFunds({ user, amount }: addFundsProps) {
       }
     );
 
-    console.log("the response is", response);
     return response.data["balance"];
   } catch (error) {
     console.log("the error", error);
@@ -89,7 +88,6 @@ async function buyStock({ user, stock, amount }: buyAndSellStockProps) {
       }
     );
 
-    console.log("the response is", response);
     return response;
   } catch (error) {
     console.log("the error", error);
@@ -112,8 +110,6 @@ async function commitBuy({ user }: userOnlyProps) {
         },
       }
     );
-
-    console.log("the response is", response);
 
     return response;
   } catch (error) {
@@ -140,7 +136,6 @@ async function sellStock({ user, stock, amount }: buyAndSellStockProps) {
       }
     );
 
-    console.log("the response is", response);
     return response;
   } catch (error) {
     console.log("the error", error);
@@ -164,8 +159,6 @@ async function commitSell({ user }: userOnlyProps) {
       }
     );
 
-    console.log("the response is", response);
-
     return response;
   } catch (error) {
     console.log("the error", error);
@@ -188,8 +181,6 @@ async function getBalance({ user }: userOnlyProps) {
         },
       }
     );
-
-    console.log("the response is", response);
 
     return response;
   } catch (error) {
@@ -218,9 +209,6 @@ async function getAllTransactionsByUser({
 
     const pendingTransactions = response.data["pending_transactions"];
     const finishedTransactions = response.data["finished_transactions"];
-
-    console.log("pending transactions are", pendingTransactions);
-    console.log("finished transactions are", finishedTransactions);
 
     const formattedPendingTransactions =
       pendingTransactions?.map((transaction: Transaction) => ({
@@ -276,8 +264,6 @@ async function getQuote({ user, stock }: getQuoteProps) {
       }
     );
 
-    console.log("the response is", response);
-
     return response.data["price"];
   } catch (error) {
     console.log("the error", error);
@@ -300,8 +286,6 @@ async function getStocks({ user }: userOnlyProps): Promise<StockHolding[]> {
         },
       }
     );
-
-    console.log("the response is", response);
 
     return response.data["stock_holding"];
   } catch (error) {
