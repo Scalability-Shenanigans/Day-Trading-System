@@ -94,6 +94,18 @@ func GetBalance(user string) float64 {
 	}
 }
 
+func GetStockHoldings(user string) ([]StockHolding, error) {
+	var account Account
+
+	filter := bson.M{"user": user}
+	err := accounts.FindOne(context.TODO(), filter).Decode(&account)
+	if err != nil {
+		return nil, err
+	}
+
+	return account.Stocks, nil
+}
+
 func UpdateBalance(amount float64, user string, transactionNum int64) bool {
 	filter := bson.M{"user": user}
 	var result Account

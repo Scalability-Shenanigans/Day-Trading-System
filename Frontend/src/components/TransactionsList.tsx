@@ -3,8 +3,9 @@ import styled from "styled-components";
 import { commitBuy, commitSell } from "../requests/requests";
 
 const TransactionsListContainer = styled.div`
+  flex: 1;
   box-sizing: border-box;
-  min-height: 200px;
+  overflow-y: auto;
   width: 100%;
   background: lightgray;
   border-radius: 5px;

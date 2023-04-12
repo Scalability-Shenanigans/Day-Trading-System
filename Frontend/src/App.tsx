@@ -10,11 +10,14 @@ import {
   getAllTransactionsByUser,
   getBalance,
   getQuote,
+  getStocks,
   sellStock,
 } from "./requests/requests";
 import TransactionsList, {
   TransactionsListItemProps,
 } from "./components/TransactionsList";
+import LoginAlert from "./components/LoginAlert";
+import { canSellStock } from "./utils/utils";
 
 const AddFundsText = styled.h3({
   margin: 0,
@@ -26,14 +29,16 @@ const AddFundsInput = styled.input({
 });
 
 const AppContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 120px);
   box-sizing: border-box;
   max-width: 760px;
-  margin: auto;
+  margin: 0 auto;
   text-align: center;
   font-family: "Lato", sans-serif;
   background-color: gray;
   padding: 15px;
-  margin-top: 20px;
   border-radius: 10px;
 `;
 
@@ -63,12 +68,25 @@ const CommitButton = styled.button`
 `;
 
 function App() {
-  const user = "USER";
+  const [user, setUser] = useState("");
 
   const [selectedFunds, setSelectedFunds] = useState<number | null>(null);
   const [funds, setFunds] = useState(0);
   const [transactionCommitted, setTransactionCommitted] = useState(false);
   const [quotePrice, setQuotePrice] = useState(null);
+
+  useEffect(() => {
+    if (user !== "") {
+      fetchBalance();
+      fetchUserTransactions();
+    }
+  }, [user]);
+
+  const handleLoginSubmit = (username: string, password: string) => {
+    console.log("Username:", username);
+    console.log("Password:", password);
+    setUser(username);
+  };
 
   const fetchUserTransactions = async () => {
     const userTransactions = await getAllTransactionsByUser({
@@ -101,14 +119,15 @@ function App() {
   const handleBuySubmit = async (stock: string, amount: number) => {
     console.log("Buy submitted", stock, amount);
 
-    if (stock.length > 0 && selectedFunds && selectedFunds > 0) {
-      const buyResponse = await buyStock({
-        user,
-        stock,
-        amount,
-      });
-      if (buyResponse?.data["status"] === "failure") {
-        alert(buyResponse.data["message"]);
+    if (stock.length > 0 && funds && funds > 0) {
+      if (amount > funds) {
+        alert("Not enough funds");
+      } else {
+        await buyStock({
+          user,
+          stock,
+          amount,
+        });
       }
     }
 
@@ -118,14 +137,20 @@ function App() {
   const handleSellSubmit = async (stock: string, amount: number) => {
     console.log("Sell submitted", stock, amount);
 
-    if (stock.length > 0 && selectedFunds && selectedFunds > 0) {
-      const sellResponse = await sellStock({
-        user,
-        stock,
-        amount,
-      });
-      if (sellResponse?.data["status"] === "failure") {
-        alert(sellResponse.data["message"]);
+    if (stock.length > 0 && funds && funds > 0) {
+      const userStockHoldings = await getStocks({ user });
+      const currentStockPrice = await getQuote({ user, stock });
+
+      console.log("stock holdings are", userStockHoldings);
+
+      if (!canSellStock(userStockHoldings, stock, amount, currentStockPrice)) {
+        alert("Insufficient shares to sell");
+      } else {
+        await sellStock({
+          user,
+          stock,
+          amount,
+        });
       }
     }
 
@@ -147,7 +172,7 @@ function App() {
     []
   );
 
-  return (
+  return user !== "" ? (
     <AppContainer>
       <TopContainer>
         <h1>Daytrading Frontend</h1>
@@ -224,6 +249,8 @@ function App() {
         setCommit={setTransactionCommitted}
       />
     </AppContainer>
+  ) : (
+    <LoginAlert onSubmit={handleLoginSubmit} />
   );
 }
 

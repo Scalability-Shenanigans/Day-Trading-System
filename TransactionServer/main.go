@@ -18,8 +18,6 @@ type AddFunds struct {
 }
 
 type AddResponse struct {
-	Status  string  `json:"status"`
-	Message string  `json:"message"`
 	Balance float64 `json:"balance,omitempty"`
 }
 
@@ -27,8 +25,16 @@ type GetBalance struct {
 	User string `json:"user"`
 }
 
+type GetStocks struct {
+	User string `json:"user"`
+}
+
 type GetBalanceResponse struct {
 	Balance float64 `json:"balance"`
+}
+
+type GetStocksResponse struct {
+	Stocks []db.StockHolding `json:"stock_holding"`
 }
 
 type TransactionsByUserRequest struct {
@@ -103,15 +109,11 @@ func addHandler(w http.ResponseWriter, r *http.Request) {
 	log.CreateUserCommandsLog(cmd)
 
 	if db.UpdateBalance(addFunds.Amount, addFunds.User, int64(transactionNumber)) {
-		response.Status = "success"
-		response.Message = "Funds added successfully"
 		response.Balance = db.GetBalance(addFunds.User)
 	} else {
 		fmt.Println("Creating an account for user")
 		db.CreateAccount(addFunds.User, addFunds.Amount, int64(transactionNumber))
 
-		response.Status = "success"
-		response.Message = "Account created and funds added successfully"
 		response.Balance = addFunds.Amount
 	}
 
@@ -131,6 +133,30 @@ func getBalanceHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response.Balance = db.GetBalance(getBalance.User)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
+}
+
+func getStocksHandler(w http.ResponseWriter, r *http.Request) {
+	var getStocks GetStocks
+	var response GetStocksResponse
+
+	err := json.NewDecoder(r.Body).Decode(&getStocks)
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("Bad Request")
+		return
+	}
+
+	userStockHolding, err := db.GetStockHoldings(getStocks.User)
+
+	if err != nil {
+		fmt.Println("cannot find stocks of user")
+		return
+	}
+
+	response.Stocks = userStockHolding
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
@@ -179,6 +205,7 @@ func main() {
 	// frontend specific endpoints
 	http.Handle("/getBalance", corsWrapper.Handler(http.HandlerFunc(getBalanceHandler)))
 	http.Handle("/allTransactionsByUser", corsWrapper.Handler(http.HandlerFunc(allTransactionsByUserHandler)))
+	http.Handle("/stocks", corsWrapper.Handler(http.HandlerFunc(getStocksHandler)))
 
 	http.ListenAndServe(port, nil)
 }

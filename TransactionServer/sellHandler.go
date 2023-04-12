@@ -16,11 +16,6 @@ type Sell struct {
 	Amount float64 `json:"amount"`
 }
 
-type SellResponse struct {
-	Status  string `json:"status"`
-	Message string `json:"message"`
-}
-
 type CancelSetSell struct {
 	User   string  `json:"user"`
 	Stock  string  `json:"stock"`
@@ -31,12 +26,6 @@ type CommitSell struct {
 	User string `json:"user"`
 }
 
-type CommitSellResponse struct {
-	Status  string `json:"status"`
-	Message string `json:"message"`
-	Stock   string `json:"stock,omitempty"`
-}
-
 type CancelSell struct {
 	User string `json:"user"`
 }
@@ -45,7 +34,6 @@ func sellHandler(w http.ResponseWriter, r *http.Request) {
 	transactionNumber := middleware.GetTransactionNumberFromContext(r)
 
 	var sell Sell
-	var response SellResponse
 
 	err := json.NewDecoder(r.Body).Decode(&sell)
 	if err != nil {
@@ -74,27 +62,6 @@ func sellHandler(w http.ResponseWriter, r *http.Request) {
 
 	quote := GetQuote(sell.Stock, sell.User, int(transactionNumber))
 
-	if !db.CanSellStock(sell.User, sell.Stock, int(sell.Amount/quote)) {
-		// Log an error message and return an appropriate HTTP response
-		response.Status = "failure"
-		response.Message = "insufficent shares to sell"
-		errorEvent := &log.ErrorEvent{
-			Timestamp:      time.Now().UnixMilli(),
-			Server:         "localhost",
-			TransactionNum: int64(transactionNumber),
-			Command:        "COMMIT_SELL",
-			Username:       sell.User,
-			ErrorMessage:   "Error: insufficent shares to sell",
-		}
-		log.CreateErrorEventLog(errorEvent)
-
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
-
-		return
-	}
-	response.Status = "success"
-
 	log.CreateSystemEventLog(sysEvent)
 
 	transaction := db.Transaction{
@@ -107,16 +74,12 @@ func sellHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	db.CreatePendingTransaction(transaction)
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
 }
 
 func commitSell(w http.ResponseWriter, r *http.Request) {
 	transactionNumber := middleware.GetTransactionNumberFromContext(r)
 
 	var commitSell CommitSell
-	var response CommitSellResponse
 
 	err := json.NewDecoder(r.Body).Decode(&commitSell)
 	if err != nil {
@@ -126,7 +89,6 @@ func commitSell(w http.ResponseWriter, r *http.Request) {
 	}
 	user := commitSell.User
 	transaction := db.ConsumeLastSellTransaction(user)
-	db.CreateFinishedTransaction(transaction)
 
 	if transaction.Transaction_ID == -1 {
 		errorEvent := &log.ErrorEvent{
@@ -140,6 +102,8 @@ func commitSell(w http.ResponseWriter, r *http.Request) {
 		log.CreateErrorEventLog(errorEvent)
 		return
 	}
+
+	db.CreateFinishedTransaction(transaction)
 
 	cmd := &log.UserCommand{
 		Timestamp:      time.Now().UnixMilli(),
@@ -157,9 +121,6 @@ func commitSell(w http.ResponseWriter, r *http.Request) {
 		if db.UpdateStockHolding(user, transaction.Stock, -1*transaction.Amount, int64(transactionNumber)) {
 			if db.UpdateBalance(transactionCost, user, int64(transactionNumber)) { // update account balance after selling
 				fmt.Println("Transaction Commited")
-				response.Status = "success"
-				response.Message = "Sell committed successfully"
-				response.Stock = transaction.Stock
 			}
 		}
 	} else {
@@ -171,14 +132,7 @@ func commitSell(w http.ResponseWriter, r *http.Request) {
 			Username:       commitSell.User,
 		}
 		log.CreateErrorEventLog(errorEvent)
-
-		response.Status = "failure"
-		response.Message = "Sell commit failure"
-		response.Stock = transaction.Stock
 	}
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
 }
 
 func cancelSell(w http.ResponseWriter, r *http.Request) {

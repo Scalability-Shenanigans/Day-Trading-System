@@ -31,6 +31,11 @@ interface TransactionData {
   isCommitted: boolean;
 }
 
+export interface StockHolding {
+  Stock: string;
+  Amount: number;
+}
+
 type Transaction = {
   Transaction_ID: number;
   Stock: string;
@@ -280,10 +285,36 @@ async function getQuote({ user, stock }: getQuoteProps) {
   }
 }
 
+async function getStocks({ user }: userOnlyProps): Promise<StockHolding[]> {
+  const data = {
+    user,
+  };
+
+  try {
+    const response = await axios.post(
+      `${transaction_server_url}/stocks`,
+      JSON.stringify(data),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    console.log("the response is", response);
+
+    return response.data["stock_holding"];
+  } catch (error) {
+    console.log("the error", error);
+    return [];
+  }
+}
+
 export {
   addFunds,
   getQuote,
   buyStock,
+  getStocks,
   commitBuy,
   sellStock,
   commitSell,
