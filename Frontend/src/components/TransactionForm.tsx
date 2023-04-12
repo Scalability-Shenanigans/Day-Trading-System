@@ -6,6 +6,7 @@ interface TransactionFormProps {
   buttonText: string;
   onSubmit: (stock: string, amount: number) => void;
   showAmount: boolean;
+  quotePrice?: number | null;
 }
 
 const FormContainer = styled.form`
@@ -20,12 +21,14 @@ const FormContainer = styled.form`
   border-radius: 5px;
   align-self: stretch;
   color: white;
+  box-sizing: border-box;
 `;
 
 const FieldContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
+  box-sizing: border-box;
 `;
 
 const Label = styled.label`
@@ -36,22 +39,33 @@ const Input = styled.input`
   // margin-bottom: 15px;
 `;
 
-const Button = styled.button({
-  // border: "none",
-  outline: "none",
-  color: "white",
-  background: "transparent",
-  padding: "5px 15px",
-  border: "2px solid white",
-  borderRadius: 5,
-  fontWeight: "bold",
-});
+const Quote = styled.h3`
+  font-weight: bold;
+  text-align: center;
+`;
+
+const Button = styled.button`
+  outline: none;
+  color: white;
+  background: transparent;
+  padding: 5px 15px;
+  border: 2px solid white;
+  border-radius: 5px;
+  font-weight: bold;
+
+  &:hover {
+    color: white;
+    background: #535354;
+    border-color: white;
+  }
+`;
 
 const TransactionForm: React.FC<TransactionFormProps> = ({
   title,
   buttonText,
   onSubmit,
   showAmount,
+  quotePrice,
 }) => {
   const [stock, setStock] = useState("");
   const [amount, setAmount] = useState(0);
@@ -83,6 +97,11 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
               value={amount}
               onChange={(e) => setAmount(Number(e.target.value))}
             />
+          </FieldContainer>
+        )}
+        {quotePrice && (
+          <FieldContainer>
+            <Quote>${quotePrice}</Quote>
           </FieldContainer>
         )}
       </div>

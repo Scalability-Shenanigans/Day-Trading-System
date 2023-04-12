@@ -17,6 +17,11 @@ interface userOnlyProps {
   user: string;
 }
 
+interface getQuoteProps {
+  user: string;
+  stock: string;
+}
+
 interface TransactionData {
   type: string;
   date: string;
@@ -249,8 +254,35 @@ async function getAllTransactionsByUser({
   }
 }
 
+async function getQuote({ user, stock }: getQuoteProps) {
+  const data = {
+    user,
+    stock,
+  };
+
+  try {
+    const response = await axios.post(
+      `${transaction_server_url}/quote`,
+      JSON.stringify(data),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    console.log("the response is", response);
+
+    return response.data["price"];
+  } catch (error) {
+    console.log("the error", error);
+    return null;
+  }
+}
+
 export {
   addFunds,
+  getQuote,
   buyStock,
   commitBuy,
   sellStock,

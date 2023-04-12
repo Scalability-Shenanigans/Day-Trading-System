@@ -9,12 +9,12 @@ import {
   commitSell,
   getAllTransactionsByUser,
   getBalance,
+  getQuote,
   sellStock,
 } from "./requests/requests";
 import TransactionsList, {
   TransactionsListItemProps,
 } from "./components/TransactionsList";
-import { AxiosResponse } from "axios";
 
 const AddFundsText = styled.h3({
   margin: 0,
@@ -40,6 +40,12 @@ const AppContainer = styled.div`
 const FormsContainer = styled.div`
   display: flex;
   justify-content: space-between;
+
+  & > * {
+    flex: 1;
+    margin: 20px 25px;
+    box-sizing: border-box;
+  }
 `;
 
 const TopContainer = styled.div`
@@ -59,6 +65,11 @@ const CommitButton = styled.button`
 function App() {
   const user = "USER";
 
+  const [selectedFunds, setSelectedFunds] = useState<number | null>(null);
+  const [funds, setFunds] = useState(0);
+  const [transactionCommitted, setTransactionCommitted] = useState(false);
+  const [quotePrice, setQuotePrice] = useState(null);
+
   const fetchUserTransactions = async () => {
     const userTransactions = await getAllTransactionsByUser({
       user: user,
@@ -74,38 +85,44 @@ function App() {
     setFunds(balance);
   };
 
+  const fetchQuote = async (user: string, stock: string) => {
+    const quote = await getQuote({
+      user,
+      stock,
+    });
+    setQuotePrice(quote.toFixed(2));
+  };
+
   const handleQuoteSubmit = async (stock: string) => {
     console.log("Quote submitted", stock);
+    stock.length > 0 && (await fetchQuote(user, stock));
   };
 
   const handleBuySubmit = async (stock: string, amount: number) => {
     console.log("Buy submitted", stock, amount);
 
-    await buyStock({
-      user: user,
-      stock: stock,
-      amount: amount,
-    });
+    stock.length > 0 &&
+      (await buyStock({
+        user: user,
+        stock: stock,
+        amount: amount,
+      }));
 
-    fetchUserTransactions();
+    await fetchUserTransactions();
   };
 
   const handleSellSubmit = async (stock: string, amount: number) => {
     console.log("Sell submitted", stock, amount);
 
-    await sellStock({
-      user: user,
-      stock: stock,
-      amount: amount,
-    });
+    stock.length > 0 &&
+      (await sellStock({
+        user: user,
+        stock: stock,
+        amount: amount,
+      }));
 
-    fetchUserTransactions();
+    await fetchUserTransactions();
   };
-
-  const [selectedFunds, setSelectedFunds] = useState(0);
-  const [funds, setFunds] = useState(0);
-
-  const [transactionCommitted, setTransactionCommitted] = useState(false);
 
   useEffect(() => {
     console.log("transaction committed");
@@ -132,14 +149,16 @@ function App() {
         <AddFundsText>Add Funds</AddFundsText>
         <AddFundsInput
           type="number"
-          value={selectedFunds}
-          onChange={(e) => setSelectedFunds(Number(e.target.value))}
+          value={selectedFunds ?? ""}
+          onChange={(e) =>
+            setSelectedFunds(e.target.value ? Number(e.target.value) : 0)
+          }
         />
         <button
           onClick={async () => {
             const newBalance = (await addFunds({
               user: user,
-              amount: selectedFunds,
+              amount: selectedFunds ?? 0,
             })) as unknown as number;
             console.log("newBalance is", newBalance);
             newBalance && setFunds(newBalance);
@@ -176,6 +195,7 @@ function App() {
           buttonText="Get Quote"
           onSubmit={(stock) => handleQuoteSubmit(stock)}
           showAmount={false}
+          quotePrice={quotePrice}
         />
         <TransactionForm
           title="Buy"
